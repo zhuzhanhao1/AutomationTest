@@ -1,0 +1,740 @@
+{
+	"erms": [
+		{
+			"title": "ERMS测试分类",
+			"icon": "&#xe6c9;",
+			"href": "",
+			"spread": false,
+			"children": [
+			]
+		},
+		{
+			"title": "快速测试",
+			"icon": "&#xe631;",
+			"href": "/web_quicktest/",
+			"spread": false
+		},
+		{
+			"title": "单一接口测试",
+			"icon": "&#xe716;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "单一接口总览",
+					"icon": "&#xe770;",
+					"href": "/web_apiindex/?system=erms",
+					"spread": false
+				},
+				{
+					"title": "单位接口",
+					"icon": "&#xe770;",
+					"href": "/web_apiindex/?system=erms&belong=unit",
+					"spread": false
+				},
+				{
+					"title": "部门管理接口",
+					"icon": "&#xe613;",
+					"href": "/web_apiindex/?system=erms&belong=dept",
+					"spread": false
+				},
+				{
+					"title": "用户管理接口",
+					"icon": "&#xe61c;",
+					"href": "/web_apiindex/?system=erms&belong=user",
+					"spread": false
+				},
+				{
+					"title": "角色管理接口",
+					"icon": "&#xe612;",
+					"href": "/web_apiindex/?system=erms&belong=role",
+					"spread": false
+				},
+				{
+					"title": "数据表单配置管理",
+					"icon": "&#xe630;",
+					"href": "/web_apiindex/?system=erms&belong=data_form_config",
+					"spread": false
+				},
+				{
+					"title": "门类管理接口",
+					"icon": "&#xe6c9;",
+					"href": "/web_apiindex/?system=erms&belong=category",
+					"spread": false
+				},
+				{
+					"title": "类目管理接口",
+					"icon": "&#xe67b;",
+					"href": "/web_apiindex/?system=erms&belong=class",
+					"spread": false
+				},
+				{
+					"title": "保留处置策略接口",
+					"icon": "&#xe67a;",
+					"href": "/web_apiindex/?system=erms&belong=policy",
+					"spread": false
+				},
+				{
+					"title": "访问控制策略接口",
+					"icon": "&#xe672;",
+					"href": "/web_apiindex/?system=erms&belong=acl",
+					"spread": false
+				},
+				{
+					"title": "视图自定义接口",
+					"icon": "&#xe66e;",
+					"href": "/web_apiindex/?system=erms&belong=view",
+					"spread": false
+				},
+								{
+					"title": "Record接口",
+					"icon": "&#xe655;",
+					"href": "/web_apiindex/?system=erms&belong=record",
+					"spread": false
+				},
+				{
+					"title": "文档管理接口",
+					"icon": "&#xe634;",
+					"href": "/web_apiindex/?system=erms&belong=document",
+					"spread": false
+				},
+				{
+					"title": "案卷管理接口",
+					"icon": "&#xe663;",
+					"href": "/web_apiindex/?system=erms&belong=volume",
+					"spread": false
+				},
+				{
+					"title": "档案管理接口",
+					"icon": "&#xe60a;",
+					"href": "/web_apiindex/?system=erms&belong=archives",
+					"spread": false
+				},
+				{
+					"title": "续存记录接口",
+					"icon": "&#xe60e;",
+					"href": "/web_apiindex/?system=erms&belong=deposit_form",
+					"spread": false
+				},
+				{
+					"title": "资源管理接口",
+					"icon": "&#xe60a;",
+					"href": "/web_apiindex/?system=erms&belong=resource",
+					"spread": false
+				},
+				{
+					"title": "导航管理接口",
+					"icon": "&#xe632;",
+					"href": "/web_apiindex/?system=erms&belong=navigation",
+					"spread": false
+				},
+				{
+					"title": "映射规则接口",
+					"icon": "&#xe62c;",
+					"href": "/web_apiindex/?system=erms&belong=attribute_mapping_scheme",
+					"spread": false
+				},
+				{
+					"title": "文件计划管理接口",
+					"icon": "&#xe621;",
+					"href": "/web_apiindex/?system=erms&belong=file_plan",
+					"spread": false
+				},
+								{
+					"title": "公共操作相关接口",
+					"icon": "&#xe638;",
+					"href": "/web_apiindex/?system=erms&belong=common",
+					"spread": false
+				},
+				{
+					"title": "移交表单信息接口",
+					"icon": "&#xe63c;",
+					"href": "/web_apiindex/?system=erms&belong=transfer_form",
+					"spread": false
+				},
+				{
+					"title": "数据表单管理接口",
+					"icon": "&#xe656;",
+					"href": "/web_apiindex/?system=erms&belong=data_form",
+					"spread": false
+				},
+				{
+					"title": "通用文件夹管理接口",
+					"icon": "&#xe631;",
+					"href": "/web_apiindex/?system=erms&belong=common_folder",
+					"spread": false
+				},
+				{
+					"title": "元数据管理平台接口",
+					"icon": "&#xe600;",
+					"href": "/web_apiindex/?system=erms&belong=metadata",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "流程接口测试",
+			"icon": "&#xe638;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "流程接口总览",
+					"icon": "&#xe638;",
+					"href": "/web_process/?system=erms&belong=",
+					"spread": false
+				},
+				{
+					"title": "登录过程接口",
+					"icon": "&#xe61c;",
+					"href": "/web_process/?system=erms&belong=login",
+					"spread": false
+				},
+				{
+					"title": "数据表单配置接口",
+					"icon": "&#xe638;",
+					"href": "/web_process/?system=erms&belong=data_form_config",
+					"spread": false
+				},
+				{
+					"title": "保留处置策略管理",
+					"icon": "&#xe656;",
+					"href": "/web_process/?system=erms&belong=policy",
+					"spread": false
+				},
+				{
+					"title": "类目保管期限设定",
+					"icon": "&#xe63c;",
+					"href": "/web_process/?system=erms&belong=category",
+					"spread": false
+				},
+				{
+					"title": "访问控制策略管理",
+					"icon": "&#xe631;",
+					"href": "/web_process/?system=erms&belong=alc",
+					"spread": false
+				},
+				{
+					"title": "视图自定义",
+					"icon": "&#xe600;",
+					"href": "/web_process/?system=erms&belong=view",
+					"spread": false
+				},
+				{
+					"title": "整理任务接口",
+					"icon": "&#xe638;",
+					"href": "/web_process/?system=erms&belong=finish_task",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "功能测试",
+			"icon": "&#xe857;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "功能测试总览",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms",
+					"spread": false
+				},
+				{
+					"title": "保留处置策略管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=policy",
+					"spread": false
+				},
+				{
+					"title": "入驻单位管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=unit",
+					"spread": false
+				},
+								{
+					"title": "数据表单设置",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=forms",
+					"spread": false
+				},
+								{
+					"title": "视图管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=views",
+					"spread": false
+				},
+								{
+					"title": "基本信息",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=info",
+					"spread": false
+				},
+								{
+					"title": "部门管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=dept",
+					"spread": false
+				},
+								{
+					"title": "用户管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=user",
+					"spread": false
+				},
+								{
+					"title": "类目保管期限设定",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=class",
+					"spread": false
+				},
+												{
+					"title": "访问控制策略管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=access",
+					"spread": false
+				},
+												{
+					"title": "移交操作",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest/?system=erms&belong=transfer",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "自动化测试",
+			"icon": "&#xe628;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "自动化测试总览",
+					"icon": "&#xe857;",
+					"href": "/web_autoindex/?system=erms",
+					"spread": false
+				},
+								{
+					"title": "数据表单设置",
+					"icon": "&#xe857;",
+					"href": "/web_autoindex/?system=erms&belong=dataform",
+					"spread": false
+				},
+								{
+					"title": "入驻单位管理",
+					"icon": "&#xe857;",
+					"href": "/web_autoindex/?system=erms&belong=unit",
+					"spread": false
+				},
+								{
+					"title": "保留处置策略管理",
+					"icon": "&#xe857;",
+					"href": "/web_autoindex/?system=erms&belong=policy",
+					"spread": false
+				},
+								{
+					"title": "部门管理",
+					"icon": "&#xe857;",
+					"href": "/web_autoindex/?system=erms&belong=dept",
+					"spread": false
+				},
+								{
+					"title": "用户管理",
+					"icon": "&#xe857;",
+					"href": "/web_autoindex/?system=erms&belong=user",
+					"spread": false
+				},
+												{
+					"title": "访问控制策略",
+					"icon": "&#xe857;",
+					"href": "/web_autoindex/?system=erms&belong=acl",
+					"spread": false
+				}
+
+			]
+		}
+	],
+	"transfer": [
+		{
+			"title": "Transfer测试分类",
+			"icon": "&#xe6c9;",
+			"href": "",
+			"spread": false,
+			"children": [
+			]
+		},
+		{
+			"title": "快速测试",
+			"icon": "&#xe631;",
+			"href": "/web_quicktest/",
+			"spread": false
+		},
+		{
+			"title": "单一接口测试",
+			"icon": "&#xe674;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "Transfer接口总览",
+					"icon": "&#xe674;",
+					"href": "/web_apiindex/?system=transfer",
+					"spread": false
+				},
+				{
+					"title": "用户相关接口",
+					"icon": "&#xe612;",
+					"href": "/web_apiindex/?system=transfer&belong=user",
+					"spread": false
+				},
+				{
+					"title": "原文相关接口",
+					"icon": "&#xe621;",
+					"href": "/web_apiindex/?system=transfer&belong=document",
+					"spread": false
+				},
+					{
+					"title": "导航相关接口",
+					"icon": "&#xe632;",
+					"href": "/web_apiindex/?system=transfer&belong=navigation",
+					"spread": false
+				},
+				{
+					"title": "record接口",
+					"icon": "&#xe655;",
+					"href": "/web_apiindex/?system=transfer&belong=record",
+					"spread": false
+				},
+					{
+					"title": "案卷相关接口",
+					"icon": "&#xe663;",
+					"href": "/web_apiindex/?system=transfer&belong=volume",
+					"spread": false
+				},
+				{
+					"title": "档案相关接口",
+					"icon": "&#xe634;",
+					"href": "/web_apiindex/?system=transfer&belong=archives",
+					"spread": false
+				},
+					{
+					"title": "映射规则接口",
+					"icon": "&#xe62c;",
+					"href": "/web_apiindex/?system=transfer&belong=attribute_mapping_scheme",
+					"spread": false
+				},
+				{
+					"title": "意见相关接口",
+					"icon": "&#xe6b2;",
+					"href": "/web_apiindex/?system=transfer&belong=comments",
+					"spread": false
+				},
+					{
+					"title": "检测报告接口",
+					"icon": "&#xe63c;",
+					"href": "/web_apiindex/?system=transfer&belong=report",
+					"spread": false
+				},
+				{
+					"title": "移交表单接口",
+					"icon": "&#xe60a;",
+					"href": "/web_apiindex/?system=transfer&belong=transfer_form",
+					"spread": false
+				},
+					{
+					"title": "资源相关接口",
+					"icon": "&#xe612;",
+					"href": "/web_apiindex/?system=transfer&belong=resource",
+					"spread": false
+				},
+				{
+					"title": "元数据接口",
+					"icon": "&#xe600;",
+					"href": "/web_apiindex/?system=transfer&belong=metadata",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "流程接口测试",
+			"icon": "&#xe638;",
+			"href": "",
+			"spread": false,
+			"children": [
+			]
+		},
+		{
+			"title": "功能测试",
+			"icon": "&#xe857;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "功能测试",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest_transfer/",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "自动化测试",
+			"icon": "&#xe628;",
+			"href": "//",
+			"spread": false
+		}
+	],
+	"systemeSttings": [
+		{
+			"title": "测试网址",
+			"icon": "&#xe631;",
+			"href": "/web_linktest/",
+			"spread": false
+		},
+		{
+			"title": "友情链接",
+			"icon": "&#xe64c;",
+			"href": "/web_linklist/",
+			"spread": false
+		},
+		{
+			"title": "系统日志",
+			"icon": "&#xe857;",
+			"href": "//",
+			"spread": false
+		}
+	],
+	"tdr": [
+		{
+			"title": "Tdr测试分类",
+			"icon": "&#xe6c9;",
+			"href": "",
+			"spread": false,
+			"children": [
+			]
+		},
+		{
+			"title": "快速测试",
+			"icon": "&#xe631;",
+			"href": "/web_quicktest/",
+			"spread": false
+		},
+		{
+			"title": "单一接口测试",
+			"icon": "&#xe674;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+						"title": "tdr接口总览",
+						"icon": "&#xe770;",
+						"href": "/web_apiindex/?system=tdr",
+						"spread": false
+					},
+					{
+						"title": "鉴定任务接口",
+						"icon": "&#xe638;",
+						"href": "/web_apiindex/?system=tdr&belong=appraisal_task",
+						"spread": false
+					},
+                    {
+						"title": "库房存址",
+						"icon": "&#xe638;",
+						"href": "/web_apiindex/?system=tdr&belong=warehouse_address",
+						"spread": false
+					},
+					{
+						"title": "库房接口",
+						"icon": "&#xe600;",
+						"href": "/web_apiindex/?system=tdr&belong=warehouse",
+						"spread": false
+					},
+					{
+						"title": "库房层接口",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=warehouseLayer",
+						"spread": false
+					},
+					{
+						"title": "专题接口",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=subject",
+						"spread": false
+					},
+				{
+						"title": "专题档案接口",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=subject_relation",
+						"spread": false
+					},
+									{
+						"title": "利用档案接口",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=usage_archives",
+						"spread": false
+					},
+									{
+						"title": "档案利用接口",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=usage",
+						"spread": false
+					},
+									{
+						"title": "实体调卷管理接口",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=file_retrieval",
+						"spread": false
+					},
+					{
+						"title": "调卷单内档案详情",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=retrieval_archives",
+						"spread": false
+					},
+					{
+						"title": "Record接口",
+						"icon": "&#xe655;",
+						"href": "/web_apiindex/?system=tdr&belong=record",
+						"spread": false
+					},
+					{
+						"title": "案卷管理接口",
+						"icon": "&#xe663;",
+						"href": "/web_apiindex/?system=tdr&belong=volume",
+						"spread": false
+					},
+					{
+						"title": "档案管理接口",
+						"icon": "&#xe60a;",
+						"href": "/web_apiindex/?system=tdr&belong=archives",
+						"spread": false
+					},
+					{
+						"title": "资源管理接口",
+						"icon": "&#xe60a;",
+						"href": "/web_apiindex/?system=tdr&belong=resource",
+						"spread": false
+					},
+					{
+						"title": "导航管理接口",
+						"icon": "&#xe632;",
+						"href": "/web_apiindex/?system=tdr&belong=navigation",
+						"spread": false
+					},
+				 	{
+						"title": "视图自定义",
+						"icon": "&#xe600;",
+						"href": "/web_apiindex/?system=tdr&belong=view",
+						"spread": false
+					},
+					{
+						"title": "门类管理接口",
+						"icon": "&#xe6c9;",
+						"href": "/web_apiindex/?system=tdr&belong=category",
+						"spread": false
+					},
+					{
+						"title": "映射规则接口",
+						"icon": "&#xe62c;",
+						"href": "/web_apiindex/?system=tdr&belong=attribute_mapping_scheme",
+						"spread": false
+					},
+
+					{
+						"title": "公共操作相关接口",
+						"icon": "&#xe638;",
+						"href": "/web_apiindex/?system=tdr&belong=common",
+						"spread": false
+					},
+					{
+						"title": "元数据管理平台接口",
+						"icon": "&#xe600;",
+						"href": "/web_apiindex/?system=tdr&belong=metadata",
+						"spread": false
+					},
+					{
+						"title": "单位接口",
+						"icon": "&#xe770;",
+						"href": "/web_apiindex/?system=tdr&belong=unit",
+						"spread": false
+					},
+					{
+						"title": "部门管理接口",
+						"icon": "&#xe613;",
+						"href": "/web_apiindex/?system=tdr&belong=dept",
+						"spread": false
+					},
+					{
+						"title": "用户管理接口",
+						"icon": "&#xe61c;",
+						"href": "/web_apiindex/?system=tdr&belong=user",
+						"spread": false
+					}
+			]
+		},
+		{
+			"title": "流程接口测试",
+			"icon": "&#xe638;",
+			"href": "",
+			"spread": false,
+			"children": [
+
+			]
+		},
+		{
+			"title": "功能测试",
+			"icon": "&#xe857;",
+			"href": "",
+			"spread": false,
+			"children": [
+				{
+					"title": "档案接收",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest_tdr/",
+					"spread": false
+				},
+								{
+					"title": "档案管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest_tdr/",
+					"spread": false
+				},
+								{
+					"title": "任务中心",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest_tdr/",
+					"spread": false
+				},
+								{
+					"title": "档案利用",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest_tdr/",
+					"spread": false
+				},
+								{
+					"title": "统计分析",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest_tdr/",
+					"spread": false
+				},
+								{
+					"title": "系统管理",
+					"icon": "&#xe857;",
+					"href": "/web_functionalTest_tdr/",
+					"spread": false
+				}
+			]
+		},
+		{
+			"title": "自动化测试",
+			"icon": "&#xe628;",
+			"href": "//",
+			"spread": false
+		}
+
+
+
+	]
+}
+
+
