@@ -169,14 +169,14 @@ class RepeatRunSingleApi(SingleApiTest):
     repeat_result = {}
 
     def get(self, request, format=None):
-        print('show_api----------' + str(RepeatRunSingleApi.num_progress))
+        print('show_api----------' + str(self.num_progress))
         # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
-        if RepeatRunSingleApi.num_progress == 100:
-            RepeatRunSingleApi.num_progress = 0
+        if self.num_progress == 100:
+            self.num_progress = 0
             return Response(100)
         # 当进度不是百分之百的时候，返回当前进度
         else:
-            return Response(RepeatRunSingleApi.num_progress)
+            return Response(self.num_progress)
 
     def post(self, request, format=None):
         '''
@@ -211,10 +211,14 @@ class RepeatRunSingleApi(SingleApiTest):
 
             runtimes = round(endtime - starttime, 3)
             print("运行已结束")
-            RepeatRunSingleApi.repeat_result["总消耗时间"] = str(runtimes) + "秒"
-            RepeatRunSingleApi.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime), 3) * 1000) + "毫秒"
-            RepeatRunSingleApi.repeat_result["重复执行次数"] = end
-            return Response(RepeatRunSingleApi.repeat_result)
+            if type(self.repeat_result) != dict:
+                dic = {}
+                dic["重复执行结果"] = self.repeat_result
+                self.repeat_result = dic
+            self.repeat_result["总消耗时间"] = str(runtimes) + "秒"
+            self.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime), 3) * 1000) + "毫秒"
+            self.repeat_result["重复执行次数"] = end
+            return Response(self.repeat_result)
         except:
             print("单线程运行")
             L = {0: int(runtime)}
@@ -232,10 +236,14 @@ class RepeatRunSingleApi(SingleApiTest):
             endtime = time.time()
             runtimes = round(endtime - starttime, 3)
             print("运行已结束")
-            RepeatRunSingleApi.repeat_result["总消耗时间"] = str(runtimes) + "秒"
-            RepeatRunSingleApi.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime),3) * 1000) + "毫秒"
-            RepeatRunSingleApi.repeat_result["执行次数"] = end
-            return Response(RepeatRunSingleApi.repeat_result)
+            if type(self.repeat_result) != dict:
+                dic = {}
+                dic["重复执行结果"] = self.repeat_result
+                self.repeat_result = dic
+            self.repeat_result["总消耗时间"] = str(runtimes) + "秒"
+            self.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime),3) * 1000) + "毫秒"
+            self.repeat_result["执行次数"] = end
+            return Response(self.repeat_result)
 
     def repeat_run(self,start,end,content,runtime_concurrency=None,concurrency=None):
         print(start,end)
@@ -262,11 +270,11 @@ class RepeatRunSingleApi(SingleApiTest):
                     print("我是计数num="+str(num))
                     RepeatRunSingleApi.num_progress = round(num / end * 100, )
                     print("进度条计数="+str(RepeatRunSingleApi.num_progress))
-                RepeatRunSingleApi.repeat_result = response
+                self.repeat_result = response
             except TypeError as e:
-                RepeatRunSingleApi.repeat_result = {"code": 400, "msg": "操作或函数应用于不适当类型的对象"}
+                self.repeat_result = {"code": 400, "msg": "操作或函数应用于不适当类型的对象"}
             except json.decoder.JSONDecodeError as e:
-                RepeatRunSingleApi.repeat_result = {"code": 400, "msg": "json.loads()读取字符串报错"}
+                self.repeat_result = {"code": 400, "msg": "json.loads()读取字符串报错"}
         else:
             '''
                 选择多个接口运行
@@ -289,9 +297,9 @@ class RepeatRunSingleApi(SingleApiTest):
                         response = RequestMethod(token).run_main(method, url, params, body)
                         L.append(response)
                     except TypeError as e:
-                        RepeatRunSingleApi.repeat_result = {"code": 400, "msg": "操作或函数应用于不适当类型的对象"}
+                        self.repeat_result = {"code": 400, "msg": "操作或函数应用于不适当类型的对象"}
                     except json.decoder.JSONDecodeError as e:
-                        RepeatRunSingleApi.repeat_result = {"code": 400, "msg": "json.loads()读取字符串报错"}
+                        self.repeat_result = {"code": 400, "msg": "json.loads()读取字符串报错"}
                     if concurrency:
                         cnt += concurrency
                         all_num = runtime_concurrency * len(content)
@@ -300,4 +308,4 @@ class RepeatRunSingleApi(SingleApiTest):
                         all_num = len(content) * end
                     RepeatRunSingleApi.num_progress = round(cnt / (all_num) * 100, )
             # 将[{},{}]数据赋值给类变量repeat_result
-            RepeatRunSingleApi.repeat_result = {"多接口重复执行结果":L}
+            self.repeat_result = {"多接口重复执行结果":L}

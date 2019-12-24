@@ -877,8 +877,8 @@
                                 });
                             },
                             error: function (data) {
-                                console.log("请求失败" + data);
-                                layer.msg("NameError", {
+                                let res = JSON.stringify(data, null, 4);
+                                layer.msg(res, {
                                     icon: 5,
                                     offset: 't',
                                 });

@@ -161,10 +161,12 @@ class DelSingleApi(APIView):
             raise Http404
 
     def delete(self, request, pk, format=None):
+        #批量删除
         if pk == '0':
             for i in json.loads(request.data['ids']):
                 self.get_object(i).delete()
             return Response({"code": "204", "msg": "操作成功"},status=status.HTTP_200_OK)
+        #单个删除
         else:
             snippet = self.get_object(pk)
             snippet.delete()
