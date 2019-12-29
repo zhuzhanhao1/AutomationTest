@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SingleApi,LeftMenu,ChildMenu,SystemRole,Link,Testurl
+from .models import SingleApi,LeftMenu,ChildMenu,SystemRole,Link,Testurl,ProcessApi
 
 
 class SingleApiSerializers(serializers.ModelSerializer):
@@ -8,7 +8,8 @@ class SingleApiSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = SingleApi
-        fields = ('caseid', 'casename', 'identity', 'url','method','header','params','body','exceptres','result','belong','system','sortid','duration','head')  # 需要序列化的属性
+        fields = ('caseid', 'casename', 'identity', 'url','method','header','params','body',
+                  'exceptres','result','belong','system','sortid','duration','head')  # 需要序列化的属性
 
 class SingleApiResponseSerializers(serializers.ModelSerializer):
     '''
@@ -60,6 +61,8 @@ class ChildMenuSerializers(serializers.ModelSerializer):
         model = ChildMenu
         fields = ('title','icon','href','spread')
 
+
+
 class SystemRoleSerializers(serializers.ModelSerializer):
     '''
         系统角色
@@ -100,3 +103,85 @@ class TesturlSerializers(serializers.ModelSerializer):
     class Meta:
         model = Testurl
         fields = ('id', 'logo','websites','url','apidocument')
+
+
+class ProcessApiListSerializers(serializers.ModelSerializer):
+    '''
+        流程列表
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('caseid', 'casename', 'identity', 'url','method','header','params','body','exceptres','result','belong','system','sortid',
+                  'duration','head','isprocess','depend_id','depend_key','replace_key','replace_position')  # 需要序列化的属性
+
+
+class AddProcessApiSerializers(serializers.ModelSerializer):
+    '''
+        新增流程接口
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('caseid', 'casename', 'identity', 'url','method','params','body','belong','system','sortid',
+                  'head','depend_id','depend_key','replace_key','replace_position')  # 需要序列化的属性
+
+
+class ProcessApiParamsSerializers(serializers.ModelSerializer):
+    '''
+        流程接口-修改params的值
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('params',)  # 需要序列化的属性
+
+
+class ProcessApiBodySerializers(serializers.ModelSerializer):
+    '''
+        流程接口-修改body的值
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('body',)  # 需要序列化的属性
+
+
+class ProcessApiHeadSerializers(serializers.ModelSerializer):
+    '''
+        流程接口-修改负责人的值
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('head',)  # 需要序列化的属性
+
+
+class ProcessApiDependKeySerializers(serializers.ModelSerializer):
+    '''
+        流程接口-修改依赖的键的值
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('depend_key',)  # 需要序列化的属性
+
+
+class ProcessApiDependIdSerializers(serializers.ModelSerializer):
+    '''
+        流程接口-修改依赖id的值
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('depend_id',)  # 需要序列化的属性
+
+
+class ProcessApiReplaceKeySerializers(serializers.ModelSerializer):
+    '''
+        流程接口-修改代替的key的值
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('replace_key',)  # 需要序列化的属性
+
+class ProcessApiReplacePositionSerializers(serializers.ModelSerializer):
+    '''
+        流程接口-修改代替位置的值
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('replace_position',)  # 需要序列化的属性

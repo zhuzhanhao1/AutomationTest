@@ -2,6 +2,7 @@
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
 
+from ApiTest.api.processApiList import AddProcessApi
 from ApiTest.common.dingDingNotice import send_singleapi_link, send_ding
 from ApiTest.models import SingleApi
 from django.contrib import auth
@@ -9,6 +10,7 @@ from django.contrib import auth
 role = {"ast":"单位档案员","sysadmin":"系统管理员","admin":"单位管理员","tdradmin": "数据管理员"}
 erms_role = {"ast":"单位档案员","sysadmin":"系统管理员","admin":"单位管理员"}
 tdr_role = {"tdradmin": "数据管理员"}
+
 ermsapi = {
     "unit": "单位接口",
     "dept": "部门管理接口",
@@ -35,6 +37,7 @@ ermsapi = {
     "admin": "admin平台接口",
     "metadata": "元数据平台接口"
 }
+
 tdrapi = {
     "user":"用户管理接口",
     "unit":"单位接口",
@@ -68,6 +71,10 @@ tdrapi = {
     "record": "Record接口"
 }
 
+erms_process_api = {
+    "login":"登录过程接口",
+    "data_form_config":"数据表单配置接口"
+}
 # 用户登录
 def login_views(request):
     if request.POST:
@@ -127,24 +134,64 @@ def singleapi_views(request):
             role:角色对象
             apinav:新建、编辑所属模块的select值
         '''
-        l  = []
-        for a in ermsapi:
-            l.append(ermsapi.get(a))
+        #如果belong存在,只返回belong的值
         for i in ermsapi:
             if belong == i:
+                L = []
                 belong_value = ermsapi.get(i,"")
-                return render(request, "singleApi.html",{"belong_key":belong,"belong": belong_value, "system": system,"role":erms_role,"apinav":l})
+                L.append(belong_value)
+                return render(request, "singleApi.html",{"belong_key":belong,"belong": belong_value, "system": system,"role":erms_role,"apinav":L})
+        #如果belong不存在，返回导航的总列表
+        l = []
+        for a in ermsapi:
+            l.append(ermsapi.get(a))
         return render(request, "singleApi.html",{"system": system,"role":erms_role,"apinav":l})
 
     elif system == "tdr":
+        # 如果belong存在,只返回belong的值
+        for i in tdrapi:
+            if belong == i:
+                L = []
+                belong_value = tdrapi.get(i,"")
+                L.append(belong_value)
+                return render(request, "singleApi.html",{"belong_key":belong,"belong": belong_value, "system": system,"role":tdr_role,"apinav":L})
+        # 如果belong不存在，返回导航的总列表
         l  = []
         for a in tdrapi:
             l.append(tdrapi.get(a))
-        for i in tdrapi:
-            if belong == i:
-                belong_value = tdrapi.get(i,"")
-                return render(request, "singleApi.html",{"belong_key":belong,"belong": belong_value, "system": system,"role":tdr_role,"apinav":l})
         return render(request, "singleApi.html",{"system": system,"role":tdr_role,"apinav":l})
+
+
+
+
+def processapi_views(request):
+    '''
+    :param request: belong、system
+    :return: 单一接口html
+    '''
+    global erms_role,tdr_role,erms_process_api
+    belong = request.GET.get("belong", "")
+    system = request.GET.get("system", "")
+    sortid = AddProcessApi().parameter_check()
+    if system == "erms":
+        #如果belong存在,只返回belong的值
+        for i in erms_process_api:
+            if belong == i:
+                L = []
+                belong_value = erms_process_api.get(i,"")
+                L.append(belong_value)
+                return render(request, "processApi.html",
+                              {"belong_key":belong,"belong": belong_value,
+                                "system": system,"role":erms_role,"apinav":L,"sortid":sortid})
+        #如果belong不存在，返回导航的总列表
+        l = []
+        for a in erms_process_api:
+            l.append(erms_process_api.get(a))
+        return render(request, "processApi.html",
+                      {"system": system,"role":erms_role,"apinav":l,"sortid":sortid})
+
+
+
 
 def quicktest_views(request):
     '''

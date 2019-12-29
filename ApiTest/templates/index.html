@@ -181,16 +181,16 @@
 				<a href="javascript:;" class="seraph hideMenu layui-icon layui-icon-shrink-right"></a>
 				<!-- 顶级菜单 -->
 				<ul class="layui-nav topLevelMenus" pc>
-					<li class="layui-nav-item layui-this" data-menu="erms" pc>
+					<li class="layui-nav-item layui-this" data-menu="single" pc>
 						<a href="javascript:;"><i class="layui-icon" data-icon="&#xe6c9;">&#xe6c9;</i><cite>接口测试</cite></a>
 					</li>
-					<li class="layui-nav-item" data-menu="transfer" pc>
+					<li class="layui-nav-item" data-menu="process" pc>
 						<a href="javascript:;"><i class="layui-icon" data-icon="&#xe600;">&#xe600;</i><cite>流程测试</cite></a>
 					</li>
 {#					<li class="layui-nav-item" data-menu="systemeSttings" pc>#}
 {#						<a href="javascript:;"><i class="layui-icon" data-icon="&#xe67a;">&#xe67a;</i><cite>Admin</cite></a>#}
 {#					</li>#}
-					<li class="layui-nav-item" data-menu="tdr" pc>
+					<li class="layui-nav-item" data-menu="automation" pc>
 						<a href="javascript:;"><i class="layui-icon" data-icon="&#xe658;">&#xe658;</i><cite>UI自动化测试</cite></a>
 					</li>
 				</ul>
@@ -301,20 +301,20 @@
 				//通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
 				function getData(json){
 					$.getJSON(tab.tabConfig.url,function(data){
-						if(json == "erms"){
-							dataStr = data.erms;
+						if(json == "single"){
+							dataStr = data.single;
 							//重新渲染左侧菜单
 							tab.render();
-						}else if(json == "transfer"){
-							dataStr = data.transfer;
+						}else if(json == "process"){
+							dataStr = data.process;
 							//重新渲染左侧菜单
 							tab.render();
 						}else if(json == "systemeSttings"){
 							dataStr = data.systemeSttings;
 							//重新渲染左侧菜单
 							tab.render();
-						}else if(json == "tdr"){
-							dataStr = data.tdr;
+						}else if(json == "automation"){
+							dataStr = data.automation;
 							//重新渲染左侧菜单
 							tab.render();
 						}
@@ -347,7 +347,7 @@
 				})
 
 				//通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
-				getData("erms");
+				getData("single");
 
 				//手机设备的简单适配
 				$('.site-tree-mobile').on('click', function(){

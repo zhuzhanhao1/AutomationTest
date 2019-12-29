@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from ApiTest.api import renderHtml,singleApiList,systemRole,Menu,quickTest,singleApiTest,Link,systemLog
+from ApiTest.api import renderHtml,singleApiList,systemRole,Menu,quickTest,singleApiTest,Link,systemLog,processApiList
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
@@ -10,12 +10,14 @@ urlpatterns = [
     url(r'home/$', renderHtml.home_views),
     url(r'quicktest/$', renderHtml.quicktest_views),
     url(r'singleapi/$', renderHtml.singleapi_views),
+    url(r'processapi/$', renderHtml.processapi_views),
     url(r'detail/$', renderHtml.apiDetail_views),
     url(r'link/$', renderHtml.link_views),
     url(r'testurl/$', renderHtml.testurl_views),
     url(r'dingding/$', renderHtml.dingdingNotice_views),
 
     url(r'singleapi/list/$', singleApiList.SingleApiList.as_view()),
+    url(r'singleapi/sort/$', singleApiList.SingleApiSort.as_view()),
     url(r'singleapi/search/$', singleApiList.SearchSingleApi.as_view()),
     url(r'singleapi/run/$', singleApiTest.SingleApiTest.as_view()),
     url(r'singleapi/repeatrun/$', singleApiTest.RepeatRunSingleApi.as_view()),
@@ -23,6 +25,12 @@ urlpatterns = [
     url(r'singleapi/del_case/(?P<pk>[0-9]+)/$', singleApiList.DelSingleApi.as_view()),
     url(r'singleapi/update_case/(?P<pk>[0-9]+)/$', singleApiList.UpdateSingleApi.as_view()),
     url(r'singleapi/detail_case/(?P<pk>[0-9]+)/$', singleApiList.SingleApiDetail.as_view()),
+
+    url(r'processapi/list/$', processApiList.ProcessApiList.as_view()),
+    url(r'processapi/add_case/$', processApiList.AddProcessApi.as_view()),
+    url(r'processapi/del_case/(?P<pk>[0-9]+)/$', processApiList.DelProcessApi.as_view()),
+    url(r'processapi/update_case/(?P<pk>[0-9]+)/$', processApiList.UpdateProcessApi.as_view()),
+
 
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),
     url(r'systemrole/update_info/(?P<pk>[a-z]+)', systemRole.UpdateSystemRole.as_view()),
