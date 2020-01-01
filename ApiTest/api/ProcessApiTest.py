@@ -3,9 +3,12 @@ import json
 import threading
 import time
 
+import jsonpath
+from django.core.paginator import Paginator
+from django.db.models import Q
 from rest_framework import viewsets
-from ApiTest.models import SystemRole, SingleApi
-from ApiTest.serializers import SingleApiSerializers,SingleApiResponseSerializers
+from ApiTest.models import SystemRole, ProcessApi
+from ApiTest.serializers import ProcessApiListSerializers,ProcessApiResponseSerializers
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -18,7 +21,26 @@ JSONParser: 表示只能解析content - type:application / json头
 JSONParser: 表示只能解析content - type:application / x - www - form - urlencoded头
 '''
 
-class SingleApiTest(APIView):
+class ProcessApiTest(APIView):
+
+    num_progress = 0
+    failed_num = 0
+    failed_ids = []
+
+    def get(self, request, format=None):
+        '''
+        :param request:
+        :param format:
+        :return: 流程进度
+        '''
+        print('show_api----------' + str(self.num_progress))
+        # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
+        if self.num_progress == 100:
+            self.num_progress = 0
+            return Response(100)
+        # 当进度不是百分之百的时候，返回当前进度
+        else:
+            return Response(self.num_progress)
 
     def get_token(self,identity):
         '''
@@ -53,17 +75,21 @@ class SingleApiTest(APIView):
             else:
                 return body
 
-    def check_result_is_fail(self,result):
+    def check_result_is_fail(self,result,caseid):
         '''
         :param body:
         :return: 错误的接口数
         '''
-        failed_num = 0
-        result = json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2)
-        if "error" in result and "timestamp" in result:
-            failed_num += 1
-            return failed_num
-
+        try:
+            result = json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2)
+            if "error" in result and "timestamp" in result:
+                self.failed_num += 1
+                self.failed_ids.append(caseid)
+                return
+            return
+        except:
+            print("返回结果不是JSON对象")
+            return
 
     def parameter_check(self, identity,url,method):
         """
@@ -78,7 +104,9 @@ class SingleApiTest(APIView):
         except KeyError:
             return Response({"code": 400, "msg": "参数有误"}, status=status.HTTP_400_BAD_REQUEST)
 
-
+    def depend_params(self,depend_id):
+        id = ProcessApi.objects.get(caseid=depend_id)
+        return id
 
 
     def post(self, request, format=None):
@@ -91,63 +119,32 @@ class SingleApiTest(APIView):
         content = json.loads(datas["request"])
         if len(content) == 1:
             caseid = content[0].get("caseid","")
-            identity = content[0].get("identity", "")   # 用户身份
-            url = content[0].get("url", "")             # 登录地址
-            method = content[0].get("method", "")       # 请求方式
-            params = content[0].get("params", "")       # query数据
-            body = content[0].get("body", "")           # body数据
+            identity = content[0].get("identity", "")    # 用户身份
+            url = content[0].get("url", "")              # 登录地址
+            method = content[0].get("method", "")        # 请求方式
+            params = content[0].get("params", "")        # query数据
+            body = content[0].get("body", "")            # body数据
+            depend_id = content[0].get("depend_id", "")  # depend_id数据
             check_params = self.parameter_check(identity,url,method)
-            if check_params:
-                return check_params
             token = self.get_token(identity)            # 根据用户身份获取请求头Token数据
             body = self.check_greater_less_is_exist(body)
-            try:
-                starttime = time.time()
-                response = RequestMethod(token).run_main(method, url, params, body)
-                endtime = time.time()
-                runtime = round(endtime - starttime, 3)
-                djson = self.check_greater_less_is_exist(response)
-                id = SingleApi.objects.get(caseid=caseid)
-                data = {"result":djson,"duration":runtime}
-                serializer = SingleApiResponseSerializers(id, data=data)
-                # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
-                if serializer.is_valid():
-                    serializer.save()
-                    return Response(response, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-            except TypeError as e:
-                print(e)
-                return Response({"code": 400, "msg": "操作或函数应用于不适当类型的对象"}, status=status.HTTP_400_BAD_REQUEST)
-            except json.decoder.JSONDecodeError as e:
-                print(e)
-                return Response({"code": 400, "msg": "json.loads()读取字符串报错"}, status=status.HTTP_400_BAD_REQUEST)
-        else:
-            '''
-                选择多个接口运行
-            '''
-            L = []
-            for i in content:
-                caseid = i.get("caseid","")
-                identity = i.get("identity", "")    # 用户身份
-                url = i.get("url", "")              # 登录地址
-                method = i.get("method", "")        # 请求方式
-                params = i.get("params", "")        # query数据
-                body = i.get("body", "")            # body数据
-                result = self.parameter_check(identity, url, method)
-                if result:
-                    return result
-                token = self.get_token(identity)  # 根据用户身份获取请求头Token数据
-                body = self.check_greater_less_is_exist(body)
+
+            if check_params:
+                return check_params
+            if depend_id:
+                id = self.depend_params(depend_id)
                 try:
                     starttime = time.time()
-                    response = RequestMethod(token).run_main(method, url, params, body)
-                    L.append(response)
+                    response = RequestMethod(token).run_main(id.method, id.url, id.params, id.body)
                     endtime = time.time()
-                    runtime = round(endtime - starttime, 3)     #接口执行的消耗时间
+                    runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
+
                     djson = self.check_greater_less_is_exist(response)
-                    id = SingleApi.objects.get(caseid=caseid)
+                    self.check_result_is_fail(response, caseid)
+
+                    id = ProcessApi.objects.get(caseid=caseid)
                     data = {"result": djson, "duration": runtime}
-                    serializer = SingleApiResponseSerializers(id, data=data)
+                    serializer = ProcessApiResponseSerializers(id, data=data)
                     # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
                     if serializer.is_valid():
                         serializer.save()
@@ -159,153 +156,260 @@ class SingleApiTest(APIView):
                 except json.decoder.JSONDecodeError as e:
                     print(e)
                     return Response({"code": 400, "msg": "json.loads()读取字符串报错"}, status=status.HTTP_400_BAD_REQUEST)
-            # 将[{},{}]数据返回给前端
-            return Response(L)
-
-
-class RepeatRunSingleApi(SingleApiTest):
-
-    num_progress = 0
-    repeat_result = {}
-
-    def get(self, request, format=None):
-        print('show_api----------' + str(self.num_progress))
-        # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
-        if self.num_progress == 100:
-            self.num_progress = 0
-            return Response(100)
-        # 当进度不是百分之百的时候，返回当前进度
-        else:
-            return Response(self.num_progress)
-
-    def post(self, request, format=None):
-        '''
-        :param request: request.data
-        :param format: None
-        :return: 接口响应结果，JOSN格式化数据
-        '''
-        datas = request.data
-        content = json.loads(datas["request"])
-        runtime = json.loads(datas["runtime"])
-        try:
-            concurrency = json.loads(datas["concurrency"])
-            print("多线程运行")
-            runtime_concurrency = int(concurrency) * int(runtime)
-            #构造线程组
-            L = {}
-            for i in range(int(concurrency)):
-                L[i*int(runtime)] = (i+1)*int(runtime)
-            print(L)
-            thread = []
-            for start, end in L.items():
-                t = threading.Thread(target=self.repeat_run, args=(start, end, content,runtime_concurrency,int(concurrency)))
-                thread.append(t)
-
-            starttime = time.time()
-            for i in range(len(thread)):
-                thread[i].start()
-
-            for w in range(len(thread)):
-                thread[w].join()
-            endtime = time.time()
-
-            runtimes = round(endtime - starttime, 3)
-            print("运行已结束")
-            if type(self.repeat_result) != dict:
-                dic = {}
-                dic["重复执行结果"] = self.repeat_result
-                self.repeat_result = dic
-            self.repeat_result["总消耗时间"] = str(runtimes) + "秒"
-            self.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime), 3) * 1000) + "毫秒"
-            self.repeat_result["重复执行次数"] = end
-            return Response(self.repeat_result)
-        except:
-            print("单线程运行")
-            L = {0: int(runtime)}
-            thread = []
-            for start, end in L.items():
-                t = threading.Thread(target=self.repeat_run, args=(start, end, content))
-                thread.append(t)
-
-            starttime = time.time()
-            for i in range(len(thread)):
-                thread[i].start()
-
-            for w in range(len(thread)):
-                thread[w].join()
-            endtime = time.time()
-            runtimes = round(endtime - starttime, 3)
-            print("运行已结束")
-            if type(self.repeat_result) != dict:
-                dic = {}
-                dic["重复执行结果"] = self.repeat_result
-                self.repeat_result = dic
-            self.repeat_result["总消耗时间"] = str(runtimes) + "秒"
-            self.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime),3) * 1000) + "毫秒"
-            self.repeat_result["执行次数"] = end
-            return Response(self.repeat_result)
-
-    def repeat_run(self,start,end,content,runtime_concurrency=None,concurrency=None):
-        print(start,end)
-        if len(content) == 1:
-            identity = content[0].get("identity", "")   # 用户身份
-            url = content[0].get("url", "")             # 登录地址
-            method = content[0].get("method", "")       # 请求方式
-            params = content[0].get("params", "")       # query数据
-            body = content[0].get("body", "")           # body数据
-            result = self.parameter_check(identity,url,method)
-            if result:
-                return result
-            token = self.get_token(identity)            # 根据用户身份获取请求头Token数据
-            body = self.check_greater_less_is_exist(body)
-            try:
-                num = 0
-                for i in range(start,end):
-                    if runtime_concurrency:
-                        num += concurrency
-                        end = runtime_concurrency
-                    else:
-                        num += 1
+            else:
+                try:
+                    starttime = time.time()
                     response = RequestMethod(token).run_main(method, url, params, body)
-                    print("我是计数num="+str(num))
-                    RepeatRunSingleApi.num_progress = round(num / end * 100, )
-                    print("进度条计数="+str(RepeatRunSingleApi.num_progress))
-                self.repeat_result = response
-            except TypeError as e:
-                self.repeat_result = {"code": 400, "msg": "操作或函数应用于不适当类型的对象"}
-            except json.decoder.JSONDecodeError as e:
-                self.repeat_result = {"code": 400, "msg": "json.loads()读取字符串报错"}
+                    print(response)
+                    endtime = time.time()
+                    runtime = round(endtime - starttime, 3)
+                    djson = self.check_greater_less_is_exist(response)
+                    id = ProcessApi.objects.get(caseid=caseid)
+                    data = {"result":djson,"duration":runtime}
+                    serializer = ProcessApiResponseSerializers(id, data=data)
+                    # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
+                    if serializer.is_valid():
+                        serializer.save()
+                        return Response(response, status=status.HTTP_201_CREATED)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                except TypeError as e:
+                    print(e)
+                    return Response({"code": 400, "msg": "操作或函数应用于不适当类型的对象"}, status=status.HTTP_400_BAD_REQUEST)
+                except json.decoder.JSONDecodeError as e:
+                    print(e)
+                    return Response({"code": 400, "msg": "json.loads()读取字符串报错"}, status=status.HTTP_400_BAD_REQUEST)
         else:
+
             '''
                 选择多个接口运行
             '''
-            cnt = 0
-            for num in range(start, end):
-                L = []
-                for i in content:
-                    identity = i.get("identity", "")    # 用户身份
-                    url = i.get("url", "")              # 登录地址
-                    method = i.get("method", "")        # 请求方式
-                    params = i.get("params", "")        # query数据
-                    body = i.get("body", "")            # body数据
-                    result = self.parameter_check(identity, url, method)
-                    if result:
-                        return result
-                    token = self.get_token(identity)  # 根据用户身份获取请求头Token数据
-                    body = self.check_greater_less_is_exist(body)
-                    try:
-                        response = RequestMethod(token).run_main(method, url, params, body)
-                        L.append(response)
-                    except TypeError as e:
-                        self.repeat_result = {"code": 400, "msg": "操作或函数应用于不适当类型的对象"}
-                    except json.decoder.JSONDecodeError as e:
-                        self.repeat_result = {"code": 400, "msg": "json.loads()读取字符串报错"}
-                    if concurrency:
-                        cnt += concurrency
-                        all_num = runtime_concurrency * len(content)
+            dic = {}
+            num = 0
+            process_ids = []
+            for i in content:
+                caseid = i.get("caseid","")
+                identity = i.get("identity", "")    # 用户身份
+                url = i.get("url", "")              # 登录地址
+                method = i.get("method", "")        # 请求方式
+                params = i.get("params", "")        # query数据
+                body = i.get("body", "")            # body数据
+                depend_id = i.get("depend_id","")
+                depend_key = i.get("depend_key","")
+                replace_key = i.get("replace_key","")
+                replace_position = i.get("replace_position","")
+
+                result = self.parameter_check(identity, url, method)
+                token = self.get_token(identity)  # 根据用户身份获取请求头Token数据
+                body = self.check_greater_less_is_exist(body)
+
+                if result:
+                    return result
+                if depend_id:
+                    print("我需要依赖别的接口哦！！！")
+                    depend_id = depend_id.split(",")
+                    # 如果请求的依赖接口只有一个的时候
+                    if len(depend_id) == 1:
+                        if int(depend_id[0]) in process_ids:
+                            print("我所依赖的接口出错了哦")
+                            response = "我所依赖的id为" + depend_id[0] + "的接口出错了哦"
+                            runtime = 0
+                        else:
+                            dependid = ProcessApi.objects.get(caseid=depend_id[0])
+                            # 获取依赖接口返回的结果
+                            result = json.loads(dependid.result)[dependid.casename]
+                            body = json.loads(body) if body != "" else body
+                            params = json.loads(params) if params != "" else params
+                            # 从前台拿到需替换的key,转为字典，字典的键存入列表
+                            replaceKey = eval(replace_key)
+                            replaceKey_key = [x for x in replaceKey]
+                            print(replaceKey_key)
+                            # 从前台拿到需要依赖的key,转为字典，把字典的键存入列表
+                            dependkey = eval(depend_key)
+                            dependkey_key = [x for x in dependkey]
+                            print(dependkey_key)
+                            # 判断替换的区域是body还是params，赋值给变量params_body
+                            params_body = params if replace_position == "params" else body
+                            depend_value = []  # 首先创建依赖的空列表
+                            replace_value = []  # 首先创建替换的空列表
+                            try:
+                                for i in range(len(dependkey)):
+                                    # 将依赖的结果集放入一个列表存储
+                                    dependvalue = jsonpath.jsonpath(result, dependkey_key[i])[
+                                        dependkey[dependkey_key[i]]]
+                                    print(dependvalue)
+                                    if type(dependvalue) is list:
+                                        dependvalue = dependvalue[0]
+                                    depend_value.append(dependvalue)
+                                    # 将需要替换的结果集放入一个列表存储
+                                    replacevalue = jsonpath.jsonpath(params_body, replaceKey_key[i])[
+                                        replaceKey[replaceKey_key[i]]]
+                                    print(replacevalue)
+                                    if type(replacevalue) is list:
+                                        replacevalue = replacevalue[0]
+                                    replace_value.append(replacevalue)
+                                # 将变量params_body转为json字符串，为了之后的字符串替换
+                                params_body = json.dumps(params_body, ensure_ascii=False, sort_keys=True, indent=2)
+                                # 将替换的内容体中需要替换的结果集内逐一遍历替换为依赖的结果集内对应的数据
+                                for i in range(len(depend_value)):
+                                    params_body = params_body.replace(replace_value[i], depend_value[i])
+                                print(params_body)
+                                starttime = time.time()
+                                response = RequestMethod(token).run_main(method, url, params_body, json.dumps(
+                                    body)) if replace_position == "params" else RequestMethod(token).run_main(method, url,
+                                                                                                   json.dumps(params),
+                                                                                                   params_body)
+                                endtime = time.time()
+                                runtime = round(endtime - starttime, 3)     #接口执行的消耗时间
+                            except TypeError as e:
+                                print("类型错误")
+                                print(e)
+                                response = "异常的id为:" + str(caseid) + "," + "操作或函数应用于不适当类型的对象"
+                            except json.decoder.JSONDecodeError as e:
+                                print("json解析错误")
+                                print(e)
+                                response = "异常的id为:" + str(caseid) + "," + "json.loads()读取字符串报错"
+                    # 如果请求的依赖接口不止有一个的时候
                     else:
-                        cnt += 1
-                        all_num = len(content) * end
-                    RepeatRunSingleApi.num_progress = round(cnt / (all_num) * 100, )
-            # 将[{},{}]数据赋值给类变量repeat_result
-            self.repeat_result = {"多接口重复执行结果":L}
+                        body = json.loads(body) if body != "" else body
+                        params = json.loads(params) if params != "" else params
+                        # 从前台拿到需替换的key,转为字典，字典的键存入列表
+                        replaceKey = eval(replace_key)
+                        replaceKey_key = [x for x in replaceKey]
+                        print(replaceKey_key)
+                        # 从前台拿到需要依赖的key,转为字典，把字典的键存入列表
+                        dependkey = eval(depend_key)
+                        # 将所有依赖的接口对应的结果的值通过jsonpath[key]替换出来，加入一个列表中
+                        depend_value = []
+                        for a in range(len(depend_id)):
+                            if int(depend_id[a]) in process_ids:
+                                response = "我所依赖的id为" + depend_id[a] + "的接口出错了哦"
+                                break
+                            else:
+                                try:
+                                    for i in range(len(depend_id)):
+                                        dependid = ProcessApi.objects.get(caseid=depend_id[i])
+                                        # 通过id获取依赖接口返回的结果
+                                        result = json.loads(dependid.result)[dependid.casename]
+                                        print(result)
+                                        # 获取需要替换的jsonpath[key]的结果，转为字典，字典的键放入一个列表存储。
+                                        dependkey_a = dependkey[i]
+                                        print(dependkey_a)
+                                        dependkey_ab = [x for x in dependkey_a]
+                                        print(dependkey_ab)
+                                        #
+                                        for ii in range(len(dependkey_ab)):
+                                            dependvalue = jsonpath.jsonpath(result, dependkey_ab[ii])[
+                                                dependkey_a[dependkey_ab[ii]]]
+                                            print(dependvalue)
+                                            if type(dependvalue) is list:
+                                                dependvalue = dependvalue[0]
+                                            depend_value.append(dependvalue)
+
+                                    params_body = params if replace_position == "params" else body
+                                    print("体内容取值开开始。。。。")
+                                    replace_value = []
+                                    for i in range(len(replaceKey_key)):
+                                        replacevalue = jsonpath.jsonpath(params_body, replaceKey_key[i])[
+                                            replaceKey[replaceKey_key[i]]]
+                                        print(replacevalue)
+                                        if type(replacevalue) is list:
+                                            replacevalue = replacevalue[0]
+                                        replace_value.append(replacevalue)
+                                    print(replace_value)
+                                    # 将变量params_body转为json字符串，为了之后的字符串替换
+                                    params_body = json.dumps(params_body, ensure_ascii=False, sort_keys=True, indent=2)
+                                    # 将替换的内容体中需要替换的结果集内逐一遍历替换为依赖的结果集内对应的数据
+                                    for i in range(len(depend_value)):
+                                        params_body = params_body.replace(replace_value[i], depend_value[i])
+                                    print(params_body)
+                                    starttime = time.time()
+                                    response = RequestMethod(token).run_main(method, url, params_body, json.dumps(
+                                        body)) if replace_position == "params" else RequestMethod(token).run_main(method, url,
+                                                                                                       json.dumps(params),params_body)
+                                    endtime = time.time()
+                                    runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
+                                except TypeError as e:
+                                    print("类型错误")
+                                    print(e)
+                                    response = "异常的id为:" + str(caseid) + "," + "操作或函数应用于不适当类型的对象"
+                                except json.decoder.JSONDecodeError as e:
+                                    print("json解析错误")
+                                    print(e)
+                                    response = "异常的id为:" + str(caseid) + "," + "json.loads()读取字符串报错"
+                                break
+
+                else:
+                    try:
+                        starttime = time.time()
+                        response = RequestMethod(token).run_main(method, url, params, body)
+                        endtime = time.time()
+                        runtime = round(endtime - starttime, 3)     #接口执行的消耗时间
+
+                    except TypeError as e:
+                        print(e)
+                        response = "异常的id为:" + str(caseid) + "," + "操作或函数应用于不适当类型的对象"
+                    except json.decoder.JSONDecodeError as e:
+                        print(e)
+                        response = "异常的id为:" + str(caseid) + "," + "json.loads()读取字符串报错"
+
+                djson = self.check_greater_less_is_exist(response)
+                self.check_result_is_fail(response, caseid)
+
+                id = ProcessApi.objects.get(caseid=caseid)
+                data = {"result": djson, "duration": runtime}
+                serializer = ProcessApiResponseSerializers(id, data=data)
+                # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
+                if serializer.is_valid():
+                    serializer.save()
+                else:
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                num += 1
+                ProcessApiTest.num_progress = round(num / len(content) * 100, )
+            # 将{}数据返回给前端
+            dic["failcases"] = self.failed_ids
+            dic["errors"] = self.failed_num
+            ProcessApiTest.failed_num = 0
+            ProcessApiTest.failed_ids = []
+            return Response(dic)
+
+
+
+
+class ProcessApiResultTest(APIView):
+
+    def get(self, request, format=None):
+        '''
+        :param request:
+        :param format:
+        :return: 流程接口异常结果
+        '''
+        caseids = request.GET.get("caseids", "")
+        system = request.GET.get("system","")
+        if caseids:
+            L = []
+            for i in json.loads(caseids):
+                apilists = ProcessApi.objects.filter(Q(caseid=i) & Q(system=system)).order_by("sortid")
+                for weblist in apilists:
+                    data = {
+                        "caseid":weblist.caseid,
+                        "casename": weblist.casename,
+                        "result": weblist.result,
+                        "head": weblist.head,
+                        "duration": weblist.duration,
+                    }
+                    L.append(data)
+            pageindex = request.GET.get('page', "")
+            pagesize = request.GET.get("limit", "")
+            pageInator = Paginator(L, pagesize)
+            # 分页
+            contacts = pageInator.page(pageindex)
+            res = []
+            for contact in contacts:
+                res.append(contact)
+            datas = {"code": 0, "msg": "", "count": len(L), "data": res}
+            return Response(datas)
+        else:
+            datas = {"code": 0, "msg": "", "count": 0, "data": []}
+            return Response(datas)
+
+

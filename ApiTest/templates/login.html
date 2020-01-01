@@ -70,7 +70,7 @@
 <div class="container">
 	<div class="content">
 		<canvas id="universe"></canvas>
-		<form  class="layui-form"  lay-filter="login"  style="height: 300px;">
+		<form  class="layui-form" action="/login/" method="post" style="height: 300px;">
 			<div class="login_face"><img src="./../static/images/login.png" class="userAvatar"></div>
 			<div class="layui-form-item input-item">
 				<label for="userName">用户名</label>
@@ -88,7 +88,7 @@
 				<img src="./../static/images/code.jpg">
 			</div>
 			<div class="layui-form-item">
-				<button class="layui-btn layui-block" lay-submit lay-filter="login">登录</button>
+				<button class="layui-btn layui-block">登录</button>
 			</div>
 			<div class="layui-form-item layui-row">
 				<a href="javascript:;"

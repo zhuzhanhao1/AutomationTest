@@ -202,23 +202,3 @@ class SearchSingleApi(APIView):
         return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
 
 
-class SingleApiSort(APIView):
-
-    def post(self, request, format=None):
-        data = request.data
-        caseids = json.loads(data["caseids"])
-        belong = data["belong"]
-        system = data["system"]
-        if belong:
-            all = SingleApi.objects.filter(Q(belong=belong) & Q(system=system))
-        else:
-            all = SingleApi.objects.filter(system=system)
-        l = []
-        for i in all:
-            l.append(i.sortid)
-        l.sort()
-        flag = 0
-        for d in caseids:
-            SingleApi.objects.filter(caseid=d).update(sortid=l[flag])
-            flag += 1
-        return Response({"code": "200", "msg": "操作成功"},status=status.HTTP_200_OK)

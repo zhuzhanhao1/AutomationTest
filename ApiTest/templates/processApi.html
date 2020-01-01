@@ -176,7 +176,7 @@
         <div class="demoTable">
             <div class="layui-breadcrumb">
 					<span class="layui-icon layui-icon-link" style="font-size: 22px;color: #fff;">
-						<a href="/web_apiindex/" class="index" style="color: #fff;">http://amberdata.cn/ermsapi</a>
+						<a href="" class="index" style="color: #fff;">http://amberdata.cn/{{ system }}api</a>
 						<a class="kit-side-fold casetitle" style="font-size: 22px;color: #fff;">{{ belong_key }}</a>
 					</span>
             </div>
@@ -930,67 +930,36 @@
                     console.log(obj.cache); // 改动后全表数据
                     console.log(obj.oldIndex); // 原来的数据索引
                     console.log(obj.newIndex); // 改动后数据索引
-                    if (obj.cache.length >= 3000) {
-                        $.ajax({
+                    var l = [];
+                    for (var i in obj.cache) {
+                        l.push(obj.cache[i].caseid)
+                    }
+                    console.log(l);
+                    $.ajax({
                             cache: false,
-                            url: "/process_sort/",
-                            dataType: 'text',
-                            type: 'GET',
-                            //async: false,
-                            data: {
-                                "oldIndex": obj.oldIndex,
-                                "newIndex": obj.newIndex
-                            },
-                            success: function (data) {
-                                layer.msg(data, {
-                                    offset: 't',
-                                    icon: 6,
-                                });
-                                $(".layui-laypage-btn").click();
-                            },
-                            error: function (data) {
-                                console.log(data);
-                                layer.msg(data, {
-                                    offset: 't',
-                                    icon: 5
-                                });
-                            }
-                        });
-                    } else {
-                        var l = [];
-                        var belong = obj.cache[0].belong;
-                        for (var i in obj.cache) {
-                            l.push(obj.cache[i].caseid)
-                            if (belong != obj.cache[i].belong) {
-                                belong = "";
-                            }
-                        }
-
-                        console.log(belong);
-                        console.log(l);
-                        $.ajax({
-                            cache: false,
-                            url: "/process_sort/",
+                            url: "/publicapi/sort/",
                             dataType: 'text',
                             type: 'POST',
                             //async: false,
                             data: {
-                                //"oldIndex": obj.oldIndex,
-                                //"newIndex":obj.newIndex
-                                "data": JSON.stringify(l),
-                                "belong": belong,
-                                "system": "{{ system }}"
+                                "caseids": JSON.stringify(l),
+								"belong":"{{ belong }}",
+								"system":"{{ system }}",
+                                "type":"process"
                             },
                             success: function (data) {
-                                layer.msg(data, {
+                                let msg = JSON.parse(data).msg;
+                                layer.msg(msg, {
                                     offset: 't',
                                     icon: 6,
                                 });
                                 $(".layui-laypage-btn").click();
                             },
                             error: function (data) {
-                                console.log(data);
-                                layer.msg(data, {
+                                console.log(typeof (data));
+                                let msg = JSON.stringify(data);
+                                console.log(msg);
+                                layer.msg(msg, {
                                     offset: 't',
                                     icon: 5
                                 });
@@ -998,8 +967,7 @@
                         });
                     }
 
-                }
-            }
+            }//排序
             , size: 'lg'	//lg大尺寸 /sm小尺寸
             , skin: 'line' //行边框风格 /row列表框风格 /nob无边框风格
             , limit: 30
@@ -1144,8 +1112,9 @@
                 //执行用例
                 case 'run_case':
                     var data = checkStatus.data;
+                    var len = data.length;
                     console.log(data);
-                    if (data.length == 0) {
+                    if (len == 0) {
                         layer.close(index);
                         layer.msg("请先选中需要执行的用例", {
                             icon: 2,
@@ -1162,7 +1131,7 @@
                             dic['method'] = data[i]['method'];
                             dic['params'] = data[i]['params'];
                             dic['body'] = data[i]['body'];
-                            dic['isprocess'] = data[i]['isprocess'];
+                            //dic['isprocess'] = data[i]['isprocess'];
                             dic['depend_id'] = data[i]['depend_id'];
                             dic['depend_key'] = data[i]['depend_key'];
                             dic['replace_key'] = data[i]['replace_key'];
@@ -1172,7 +1141,7 @@
                         console.log(l);
                         $.ajax({
                             cache: false,
-                            url: "/run_processcase/",
+                            url: "/processapi/run/",
                             dataType: 'json',
                             type: 'POST',
                             //async: false,
@@ -1201,7 +1170,7 @@
                                                 var sitv = setInterval(function () {
                                                     $.ajax({
                                                         cache: false,
-                                                        url: "/show_progress/",
+                                                        url: "/processapi/run/",
                                                         dataType: 'JSON',
                                                         type: 'GET',
                                                         //async: false,
@@ -1241,14 +1210,14 @@
 
                             },
                             success: function (data) {
-                                console.log(data.status_code);
-                                console.log(typeof (data.status_code));
-                                if (data.status_code == 201) {
+                                console.log(data);
+                                console.log(typeof (data));
+                                if (len > 1) {
                                     console.log("我先进来的");
-                                    let content = data.content;
-                                    let failcases = data.errorids;
-                                    let pass = data.pass;
+                                    let failcases = data.failcases;
                                     let errors = data.errors;
+                                    let pass = len - errors;
+                                    console.log(typeof (errors))
                                     var result = layer.open({
                                         type: 1,
                                         title: false,
@@ -1276,12 +1245,12 @@
                                             '</fieldset>' +
                                             '</div>',
                                         success: function (data) {
-                                            document.getElementById("all_num").innerText = content;
+                                            document.getElementById("all_num").innerText = len;
                                             $("#success_num").html(pass);
                                             $("#fail_num").html(errors);
                                             var myTable = table.render({
                                                 elem: '#templateTable'
-                                                , url: '/process_result_list/'
+                                                , url: '/processapi/result_list/'
                                                 , page: true
                                                 , toolbar: '#resultDemo'
                                                 //, height: 'full-20'
@@ -1310,12 +1279,13 @@
                                                         align: "left",
                                                         event: "detail",
                                                         templet: function (res) {
-                                                            if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1 && res.result.indexOf(res.casename) != -1) {
-                                                                var a = res.casename;
-                                                                var b = JSON.parse(res.result);
-                                                                return '<span style="color: red;">' + JSON.stringify(b[a]["message"]) + '</span>'
+                                                            if (res.result == null) {
+                                                                return '<span>' + res.result + '</span>'
+                                                            } else if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1) {
+                                                                let b = JSON.parse(res.result);
+                                                                return '<span style="color: red;">' + JSON.stringify(b["message"]) + '</span>'
                                                             } else if (res.result != "") {
-                                                                let a = JSON.parse(res.result)[res.casename];
+                                                                let a = JSON.parse(res.result);
                                                                 return '<span>' + JSON.stringify(a) + '</span>'
                                                             } else {
                                                                 return '<span>' + res.result + '</span>'
@@ -1325,7 +1295,8 @@
                                                     , {field: 'head', width: 90, title: '负责人', align: "left"}
                                                 ]]
                                                 , where: {
-                                                    caseids: failcases
+                                                    caseids: JSON.stringify(failcases),
+                                                    system: "{{ system }}"
                                                 }
                                             });
                                             //头工具栏事件
@@ -1455,11 +1426,10 @@
                                         }
                                     });
 
-                                } else if (data.status_code == 200) {
+                                }
+                                else if (len == 1) {
                                     console.log("我后进来的");
-                                    console.log(data.casename);
-                                    let name = data.casename;
-                                    var strjson = JSON.stringify(data[name], null, 4);
+                                    let strjson = JSON.stringify(data, null, 4);
                                     layer.prompt({
                                         formType: 2,//多行文本
                                         value: strjson,
@@ -1494,7 +1464,8 @@
                                         },
                                         area: ['700px', '500px'] //自定义文本域宽高
                                     });
-                                } else if (data.status_code == 500 || data.status_code == 401) {
+                                }
+                                else if (data.status_code == 500 || data.status_code == 401) {
                                     layer.msg(data.msg, {
                                         icon: 5,
                                         offset: 't',
@@ -1917,9 +1888,8 @@
             }
 
         });
+
         //监听行工具事件
-
-
         table.on('tool(test)', function (obj) {
             var data = obj.data;
             var id = data['caseid'];
@@ -2699,7 +2669,7 @@
         <button type="button" onclick="add_case()" class="layui-btn layui-btn-sm">新建用例</button>
         <button type="button" onclick="update_role_info()" class="layui-btn layui-btn-sm">用户信息</button>
         <button class="layui-btn layui-btn-sm" lay-event="batch_delete">批量删除</button>
-        <button class="layui-btn layui-btn-sm" lay-event="run_case">执行用例</button>
+        <button id= "Runcase" class="layui-btn layui-btn-sm" lay-event="run_case">执行用例</button>
         <button class="layui-btn layui-btn-sm" lay-event="timing_task">定时任务</button>
         <button class="layui-btn layui-btn-sm" lay-event="ding_ding">钉钉通知</button>
         <button class="layui-btn layui-btn-sm" lay-event="repeat_run">重复执行</button>
@@ -2714,7 +2684,7 @@
 </script>
 <!--用例名字超链接模板-->
 <script type="text/html" id="casenameTpl">
-	<a href="/detail?id={% verbatim %}{{d.caseid}}{% endverbatim %}" class="layui-table-link" target="_blank" style="color: blueviolet;">
+	<a href="/detail?processid={% verbatim %}{{d.caseid}}{% endverbatim %}" class="layui-table-link" target="_blank" style="color: blueviolet;">
 		{% verbatim %}{{d.casename}}{% endverbatim %}
 	</a>
 </script>

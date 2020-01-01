@@ -602,14 +602,15 @@
                     console.log(l);
                     $.ajax({
                             cache: false,
-                            url: "/singleapi/sort/",
+                            url: "/publicapi/sort/",
                             dataType: 'text',
                             type: 'POST',
                             //async: false,
                             data: {
                                 "caseids": JSON.stringify(l),
 								"belong":"{{ belong }}",
-								"system":"{{ system }}"
+								"system":"{{ system }}",
+                                "type":"single"
                             },
                             success: function (data) {
                                 let msg = JSON.parse(data).msg;
@@ -1791,7 +1792,7 @@
 </script>
 <!--用例名字超链接模板-->
 <script type="text/html" id="casenameTpl">
-	<a href="/detail?id={% verbatim %}{{d.caseid}}{% endverbatim %}" class="layui-table-link" target="_blank" style="color: blueviolet;">
+	<a href="/detail?singleid={% verbatim %}{{d.caseid}}{% endverbatim %}" class="layui-table-link" target="_blank" style="color: blueviolet;">
 		{% verbatim %}{{d.casename}}{% endverbatim %}
 	</a>
 </script>

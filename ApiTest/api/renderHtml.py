@@ -4,7 +4,7 @@ from django.shortcuts import render
 
 from ApiTest.api.processApiList import AddProcessApi
 from ApiTest.common.dingDingNotice import send_singleapi_link, send_ding
-from ApiTest.models import SingleApi
+from ApiTest.models import SingleApi, ProcessApi
 from django.contrib import auth
 
 role = {"ast":"单位档案员","sysadmin":"系统管理员","admin":"单位管理员","tdradmin": "数据管理员"}
@@ -75,6 +75,10 @@ erms_process_api = {
     "login":"登录过程接口",
     "data_form_config":"数据表单配置接口"
 }
+
+tdr_process_api = {
+    "login":"登录过程接口"
+}
 # 用户登录
 def login_views(request):
     if request.POST:
@@ -89,7 +93,6 @@ def login_views(request):
             response = HttpResponseRedirect('/index/')
             return response
         else:
-            print('账户或者密码错误，请检查')
             return HttpResponse("账户或者密码错误，请检查")
     return render(request, 'login.html')
 
@@ -107,7 +110,6 @@ def index_views(request):
     return render(request, 'index.html')
 
 
-# 后台首页
 def home_views(request):
     '''
     :param request:
@@ -190,6 +192,22 @@ def processapi_views(request):
         return render(request, "processApi.html",
                       {"system": system,"role":erms_role,"apinav":l,"sortid":sortid})
 
+    elif system == "tdr":
+        #如果belong存在,只返回belong的值
+        for i in tdr_process_api:
+            if belong == i:
+                L = []
+                belong_value = tdr_process_api.get(i,"")
+                L.append(belong_value)
+                return render(request, "processApi.html",
+                              {"belong_key":belong,"belong": belong_value,
+                                "system": system,"role":tdr_role,"apinav":L,"sortid":sortid})
+        #如果belong不存在，返回导航的总列表
+        l = []
+        for a in tdr_process_api:
+            l.append(tdr_process_api.get(a))
+        return render(request, "processApi.html",
+                      {"system": system,"role":tdr_role,"apinav":l,"sortid":sortid})
 
 
 
@@ -206,23 +224,26 @@ def apiDetail_views(request):
     :param request:
     :return: 详情页面
     '''
-    res = request.GET.get("id","")
-    if res:
-        id = SingleApi.objects.get(caseid=res)
-        identity = id.identity
-        url = "/".join(id.url.split("/")[-2:])
-        dic = {
-            "identity": identity,
-            "belong": id.belong,
-            "casename": id.casename,
-            "url": url,
-            "method": id.method,
-            "params": id.params,
-            "body" : id.body,
-            "result" : id.result,
-            "head" : id.head
-        }
-        return render(request, "apiDetail.html", {"dic":dic})
+    singleid = request.GET.get("singleid","")
+    processid = request.GET.get("processid", "")
+    if singleid:
+        id = SingleApi.objects.get(caseid=singleid)
+    elif processid:
+        id = ProcessApi.objects.get(caseid=processid)
+    identity = id.identity
+    url = "/".join(id.url.split("/")[-2:])
+    dic = {
+        "identity": identity,
+        "belong": id.belong,
+        "casename": id.casename,
+        "url": url,
+        "method": id.method,
+        "params": id.params,
+        "body" : id.body,
+        "result" : id.result,
+        "head" : id.head
+    }
+    return render(request, "apiDetail.html", {"dic":dic})
 
 
 def link_views(request):

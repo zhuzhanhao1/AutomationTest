@@ -111,8 +111,9 @@ class ProcessApiListSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = ProcessApi
-        fields = ('caseid', 'casename', 'identity', 'url','method','header','params','body','exceptres','result','belong','system','sortid',
-                  'duration','head','isprocess','depend_id','depend_key','replace_key','replace_position')  # 需要序列化的属性
+        fields = ('caseid', 'casename', 'identity', 'url','method','header','params',
+                  'body','exceptres','result','belong','system','sortid','duration','head',
+                  'isprocess','depend_id','depend_key','replace_key','replace_position')  # 需要序列化的属性
 
 
 class AddProcessApiSerializers(serializers.ModelSerializer):
@@ -185,3 +186,11 @@ class ProcessApiReplacePositionSerializers(serializers.ModelSerializer):
     class Meta:
         model = ProcessApi
         fields = ('replace_position',)  # 需要序列化的属性
+
+class ProcessApiResponseSerializers(serializers.ModelSerializer):
+    '''
+        流程接口，更新响应内容和响应延迟
+    '''
+    class Meta:
+        model = ProcessApi
+        fields = ('result','duration')  # 需要序列化的属性

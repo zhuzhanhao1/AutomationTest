@@ -88,7 +88,7 @@
     .search-wrapper.active .input-holder {
         border-radius: 50px;
         width: 450px;
-        background: rgba(0, 0, 0, 0.5);
+        background: rgba(0, 0, 0, 0.2);
         -webkit-transition: all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570);
         -moz-transition: all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570);
         transition: all .5s cubic-bezier(0.000, 0.105, 0.035, 1.570);
@@ -260,9 +260,9 @@
         left: 0px;
         text-align: center;
         font-family: "Open Sans", Arial, Verdana;
-        font-size: 14px;
+        font-size: 16px;
         display: none;
-        color: #B7B7B7;
+        color: black;
     }
 
 
@@ -423,7 +423,7 @@
     <form onsubmit="submitFn(this, event);">
         <div class="search-wrapper">
             <div class="input-holder">
-                <input type="text" class="search-input" placeholder="Type to search"/>
+                <input type="text" class="search-input" placeholder="请输入接口名称或URL或责任者等等"/>
                 <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
             </div>
             <span class="close" onclick="searchToggle(this, event);"></span>
@@ -503,7 +503,7 @@
                         , title: '接口测试'
                         , limit: 10
                         , limits: [10, 20, 30, 100, 200, 500]
-                        //, size: 'lg'	//大尺寸 /sm小尺寸
+                        , size: 'lg'	//大尺寸 /sm小尺寸
                         , skin: 'line' //行边框风格 /row列表框风格 /nob无边框风格
                         , page: {groups: 5}  //开启分页
                         , loading: false
@@ -1446,7 +1446,7 @@
 
 <!--用例名字超链接模板-->
 <script type="text/html" id="casenameTpl">
-    <a href="/detail?id={% verbatim %}{{d.caseid}}{% endverbatim %}" class="layui-table-link" target="_blank"
+    <a href="/detail?singleid={% verbatim %}{{d.caseid}}{% endverbatim %}" class="layui-table-link" target="_blank"
        style="color: blueviolet;">
         {% verbatim %}{{d.casename}}{% endverbatim %}
     </a>

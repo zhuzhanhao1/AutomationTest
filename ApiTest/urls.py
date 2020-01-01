@@ -1,5 +1,7 @@
 from django.conf.urls import url
-from ApiTest.api import renderHtml,singleApiList,systemRole,Menu,quickTest,singleApiTest,Link,systemLog,processApiList
+from ApiTest.api import renderHtml,singleApiList,systemRole,Menu,\
+    quickTest,singleApiTest,Link,systemLog,processApiList,ProcessApiTest,\
+    publicApi
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
@@ -17,7 +19,6 @@ urlpatterns = [
     url(r'dingding/$', renderHtml.dingdingNotice_views),
 
     url(r'singleapi/list/$', singleApiList.SingleApiList.as_view()),
-    url(r'singleapi/sort/$', singleApiList.SingleApiSort.as_view()),
     url(r'singleapi/search/$', singleApiList.SearchSingleApi.as_view()),
     url(r'singleapi/run/$', singleApiTest.SingleApiTest.as_view()),
     url(r'singleapi/repeatrun/$', singleApiTest.RepeatRunSingleApi.as_view()),
@@ -30,7 +31,10 @@ urlpatterns = [
     url(r'processapi/add_case/$', processApiList.AddProcessApi.as_view()),
     url(r'processapi/del_case/(?P<pk>[0-9]+)/$', processApiList.DelProcessApi.as_view()),
     url(r'processapi/update_case/(?P<pk>[0-9]+)/$', processApiList.UpdateProcessApi.as_view()),
+    url(r'processapi/run/$', ProcessApiTest.ProcessApiTest.as_view()),
+    url(r'processapi/result_list/$', ProcessApiTest.ProcessApiResultTest.as_view()),
 
+    url(r'publicapi/sort/$', publicApi.PublicApiSort.as_view()),
 
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),
     url(r'systemrole/update_info/(?P<pk>[a-z]+)', systemRole.UpdateSystemRole.as_view()),
@@ -44,6 +48,8 @@ urlpatterns = [
     url(r'link/list/$', Link.LinkList.as_view()),
     url(r'Testurl/list/$', Link.TesturlList.as_view()),
     url(r'Testurl/list/$', Link.TesturlList.as_view()),
+
+
 
 
 
