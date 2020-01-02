@@ -131,53 +131,27 @@ class ProcessApiTest(APIView):
 
             if check_params:
                 return check_params
-            if depend_id:
-                id = self.depend_params(depend_id)
-                try:
-                    starttime = time.time()
-                    response = RequestMethod(token).run_main(id.method, id.url, id.params, id.body)
-                    endtime = time.time()
-                    runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
-
-                    djson = self.check_greater_less_is_exist(response)
-                    self.check_result_is_fail(response, caseid)
-
-                    id = ProcessApi.objects.get(caseid=caseid)
-                    data = {"result": djson, "duration": runtime}
-                    serializer = ProcessApiResponseSerializers(id, data=data)
-                    # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
-                    if serializer.is_valid():
-                        serializer.save()
-                    else:
-                        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                except TypeError as e:
-                    print(e)
-                    return Response({"code": 400, "msg": "操作或函数应用于不适当类型的对象"}, status=status.HTTP_400_BAD_REQUEST)
-                except json.decoder.JSONDecodeError as e:
-                    print(e)
-                    return Response({"code": 400, "msg": "json.loads()读取字符串报错"}, status=status.HTTP_400_BAD_REQUEST)
-            else:
-                try:
-                    starttime = time.time()
-                    response = RequestMethod(token).run_main(method, url, params, body)
-                    print(response)
-                    endtime = time.time()
-                    runtime = round(endtime - starttime, 3)
-                    djson = self.check_greater_less_is_exist(response)
-                    id = ProcessApi.objects.get(caseid=caseid)
-                    data = {"result":djson,"duration":runtime}
-                    serializer = ProcessApiResponseSerializers(id, data=data)
-                    # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
-                    if serializer.is_valid():
-                        serializer.save()
-                        return Response(response, status=status.HTTP_201_CREATED)
-                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-                except TypeError as e:
-                    print(e)
-                    return Response({"code": 400, "msg": "操作或函数应用于不适当类型的对象"}, status=status.HTTP_400_BAD_REQUEST)
-                except json.decoder.JSONDecodeError as e:
-                    print(e)
-                    return Response({"code": 400, "msg": "json.loads()读取字符串报错"}, status=status.HTTP_400_BAD_REQUEST)
+            try:
+                starttime = time.time()
+                response = RequestMethod(token).run_main(method, url, params, body)
+                print(response)
+                endtime = time.time()
+                runtime = round(endtime - starttime, 3)
+                djson = self.check_greater_less_is_exist(response)
+                id = ProcessApi.objects.get(caseid=caseid)
+                data = {"result":djson,"duration":runtime}
+                serializer = ProcessApiResponseSerializers(id, data=data)
+                # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(response, status=status.HTTP_201_CREATED)
+                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except TypeError as e:
+                print(e)
+                return Response({"code": 400, "msg": "操作或函数应用于不适当类型的对象"}, status=status.HTTP_400_BAD_REQUEST)
+            except json.decoder.JSONDecodeError as e:
+                print(e)
+                return Response({"code": 400, "msg": "json.loads()读取字符串报错"}, status=status.HTTP_400_BAD_REQUEST)
         else:
 
             '''
@@ -216,7 +190,7 @@ class ProcessApiTest(APIView):
                         else:
                             dependid = ProcessApi.objects.get(caseid=depend_id[0])
                             # 获取依赖接口返回的结果
-                            result = json.loads(dependid.result)[dependid.casename]
+                            result = json.loads(dependid.result)
                             body = json.loads(body) if body != "" else body
                             params = json.loads(params) if params != "" else params
                             # 从前台拿到需替换的key,转为字典，字典的键存入列表
@@ -289,7 +263,7 @@ class ProcessApiTest(APIView):
                                     for i in range(len(depend_id)):
                                         dependid = ProcessApi.objects.get(caseid=depend_id[i])
                                         # 通过id获取依赖接口返回的结果
-                                        result = json.loads(dependid.result)[dependid.casename]
+                                        result = json.loads(dependid.result)
                                         print(result)
                                         # 获取需要替换的jsonpath[key]的结果，转为字典，字典的键放入一个列表存储。
                                         dependkey_a = dependkey[i]

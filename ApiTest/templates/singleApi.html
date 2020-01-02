@@ -421,7 +421,7 @@
 	</div>
 
 	<!--负责人-->
-	<div class="layui-row" id="requestParams" style="display: none;">
+	<div class="layui-row" id="head" style="display: none;">
 		<div class="layui-col-md11">
 			<form class="layui-form" lay-filter="head">
 				<div class="layui-form-item" style="margin-top: 25px;">
@@ -456,7 +456,7 @@
 	<!--导入测试用例-->
 	<div class="layui-row" id="importCase" style="display:none;">
 		<div class="layui-col-md11">
-			<form class="layui-form" enctype="multipart/form-data" action="/import_case/" method="post">
+			<form class="layui-form" enctype="multipart/form-data" action="/publicapi/import_case/" method="post">
 
 				<div class="layui-form-item" style="margin-top: 20px;">
 					<div class="layui-input-block">
@@ -467,7 +467,6 @@
 				<div class="layui-form-item">
 					<div class="layui-input-block">
 						<button class="layui-btn" lay-submit lay-filter="importCase" style="float: right;">上传</button>
-{#						<button type="reset" class="layui-btn layui-btn-primary">重置</button>#}
 					</div>
 				</div>
 			</form>
@@ -712,17 +711,16 @@
                 }
                 , {
                     field: 'result', title: '响应结果', align: "left",  event:"detail", templet: function (res) {
-                         if(res.result == null) {
+                         if(res.result == null || res.result == "") {
                              return '<span>' + res.result + '</span>'
-                         }else if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1) {
+                         }
+                         else if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1) {
                             let b = JSON.parse(res.result);
                             return '<span style="color: red;">' + JSON.stringify(b["message"]) + '</span>'
-                        }else if(res.result != ""){
-                            let a = JSON.parse(res.result);
-                            return '<span>' + JSON.stringify(a) + '</span>'
-                        } else {
+                         }
+                         else {
                             return '<span>' + res.result + '</span>'
-                        }
+                         }
                     }
                 }
                 , {field: 'head', title: '负责人', width: 80, align: "left",event:"head"}//merge: true行合并
@@ -883,7 +881,7 @@
                                 }
                                 $.ajax({
                                     cache: false,
-                                    url: "/dingding/",
+                                    url: "/publicapi/dingding/",
                                     dataType: 'text',
                                     type: 'GET',
                                     //async: false,
@@ -901,7 +899,8 @@
                                     },
                                     success: function (data) {
                                         console.log(data);
-                                        layer.msg(data, {
+                                        let msg = JSON.parse(data).msg;
+                                        layer.msg(msg, {
                                             icon: 6,
                                             offset: 't',
                                         });

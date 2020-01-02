@@ -8,12 +8,12 @@ url = "https://oapi.dingtalk.com/robot/send?access_token=99c9913b6f5370541f17d56
 # 初始化机器人小丁
 def send_image():
     xiaoding = DingtalkChatbot(url)
-    xiaoding.send_text(msg='/李建构吃屎去吧！')
+    xiaoding.send_text(msg='-李建构吃屎去吧！')
     # xiaoding.send_image(pic_url='https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1147110391,1099568746&fm=173&app=25&f=JPEG?w=640&h=640&s=4BA43A625AFA7BAF7D302CC60000A0A1')
 
-def send_singleapi_link(id,text):
+def send_singleapi_link(isprocess,id,text):
     xiaoding = DingtalkChatbot(url)
-    xiaoding.send_link(title='接口详情', text='{}请点击我......'.format(text), message_url='http://localhost:8000/detail/?id={}'.format(id))
+    xiaoding.send_link(title='接口详情', text='{}请点击我......'.format(text), message_url='http://localhost:8000/detail/?{}={}'.format(isprocess,id))
 
 def send_process_link(id, text):
     xiaoding = DingtalkChatbot(url)
@@ -31,7 +31,7 @@ def get_phone_number_by_name(name):
     elif name == "老江":
         return "15073326435"
     elif name == "老王":
-        return "15279438039"
+        return ""
     else:
         return ""
 

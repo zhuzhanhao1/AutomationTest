@@ -16,7 +16,6 @@ urlpatterns = [
     url(r'detail/$', renderHtml.apiDetail_views),
     url(r'link/$', renderHtml.link_views),
     url(r'testurl/$', renderHtml.testurl_views),
-    url(r'dingding/$', renderHtml.dingdingNotice_views),
 
     url(r'singleapi/list/$', singleApiList.SingleApiList.as_view()),
     url(r'singleapi/search/$', singleApiList.SearchSingleApi.as_view()),
@@ -35,6 +34,8 @@ urlpatterns = [
     url(r'processapi/result_list/$', ProcessApiTest.ProcessApiResultTest.as_view()),
 
     url(r'publicapi/sort/$', publicApi.PublicApiSort.as_view()),
+    url(r'publicapi/dingding/$', publicApi.PublicApiDingDingNotice.as_view()),
+    url(r'publicapi/import_case/$', publicApi.PublicApiImport.as_view()),
 
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),
     url(r'systemrole/update_info/(?P<pk>[a-z]+)', systemRole.UpdateSystemRole.as_view()),

@@ -261,16 +261,4 @@ def testurl_views(request):
     '''
     return render(request, 'testUrl.html')
 
-def dingdingNotice_views(request):
-    '''
-    :param request: id
-    :return: 钉钉消息
-    '''
-    ids = request.GET.get("caseid","").split(",")[:-1]
-    isporcess = request.GET.get("isprocess","")
-    for id in ids:
-        if isporcess == "no":
-            data = SingleApi.objects.get(caseid=id)
-            send_singleapi_link(id, data.casename + "-详情-->")
-            send_ding(data.head+"-看消息",data.head)
-    return HttpResponse("操作成功")
+

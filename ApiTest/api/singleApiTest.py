@@ -169,14 +169,14 @@ class RepeatRunSingleApi(SingleApiTest):
     repeat_result = {}
 
     def get(self, request, format=None):
-        print('show_api----------' + str(self.num_progress))
+        print('show_api----------' + str(RepeatRunSingleApi.num_progress))
         # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
-        if self.num_progress == 100:
-            self.num_progress = 0
+        if RepeatRunSingleApi.num_progress == 100:
+            RepeatRunSingleApi.num_progress = 0
             return Response(100)
         # 当进度不是百分之百的时候，返回当前进度
         else:
-            return Response(self.num_progress)
+            return Response(RepeatRunSingleApi.num_progress)
 
     def post(self, request, format=None):
         '''
@@ -306,6 +306,8 @@ class RepeatRunSingleApi(SingleApiTest):
                     else:
                         cnt += 1
                         all_num = len(content) * end
+                    print("进度条计数=" + str(RepeatRunSingleApi.num_progress))
                     RepeatRunSingleApi.num_progress = round(cnt / (all_num) * 100, )
+                    print("进度条计数=" + str(RepeatRunSingleApi.num_progress))
             # 将[{},{}]数据赋值给类变量repeat_result
             self.repeat_result = {"多接口重复执行结果":L}
