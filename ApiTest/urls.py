@@ -16,6 +16,8 @@ urlpatterns = [
     url(r'detail/$', renderHtml.apiDetail_views),
     url(r'link/$', renderHtml.link_views),
     url(r'testurl/$', renderHtml.testurl_views),
+    url(r'test/$', renderHtml.test),
+
 
     url(r'singleapi/list/$', singleApiList.SingleApiList.as_view()),
     url(r'singleapi/search/$', singleApiList.SearchSingleApi.as_view()),

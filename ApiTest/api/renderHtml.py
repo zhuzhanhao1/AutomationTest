@@ -261,3 +261,20 @@ def testurl_views(request):
     return render(request, 'testUrl.html')
 
 
+
+def test(request):
+    all = SingleApi.objects.filter()
+    for i in all:
+        url = i.url.split("/")
+        a = 0
+        w = ""
+        e = ""
+        for ii in url:
+            if a >= 3:
+                e = "/"+ii
+            w += e
+            a += 1
+        SingleApi.objects.filter(caseid=i.caseid).update(url=w)
+    return HttpResponse("完成咯")
+
+

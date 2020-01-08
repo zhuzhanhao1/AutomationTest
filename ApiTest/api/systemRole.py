@@ -41,7 +41,7 @@ class GetTokenByRole(APIView):
             "loginName": username,
             "password": password
         }
-        response = requests.post(url="http://{0}/adminapi/user/login".format(ip), headers=headers, data=json.dumps(params))
+        response = requests.post(url="{0}/adminapi/user/login".format(ip), headers=headers, data=json.dumps(params))
         res = response.json()['accessToken']
         print(res)
         return res,id
@@ -58,7 +58,7 @@ class GetTokenByRole(APIView):
         print(ip)
         for i in role:
             token,id = self.get_token(i,ip)
-            data = {"token":token}
+            data = {"token":token,"ip":ip}
             serializer = TokenSerializers(id,data=data)
             # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
             if serializer.is_valid():

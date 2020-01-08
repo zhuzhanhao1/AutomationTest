@@ -42,9 +42,9 @@ class ProcessApiTest(APIView):
         else:
             return Response(self.num_progress)
 
-    def get_token(self,identity):
+    def get_token_ip_by_identity(self,identity):
         '''
-        获取角色请求令牌
+        获取角色请求令牌和IP地址
         :param identity: 用户角色
         :return: 请求令牌
         '''

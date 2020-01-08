@@ -20,14 +20,15 @@ JSONParser: 表示只能解析content - type:application / x - www - form - urle
 
 class SingleApiTest(APIView):
 
-    def get_token(self,identity):
+    def get_token_ip_by_identity(self,identity):
         '''
-        获取角色请求令牌
+        获取角色请求令牌和ip
         :param identity: 用户角色
         :return: 请求令牌
         '''
         token = SystemRole.objects.get(identity=identity).token
-        return token
+        ip = SystemRole.objects.get(identity=identity).ip
+        return token,ip
 
     def check_greater_less_is_exist(self,body):
         '''
@@ -79,8 +80,6 @@ class SingleApiTest(APIView):
             return Response({"code": 400, "msg": "参数有误"}, status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
     def post(self, request, format=None):
         '''
         :param request: request.data
@@ -89,6 +88,7 @@ class SingleApiTest(APIView):
         '''
         datas = request.data
         content = json.loads(datas["request"])
+        print(content)
         if len(content) == 1:
             caseid = content[0].get("caseid","")
             identity = content[0].get("identity", "")   # 用户身份
@@ -96,14 +96,17 @@ class SingleApiTest(APIView):
             method = content[0].get("method", "")       # 请求方式
             params = content[0].get("params", "")       # query数据
             body = content[0].get("body", "")           # body数据
-            check_params = self.parameter_check(identity,url,method)
-            if check_params:
+            params = "" if params == None else params
+            body = "" if body == None else body
+            check_params = self.parameter_check(identity,url,method)    #检验请求Query或body是有为None
+            if check_params:                            #检验参数是否存在
                 return check_params
-            token = self.get_token(identity)            # 根据用户身份获取请求头Token数据
-            body = self.check_greater_less_is_exist(body)
+            token,ip = self.get_token_ip_by_identity(identity)          #根据用户身份获取请求头Token数据和IP
+            if body:
+                body = self.check_greater_less_is_exist(body)
             try:
                 starttime = time.time()
-                response = RequestMethod(token).run_main(method, url, params, body)
+                response = RequestMethod(token).run_main(method, ip+url, params, body)
                 endtime = time.time()
                 runtime = round(endtime - starttime, 3)
                 djson = self.check_greater_less_is_exist(response)

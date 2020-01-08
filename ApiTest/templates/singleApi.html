@@ -411,7 +411,7 @@
 				<div class="layui-form-item">
 					<label class="layui-form-label">IP地址</label>
 					<div class="layui-input-block">
-						<input type="text"  name="ip" required lay-verify="required" value="amberdata.cn"
+						<input type="text"  name="ip" required lay-verify="required" value="http://amberdata.cn"
 							   placeholder="请输入ip地址" autocomplete="off" class="layui-input">
 					</div>
 				</div>
@@ -552,6 +552,7 @@
 			</div>
 		</div>
 	</div>
+
 
 <!--数据表格JS-->
 <script>
@@ -769,12 +770,13 @@
                     var data = checkStatus.data;
                     console.log(data);
                     if (data.length == 0) {
-                        layer.close(index);
+                        layer.close(run_case);
                         layer.msg("请先选中需要执行的用例", {
                             icon: 2,
                             offset: "t"
                         });
-                    } else {
+                    }
+                    else {
                         var l = [];
                         for (i = 0; i < data.length; i++) {
                             var dic = {};
@@ -799,8 +801,6 @@
                             },
                             //请求前的处理,加载loading
                             beforeSend: function () {
-                                document.getElementById("Runcase").setAttribute("disabled", true);
-                                document.getElementById("Runcase").innerHTML = "loading...";
                                 l_index = layer.load(0, {
                                     shade: [0.5, '#DBDBDB'] //0.1透明度的白色背景
                                 });
@@ -850,8 +850,6 @@
                                 });
                             },
                             complete: function () {
-                                document.getElementById("Runcase").removeAttribute("disabled");
-                                document.getElementById("Runcase").innerHTML = "执行用例";
                                 layer.close(l_index);
                             }
                         });
@@ -1758,6 +1756,7 @@
                         , {field: 'password', title: '用户密码',  align: "left"}
                         , {field: 'token', title: '请求令牌', align: "left"}
                         , {field: 'system', title: '所属系统', align: "left"}
+                        , {field: 'ip', title: 'ip地址', align: "left"}
                     ]]
                 });
             },

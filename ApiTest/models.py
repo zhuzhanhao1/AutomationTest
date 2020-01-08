@@ -95,6 +95,7 @@ class SystemRole(models.Model):
     password = models.CharField(max_length=250, verbose_name="密码")
     system = models.CharField(max_length=150, verbose_name="所属系统")
     token = models.CharField(max_length=250, verbose_name="令牌信息",null=True,blank=True)
+    ip = models.CharField(max_length=200,verbose_name="IP地址")
 
     def __str__(self):
         return self.role

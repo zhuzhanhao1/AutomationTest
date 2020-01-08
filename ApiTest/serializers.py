@@ -69,15 +69,15 @@ class SystemRoleSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = SystemRole
-        fields = ('id','identity','role','username','password','token','system')
+        fields = ('id','identity','role','username','password','token','system','ip')
 
 class TokenSerializers(serializers.ModelSerializer):
     '''
-        更新令牌信息
+        更新令牌信息/ip地址
     '''
     class Meta:
         model = SystemRole
-        fields = ('token',)
+        fields = ('token',"ip")
 
 class SystemRoleUpdateInfoSerializers(serializers.ModelSerializer):
     '''
