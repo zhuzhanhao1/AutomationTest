@@ -700,6 +700,14 @@
                 </div>
             </div>
 
+            <div class="layui-form-item">
+                <label class="layui-form-label">IP地址</label>
+                <div class="layui-input-block">
+                    <input type="text"  name="ip" required lay-verify="required" value="amberdata.cn"
+                           placeholder="请输入ip地址" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
             <div class="layui-form-item" style="margin-top: 30px;">
                 <div class="layui-input-block">
                     <button class="layui-btn" lay-submit lay-filter="get_token"
@@ -1090,11 +1098,7 @@
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
-                    , where: {
-                        key: {
-                            casename: demoReload.val()
-                        }
-                    }
+                    , where: {casename: demoReload.val()}
                 }, 'data');
             }
         };
@@ -2415,7 +2419,8 @@
                             //async: false
                             data: {
                                 //"system": '',
-                                "role": JSON.stringify(l)
+                                "role": JSON.stringify(l),
+                                "ip":data.field.ip
                             },
                             success: function (data) {
                                 let msg = JSON.parse(data);

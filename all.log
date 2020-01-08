@@ -9587,3 +9587,29 @@ Traceback (most recent call last):
     raise TypeError('HTTP status code must be an integer.')
 TypeError: HTTP status code must be an integer.
 2020-01-02 19:29:58,596,2603,django.server,ERROR,basehttp.py:124,"GET /publicapi/detail/?processid=11 HTTP/1.1" 500 126853
+2020-01-08 14:17:20,150,1257,django.request,ERROR,exception.py:135,Internal Server Error: /systemrole/get_token_by_role/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/systemRole.py", line 60, in post
+    token,id = self.get_token(i,ip)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/systemRole.py", line 44, in get_token
+    response = requests.post(url="http://{ip}/adminapi/user/login".format(ip), headers=headers, data=json.dumps(params))
+KeyError: 'ip'
+2020-01-08 14:17:20,316,1257,django.server,ERROR,basehttp.py:124,"POST /systemrole/get_token_by_role/ HTTP/1.1" 500 16374

@@ -408,6 +408,13 @@
                         {% endfor %}
 					</div>
 				</div>
+				<div class="layui-form-item">
+					<label class="layui-form-label">IP地址</label>
+					<div class="layui-input-block">
+						<input type="text"  name="ip" required lay-verify="required" value="amberdata.cn"
+							   placeholder="请输入ip地址" autocomplete="off" class="layui-input">
+					</div>
+				</div>
 
 				<div class="layui-form-item" style="margin-top: 30px;">
 						<div class="layui-input-block">
@@ -479,15 +486,6 @@
 			<div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="demo">
 				<div class="layui-progress-bar" lay-percent="0%"></div>
 			</div>
-{#			<div class="progress-div">#}
-{#				<div class="progress">#}
-{#					<div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="2"#}
-{#						 aria-valuemin="0"#}
-{#						 aria-valuemax="100" style="min-width: 2em; width: 2%;">#}
-{#						2%#}
-{#					</div>#}
-{#				</div>#}
-{#			</div>#}
 		</div>
 	</div>
 
@@ -1513,7 +1511,7 @@
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 1,
             title: "获取AccessToken",
-            area: ['20%', ''],
+            area: ['35%', ''],
             skin: "layui-layer-rim",
             shade: 0.6,
             anim: 1,
@@ -1542,7 +1540,8 @@
                             //async: false
                             data: {
                                 //"system": '',
-                                "role":JSON.stringify(l)
+                                "role":JSON.stringify(l),
+                                "ip":data.field.ip
                             },
                             success: function (data) {
                                 let msg = JSON.parse(data);

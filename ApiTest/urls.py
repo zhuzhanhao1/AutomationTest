@@ -52,10 +52,6 @@ urlpatterns = [
 
 
 
-
-
-
-
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'html'])

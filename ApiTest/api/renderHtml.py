@@ -79,6 +79,8 @@ erms_process_api = {
 tdr_process_api = {
     "login":"登录过程接口"
 }
+
+
 # 用户登录
 def login_views(request):
     if request.POST:
@@ -164,8 +166,6 @@ def singleapi_views(request):
         return render(request, "singleApi.html",{"system": system,"role":tdr_role,"apinav":l})
 
 
-
-
 def processapi_views(request):
     '''
     :param request: belong、system
@@ -208,7 +208,6 @@ def processapi_views(request):
             l.append(tdr_process_api.get(a))
         return render(request, "processApi.html",
                       {"system": system,"role":tdr_role,"apinav":l,"sortid":sortid})
-
 
 
 def quicktest_views(request):

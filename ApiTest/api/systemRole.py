@@ -26,7 +26,7 @@ class SystemRoleList(APIView):
 
 class GetTokenByRole(APIView):
 
-    def get_token(self,role):
+    def get_token(self,role,ip):
         '''
         :param role: 用户角色名
         :return: 系统用户登录的令牌、系统用户的id
@@ -41,7 +41,7 @@ class GetTokenByRole(APIView):
             "loginName": username,
             "password": password
         }
-        response = requests.post(url="http://amberdata.cn/adminapi/user/login", headers=headers, data=json.dumps(params))
+        response = requests.post(url="http://{0}/adminapi/user/login".format(ip), headers=headers, data=json.dumps(params))
         res = response.json()['accessToken']
         print(res)
         return res,id
@@ -54,8 +54,10 @@ class GetTokenByRole(APIView):
         '''
         datas = request.data
         role = json.loads(datas["role"])
+        ip = datas["ip"]
+        print(ip)
         for i in role:
-            token,id = self.get_token(i)
+            token,id = self.get_token(i,ip)
             data = {"token":token}
             serializer = TokenSerializers(id,data=data)
             # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
