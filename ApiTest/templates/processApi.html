@@ -4,16 +4,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>Testapi-流程测试</title>
+
     <link rel="icon" href="../static/images/favicon%202.ico">
-    <script src="../static/jquery-3.4.1/jquery-3.4.1.min.js"></script>
-    <link href="../static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-    <script src="../static/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../static/css/layui.css">
-    <script src="../static/js/layui/layui.js"></script>
     <link rel="stylesheet" href="../static/font-awesome-4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/css/soulTable.css">
-    {#	<script type="text/javascript" src="../static/js/docs.min.js"></script>#}
-    <script type="text/javascript" src="../static/js/cache.js"></script>
+
+    <script src="../static/js/layui2.5.5/layui.js"></script>
 
     <style>
         #layui-laypage-2 {
@@ -703,7 +700,7 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">IP地址</label>
                 <div class="layui-input-block">
-                    <input type="text"  name="ip" required lay-verify="required" value="amberdata.cn"
+                    <input type="text"  name="ip" required lay-verify="required" value="http://amberdata.cn"
                            placeholder="请输入ip地址" autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -920,11 +917,11 @@
             , url: '/processapi/list/' //数据接口"exports"
             , toolbar: '#toolbarDemo'
             , defaultToolbar: [
-                'filter', {title: '导出数据', layEvent: 'export', icon: 'layui-icon-download-circle'}, {
+                'filter', {title: '导出数据', layEvent: 'export_case', icon: 'layui-icon-download-circle'}, {
                     title: '全屏显示',
                     layEvent: 'fullScreen',
                     icon: 'layui-icon-top'
-                }, {title: '导入数据', layEvent: 'import', icon: 'layui-icon-upload-circle'}, 'print']
+                }, {title: '导入数据', layEvent: 'import_case', icon: 'layui-icon-upload-circle'}, 'print']
             , title: '接口流程测试'
             , page: {groups: 5} //开启分页
             , loading: false
@@ -1894,7 +1891,7 @@
         table.on('tool(test)', function (obj) {
             var data = obj.data;
             var id = data['caseid'];
-            //console.log(obj);
+            //点击result查看详情
             if (obj.event === 'detail') {
                 console.log(data.result);
                 //var strjson = JSON.parse(data.result);
@@ -1928,6 +1925,7 @@
                     }
                 });
             }
+            //删除接口用例
             else if (obj.event === 'del_case') {
                 layer.confirm('真的删除行么',{icon:2,title:"删除提示"},function (index) {
                     console.log(obj.data);
@@ -1963,6 +1961,7 @@
                     });
                 });
             }
+            //编辑请求Query
             else if (obj.event === 'params') {
                 layer.prompt({
                     formType: 2
@@ -2009,6 +2008,7 @@
                     layer.close(index);
                 });
             }
+            //编辑请求体
             else if (obj.event === 'body') {
                 layer.prompt({
                     formType: 2
@@ -2055,6 +2055,7 @@
 
                 });
             }
+            //编辑依赖的id
             else if (obj.event === 'depend_id'){
                 layer.prompt({
                     formType: 2
@@ -2098,6 +2099,7 @@
 
                 });
             }
+            //编辑依赖的key
             else if (obj.event === 'depend_key') {
                 layer.prompt({
                     formType: 2
@@ -2144,6 +2146,7 @@
 
                 });
             }
+            //编辑替换的key
             else if (obj.event === 'replace_key') {
                 layer.prompt({
                     formType: 2
@@ -2188,6 +2191,7 @@
 
                 });
             }
+            //编辑替换的区域
             else if (obj.event === 'replace_position') {
                 layer.prompt({
                     formType: 2
@@ -2197,7 +2201,6 @@
                     , shade: 0.6
                     , area: ['300px', '150px'] //自定义文本域宽高
                     , maxlength: 500000
-
                 }, function (value, index) {
                     $.ajax({
                         cache: false,
@@ -2231,14 +2234,14 @@
 
                 });
             }
+            //编辑接口整体
             else if (obj.event === 'update_case') {
                 var a = layer.open({
                     type: 1,
                     title: "编辑用例",
-                    area: ['35%', ""],
+                    area: ['35%', "80%"],
                     skin: "layui-layer-molv",
                     shada: 0.6,
-                    offset:"t",
                     content: $("#update_case").html(),
                     success: function () {
                         layui.use(['form', "jquery"], function () {
@@ -2321,6 +2324,7 @@
                 });
 
             }
+            //编辑负责人
             else if (obj.event === 'head') {
                 var update_head = layer.open({
                     type: 1
@@ -2390,7 +2394,7 @@
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 1,
             title: "获取AccessToken",
-            area: ['20%', ''],
+            area: ['30%', ''],
             skin: "layui-layer-rim",
             shade: 0.6,
             anim: 1,
@@ -2668,15 +2672,14 @@
 <!--表头按钮-->
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button type="button" onclick="add_case()" class="layui-btn layui-btn-sm">新建用例</button>
+        <button type="button" onclick="add_case()" class="layui-btn layui-btn-sm">添加接口</button>
         <button type="button" onclick="update_role_info()" class="layui-btn layui-btn-sm">用户信息</button>
         <button class="layui-btn layui-btn-sm" lay-event="batch_delete">批量删除</button>
-        <button id= "Runcase" class="layui-btn layui-btn-sm" lay-event="run_case">执行用例</button>
-        <button class="layui-btn layui-btn-sm" lay-event="timing_task">定时任务</button>
-        <button class="layui-btn layui-btn-sm" lay-event="ding_ding">钉钉通知</button>
-        <button class="layui-btn layui-btn-sm" lay-event="repeat_run">重复执行</button>
-        <button class="layui-btn layui-btn-sm" lay-event="import_case">导入用例</button>
-        <button class="layui-btn layui-btn-sm" lay-event="export_case">导出用例</button>
+
+{#        <button class="layui-btn layui-btn-sm" lay-event="timing_task">定时任务</button>#}
+        <button id="Dingding" class="layui-btn layui-btn-sm" lay-event="ding_ding">钉钉通知</button>
+{#        <button class="layui-btn layui-btn-sm" lay-event="repeat_run">重复执行</button>#}
+        <button id= "Runcase" class="layui-btn layui-btn-sm layui-icon layui-icon-triangle-r" lay-event="run_case">执行</button>
     </div>
 </script>
 <!--行内按钮-->

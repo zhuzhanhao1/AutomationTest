@@ -35,12 +35,12 @@ class ProcessApiTest(APIView):
         '''
         print('show_api----------' + str(self.num_progress))
         # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
-        if self.num_progress == 100:
-            self.num_progress = 0
+        if ProcessApiTest.num_progress == 100:
+            ProcessApiTest.num_progress = 0
             return Response(100)
         # 当进度不是百分之百的时候，返回当前进度
         else:
-            return Response(self.num_progress)
+            return Response(ProcessApiTest.num_progress)
 
     def get_token_ip_by_identity(self,identity):
         '''
@@ -49,7 +49,8 @@ class ProcessApiTest(APIView):
         :return: 请求令牌
         '''
         token = SystemRole.objects.get(identity=identity).token
-        return token
+        ip = SystemRole.objects.get(identity=identity).ip
+        return token,ip
 
     def check_greater_less_is_exist(self,body):
         '''
@@ -126,14 +127,14 @@ class ProcessApiTest(APIView):
             body = content[0].get("body", "")            # body数据
             depend_id = content[0].get("depend_id", "")  # depend_id数据
             check_params = self.parameter_check(identity,url,method)
-            token = self.get_token(identity)            # 根据用户身份获取请求头Token数据
+            token,ip = self.get_token_ip_by_identity(identity)            # 根据用户身份获取请求头Token数据
             body = self.check_greater_less_is_exist(body)
 
             if check_params:
                 return check_params
             try:
                 starttime = time.time()
-                response = RequestMethod(token).run_main(method, url, params, body)
+                response = RequestMethod(token).run_main(method, ip+url, params, body)
                 print(response)
                 endtime = time.time()
                 runtime = round(endtime - starttime, 3)
@@ -173,7 +174,7 @@ class ProcessApiTest(APIView):
                 replace_position = i.get("replace_position","")
 
                 result = self.parameter_check(identity, url, method)
-                token = self.get_token(identity)  # 根据用户身份获取请求头Token数据
+                token,ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
                 body = self.check_greater_less_is_exist(body)
 
                 if result:
@@ -228,7 +229,7 @@ class ProcessApiTest(APIView):
                                     params_body = params_body.replace(replace_value[i], depend_value[i])
                                 print(params_body)
                                 starttime = time.time()
-                                response = RequestMethod(token).run_main(method, url, params_body, json.dumps(
+                                response = RequestMethod(token).run_main(method, ip+url, params_body, json.dumps(
                                     body)) if replace_position == "params" else RequestMethod(token).run_main(method, url,
                                                                                                    json.dumps(params),
                                                                                                    params_body)
@@ -297,7 +298,7 @@ class ProcessApiTest(APIView):
                                         params_body = params_body.replace(replace_value[i], depend_value[i])
                                     print(params_body)
                                     starttime = time.time()
-                                    response = RequestMethod(token).run_main(method, url, params_body, json.dumps(
+                                    response = RequestMethod(token).run_main(method, ip+url, params_body, json.dumps(
                                         body)) if replace_position == "params" else RequestMethod(token).run_main(method, url,
                                                                                                        json.dumps(params),params_body)
                                     endtime = time.time()
@@ -315,7 +316,7 @@ class ProcessApiTest(APIView):
                 else:
                     try:
                         starttime = time.time()
-                        response = RequestMethod(token).run_main(method, url, params, body)
+                        response = RequestMethod(token).run_main(method, ip+url, params, body)
                         endtime = time.time()
                         runtime = round(endtime - starttime, 3)     #接口执行的消耗时间
 
@@ -339,6 +340,7 @@ class ProcessApiTest(APIView):
                     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
                 num += 1
                 ProcessApiTest.num_progress = round(num / len(content) * 100, )
+                print(ProcessApiTest.num_progress)
             # 将{}数据返回给前端
             dic["failcases"] = self.failed_ids
             dic["errors"] = self.failed_num

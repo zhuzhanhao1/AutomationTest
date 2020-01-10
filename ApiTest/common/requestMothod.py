@@ -57,7 +57,7 @@ class RequestMethod():
             data = json.loads(data)
             r = requests.delete(url, params=params, data=json.dumps(data), headers=headers)
         else:
-            headers = {"accessToken": token}
+            headers = {"accessToken": self.token}
             r = requests.delete(url, params=params, headers=headers)
         try:
             json_response = r.json()

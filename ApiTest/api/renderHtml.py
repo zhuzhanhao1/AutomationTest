@@ -263,7 +263,7 @@ def testurl_views(request):
 
 
 def test(request):
-    all = SingleApi.objects.filter()
+    all = ProcessApi.objects.filter()
     for i in all:
         url = i.url.split("/")
         a = 0
@@ -274,7 +274,7 @@ def test(request):
                 e = "/"+ii
             w += e
             a += 1
-        SingleApi.objects.filter(caseid=i.caseid).update(url=w)
+        ProcessApi.objects.filter(caseid=i.caseid).update(url=w)
     return HttpResponse("完成咯")
 
 

@@ -39,15 +39,19 @@ class RunQuickTest(APIView):
         :return: 接口响应结果，JOSN格式化数据
         '''
         datas = request.data
-        #参数校验
-        result = self.parameter_check(datas)
-        if result:
-            return result
         method=datas["Method"]
         url=datas["addURL"]
         headers=datas["addmergeheaders"]
         params=datas["addmergeformdatas"]
         body=datas["body"]
+        print(body)
+        if body == "":
+            print(33333333333)
+        print(type(body))
+        #参数校验
+        result = self.parameter_check(datas)
+        if result:
+            return result
         try:
             response = QuickMothod().run_main(method, url, headers, params, body)
             response = json.dumps(response, ensure_ascii=False, sort_keys=True, indent=2)

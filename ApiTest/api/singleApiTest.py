@@ -3,16 +3,13 @@ import json
 import threading
 import time
 
-from rest_framework import viewsets
 from ApiTest.models import SystemRole, SingleApi
-from ApiTest.serializers import SingleApiSerializers,SingleApiResponseSerializers
-from django.http import Http404
+from ApiTest.serializers import SingleApiResponseSerializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from ApiTest.common.requestMothod import RequestMethod
 
-from rest_framework.parsers import JSONParser
 '''
 JSONParser: 表示只能解析content - type:application / json头
 JSONParser: 表示只能解析content - type:application / x - www - form - urlencoded头
@@ -139,11 +136,11 @@ class SingleApiTest(APIView):
                 result = self.parameter_check(identity, url, method)
                 if result:
                     return result
-                token = self.get_token(identity)  # 根据用户身份获取请求头Token数据
+                token,ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
                 body = self.check_greater_less_is_exist(body)
                 try:
                     starttime = time.time()
-                    response = RequestMethod(token).run_main(method, url, params, body)
+                    response = RequestMethod(token).run_main(method, ip+url, params, body)
                     L.append(response)
                     endtime = time.time()
                     runtime = round(endtime - starttime, 3)     #接口执行的消耗时间
@@ -259,7 +256,7 @@ class RepeatRunSingleApi(SingleApiTest):
             result = self.parameter_check(identity,url,method)
             if result:
                 return result
-            token = self.get_token(identity)            # 根据用户身份获取请求头Token数据
+            token,ip = self.get_token_ip_by_identity(identity)            # 根据用户身份获取请求头Token数据
             body = self.check_greater_less_is_exist(body)
             try:
                 num = 0
@@ -269,7 +266,7 @@ class RepeatRunSingleApi(SingleApiTest):
                         end = runtime_concurrency
                     else:
                         num += 1
-                    response = RequestMethod(token).run_main(method, url, params, body)
+                    response = RequestMethod(token).run_main(method, ip+url, params, body)
                     print("我是计数num="+str(num))
                     RepeatRunSingleApi.num_progress = round(num / end * 100, )
                     print("进度条计数="+str(RepeatRunSingleApi.num_progress))
@@ -294,10 +291,10 @@ class RepeatRunSingleApi(SingleApiTest):
                     result = self.parameter_check(identity, url, method)
                     if result:
                         return result
-                    token = self.get_token(identity)  # 根据用户身份获取请求头Token数据
+                    token,ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
                     body = self.check_greater_less_is_exist(body)
                     try:
-                        response = RequestMethod(token).run_main(method, url, params, body)
+                        response = RequestMethod(token).run_main(method, ip+url, params, body)
                         L.append(response)
                     except TypeError as e:
                         self.repeat_result = {"code": 400, "msg": "操作或函数应用于不适当类型的对象"}
@@ -314,3 +311,68 @@ class RepeatRunSingleApi(SingleApiTest):
                     print("进度条计数=" + str(RepeatRunSingleApi.num_progress))
             # 将[{},{}]数据赋值给类变量repeat_result
             self.repeat_result = {"多接口重复执行结果":L}
+
+
+class LocustSingApi(APIView):
+    pass
+#
+#
+#     def get_token_ip_by_identity(self,identity):
+#         '''
+#         获取角色请求令牌和ip
+#         :param identity: 用户角色
+#         :return: 请求令牌
+#         '''
+#         token = SystemRole.objects.get(identity=identity).token
+#         ip = SystemRole.objects.get(identity=identity).ip
+#         return token,ip
+#
+#     def post(self, request, format=None):
+#         '''
+#         :param request: request.data
+#         :param format: None
+#         :return: 接口响应结果，JOSN格式化数据
+#         '''
+#         datas = request.data
+#         content = json.loads(datas["request"])
+#         print(content)
+#         if len(content) == 1:
+#             identity = content[0].get("identity", "")   # 用户身份
+#             url = content[0].get("url", "")             # 登录地址
+#             method = content[0].get("method", "")       # 请求方式
+#             params = content[0].get("params", "")       # query数据
+#             body = content[0].get("body", "")           # body数据
+#
+#             token,ip = self.get_token_ip_by_identity(identity)          #根据用户身份获取请求头Token数据和IP
+#
+#             response = self.run(token, method, ip+url, params, body)
+#             return Response(response)
+#
+#     @task(1)
+#     def run(self,token,method, url, params, data):
+#         print(token)
+#         print(method)
+#         print(url)
+#         print(params)
+#         print((type(params)))
+#         print(data)
+#         print(type(data))
+#         headers = {
+#             "accessToken": token,
+#             "Content-Type": "application/json"
+#         }
+#         params = json.loads(params) if params != "" else None
+#         if data:
+#             data = json.loads(data)
+#             data = data if any(data) == True else None
+#             r = self.client.post(url, params=params, data=json.dumps(data), headers=headers)
+#         else:
+#             r = self.client.post(url, params=params, data=None, headers=headers)
+#         try:
+#             json_response = r.json()
+#             return json_response
+#         except Exception as e:
+#             print("POST请求出错", e)
+#             return r.text
+
+
