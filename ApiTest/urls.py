@@ -27,7 +27,7 @@ urlpatterns = [
     url(r'singleapi/del_case/(?P<pk>[0-9]+)/$', singleApiList.DelSingleApi.as_view()),
     url(r'singleapi/update_case/(?P<pk>[0-9]+)/$', singleApiList.UpdateSingleApi.as_view()),
     url(r'singleapi/detail_case/(?P<pk>[0-9]+)/$', singleApiList.SingleApiDetail.as_view()),
-    url(r'singleapi/locust/$', singleApiTest.LocustSingApi.as_view()),
+    # url(r'singleapi/locust/$', singleApiTest.LocustSingApi.as_view()),
 
     url(r'processapi/list/$', processApiList.ProcessApiList.as_view()),
     url(r'processapi/add_case/$', processApiList.AddProcessApi.as_view()),
@@ -50,7 +50,6 @@ urlpatterns = [
     url(r'quicktest/run/$', quickTest.RunQuickTest.as_view()),
 
     url(r'link/list/$', Link.LinkList.as_view()),
-    url(r'Testurl/list/$', Link.TesturlList.as_view()),
     url(r'Testurl/list/$', Link.TesturlList.as_view()),
 
 

@@ -44,10 +44,6 @@ class RunQuickTest(APIView):
         headers=datas["addmergeheaders"]
         params=datas["addmergeformdatas"]
         body=datas["body"]
-        print(body)
-        if body == "":
-            print(33333333333)
-        print(type(body))
         #参数校验
         result = self.parameter_check(datas)
         if result:
