@@ -2,9 +2,11 @@
 import json
 import threading
 import time
+import os
 
-from ApiTest.models import SystemRole, SingleApi
-from ApiTest.serializers import SingleApiResponseSerializers
+from django.http import Http404
+from ApiTest.models import SystemRole, SingleApi,LocustApi
+from ApiTest.serializers import SingleApiResponseSerializers, LocustApiSerializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -314,65 +316,62 @@ class RepeatRunSingleApi(SingleApiTest):
 
 
 class LocustSingApi(APIView):
-    pass
-#
-#
-#     def get_token_ip_by_identity(self,identity):
-#         '''
-#         获取角色请求令牌和ip
-#         :param identity: 用户角色
-#         :return: 请求令牌
-#         '''
-#         token = SystemRole.objects.get(identity=identity).token
-#         ip = SystemRole.objects.get(identity=identity).ip
-#         return token,ip
-#
-#     def post(self, request, format=None):
-#         '''
-#         :param request: request.data
-#         :param format: None
-#         :return: 接口响应结果，JOSN格式化数据
-#         '''
-#         datas = request.data
-#         content = json.loads(datas["request"])
-#         print(content)
-#         if len(content) == 1:
-#             identity = content[0].get("identity", "")   # 用户身份
-#             url = content[0].get("url", "")             # 登录地址
-#             method = content[0].get("method", "")       # 请求方式
-#             params = content[0].get("params", "")       # query数据
-#             body = content[0].get("body", "")           # body数据
-#
-#             token,ip = self.get_token_ip_by_identity(identity)          #根据用户身份获取请求头Token数据和IP
-#
-#             response = self.run(token, method, ip+url, params, body)
-#             return Response(response)
-#
-#     @task(1)
-#     def run(self,token,method, url, params, data):
-#         print(token)
-#         print(method)
-#         print(url)
-#         print(params)
-#         print((type(params)))
-#         print(data)
-#         print(type(data))
-#         headers = {
-#             "accessToken": token,
-#             "Content-Type": "application/json"
-#         }
-#         params = json.loads(params) if params != "" else None
-#         if data:
-#             data = json.loads(data)
-#             data = data if any(data) == True else None
-#             r = self.client.post(url, params=params, data=json.dumps(data), headers=headers)
-#         else:
-#             r = self.client.post(url, params=params, data=None, headers=headers)
-#         try:
-#             json_response = r.json()
-#             return json_response
-#         except Exception as e:
-#             print("POST请求出错", e)
-#             return r.text
+
+    def get_token_ip_by_identity(self,identity):
+        '''
+        :param identity: 用户角色
+        :return: 角色请求令牌、ip
+        '''
+        token = SystemRole.objects.get(identity=identity).token
+        ip = SystemRole.objects.get(identity=identity).ip
+        return token,ip
+
+    def get_object(self, pk):
+        try:
+            return LocustApi.objects.get(caseid=pk)
+        except LocustApi.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, format=None):
+        '''
+        :param request: 请求压测的接口参数
+        :param pk: 唯一id
+        :return:蝗虫任务8089端口开启，返回成功提示
+        '''
+        datas = request.data
+        content = json.loads(datas["request"])[0]
+        identity = content.get("identity", "")  # 用户身份
+
+        token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据和IP
+        headers = json.dumps({"accessToken":token})
+        content["header"] = headers
+        content["ip"] = ip
+        print(content)
+        snippet = self.get_object(pk)
+        serializer = LocustApiSerializers(snippet, data=content)
+        if serializer.is_valid():
+            serializer.save()
+            #天坑，不后台运行，应该就是阻塞了，Response返回的消息不能返回，暂时使用后台运行解决
+            os.system("nohup locust -f ApiTest/common/locustTest.py --host={} &".format(ip))
+            return Response({"code": 200, "msg": "Successful opening locust"})
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class CloseLocust(APIView):
+
+    def get(self, request, format=None):
+        '''
+        :param request:无参数
+        :return:关闭蝗虫的提示信息
+        '''
+        locust_process = os.popen('lsof -i:8089').readlines()[-1]
+        res = locust_process.split(" ")
+        res_filter = list(filter(None, res))
+        try:
+            command = "kill -9 {}".format(res_filter[1])
+            print(command)
+            os.system(command)
+            return Response({"code": 200, "msg": "Successful closing locust"})
+        except Exception as e:
+            print(e)
+            return Response({"code": 500, "msg": "Failed closing locust"})

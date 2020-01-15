@@ -440,6 +440,29 @@
 		</div>
 	</div>
 
+    <!--负责人-->
+	<div class="layui-row" id="locust" style="display: none;">
+		<div class="layui-col-md11">
+
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 20px;">
+                <a href="http://localhost:8089/" style="font-size: 20px;color: #1E9FFF;padding-left: 20px;" target="_blank">点击前往-->Start new Locust swarm</a>
+            </blockquote>
+
+            <blockquote class="layui-elem-quote" style="margin-top: 20px;padding-left: 20px;">注意:如果测试结束，请回到此页面关闭8089端口进程</blockquote>
+
+			<form class="layui-form" lay-filter="locust">
+
+				<div class="layui-form-item" style="margin-top: 20px;">
+					<div class="layui-input-block">
+						<button class="layui-btn" lay-submit lay-filter="locust"
+								style="float: right;background-color: cornflowerblue;">关闭8089端口
+						</button>
+					</div>
+				</div>
+
+			</form>
+		</div>
+	</div>
 
 <!--数据表格JS-->
 <script>
@@ -1081,6 +1104,114 @@
 						});
                     }
                     break;
+                //性能测试
+                case 'locust':
+                    var data = checkStatus.data;
+                    console.log(data);
+                    if (data.length == 0) {
+                        layer.msg("请先选中需要执行的用例", {
+                            icon: 2,
+                            offset: "t"
+                        });
+                    }
+                    else {
+                        var l = [];
+                        for (i = 0; i < data.length; i++) {
+                            var dic = {};
+                            dic["caseid"] = i;
+                            dic['identity'] = data[i]['identity'];
+                            dic["url"] = data[i]['url'];
+                            dic['method'] = data[i]['method'];
+                            dic['params'] = data[i]['params'];
+                            dic['body'] = data[i]['body'];
+                            l.push(dic);
+                        }
+                        console.log(l);
+                        $.ajax({
+                            cache: false,
+                            url: "/singleapi/locust/1/",
+                            dataType: 'json',
+                            type: 'PUT',
+                            //async: false,
+                            data: {
+                                "request": JSON.stringify(l)
+                            },
+                            //请求前的处理,加载loading
+                            beforeSend: function () {
+                                var locust_test = layer.open({
+                                    type: 1
+                                    , title: ["locust接口性能测试"]
+                                    , skin: "layui-layer-lan"
+                                    , shade: 0.6
+                                    , shadeClose: true
+                                    , moveOut: true
+                                    , area: ["30%", '33%'] //自定义文本域宽高
+                                    , content: $("#locust").html(),
+                                    success: function () {
+                                        layui.use('form', function () {
+                                            var form = layui.form;
+                                            //关闭locust，
+                                            form.on('submit(locust)', function (data) {
+                                                $.ajax({
+                                                    cache: false,
+                                                    url: "/singleapi/close_locust/",
+                                                    dataType: 'json',
+                                                    type: 'GET',
+                                                    success: function (data) {
+                                                        console.log(data);
+                                                        if (data.code == 200){
+                                                            layer.msg(data.msg, {
+                                                                offset: 't',
+                                                                icon: 6,
+                                                            });
+                                                        }else if(data.code == 500){
+                                                            layer.msg(data.msg, {
+                                                                offset: 't',
+                                                                icon: 5,
+                                                            });
+                                                        }
+
+                                                    },
+                                                    error: function (data) {
+                                                        console.log(data);
+                                                        layer.msg(data, {
+                                                            icon: 5,
+                                                            offset: 't',
+                                                        });
+                                                    },
+                                                    complete: function () {
+                                                        layer.close(locust_test);
+                                                    }
+
+                                                });
+                                                return false;//阻止表单跳转
+                                            });
+                                        })
+                                    }
+
+                                });
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                layer.msg(data.msg, {
+                                    offset: 't',
+                                    icon: 6,
+                                });
+                            },
+                            error: function (data) {
+                                console.log(data);
+                                let res = JSON.stringify(data, null, 4);
+                                layer.msg(data, {
+                                    icon: 5,
+                                    offset: 't',
+                                });
+                            },
+                            complete: function () {
+                                //layer.close(l_index);
+                            }
+                        });
+                    }
+                    break;
             }
 
         });
@@ -1666,6 +1797,7 @@
         <button class="layui-btn layui-btn-sm" lay-event="ding_ding">钉钉通知</button>
 		<button class="layui-btn layui-btn-sm layui-icon layui-icon-triangle-r" lay-event="run_case">执行</button>
 		<button class="layui-btn layui-btn-sm" lay-event="repeat_run">重复执行</button>
+        <button class="layui-btn layui-btn-sm" lay-event="locust">性能测试</button>
 	</div>
 </script>
 <!--行内按钮-->

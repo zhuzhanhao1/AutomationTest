@@ -186,3 +186,22 @@ class ProcessApi(models.Model):
 
     class Meta:
         verbose_name_plural = '接口流程管理'
+
+
+
+class LocustApi(models.Model):
+    """
+    接口性能测试
+    """
+    caseid = models.AutoField(primary_key=True,max_length=200,unique=True)
+    identity = models.CharField(max_length=50,verbose_name="用户身份")
+    url = models.CharField(max_length=250,verbose_name="访问路径")
+    method = models.CharField(max_length = 20,verbose_name="请求方式")
+    header = models.CharField(max_length=200,verbose_name="请求头",null=True,blank=True)
+    params = models.TextField(verbose_name="请求参数",null=True,blank=True)
+    body = models.TextField(verbose_name="请求体内容",null=True,blank=True)
+    ip = models.CharField(max_length = 100,verbose_name="ip地址")
+
+    class Meta:
+        verbose_name = '接口性能测试'
+        verbose_name_plural = '接口性能测试'

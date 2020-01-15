@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SingleApi,LeftMenu,ChildMenu,SystemRole,Link,Testurl,ProcessApi
+from .models import SingleApi, LeftMenu, ChildMenu, SystemRole, Link, Testurl, ProcessApi, LocustApi
 
 
 class SingleApiSerializers(serializers.ModelSerializer):
@@ -194,3 +194,11 @@ class ProcessApiResponseSerializers(serializers.ModelSerializer):
     class Meta:
         model = ProcessApi
         fields = ('result','duration')  # 需要序列化的属性
+
+class LocustApiSerializers(serializers.ModelSerializer):
+    '''
+        流程接口，更新响应内容和响应延迟
+    '''
+    class Meta:
+        model = LocustApi
+        fields = ('caseid', 'identity', 'url','method','params','body',"header","ip")  # 需要序列化的属性
