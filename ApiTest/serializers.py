@@ -79,6 +79,7 @@ class TokenSerializers(serializers.ModelSerializer):
         model = SystemRole
         fields = ('token',"ip")
 
+
 class SystemRoleUpdateInfoSerializers(serializers.ModelSerializer):
     '''
         更新系统角色信息

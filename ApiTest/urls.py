@@ -42,7 +42,8 @@ urlpatterns = [
     url(r'publicapi/import_case/$', publicApi.PublicApiImport.as_view()),
 
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),
-    url(r'systemrole/update_info/(?P<pk>[a-z]+)', systemRole.UpdateSystemRole.as_view()),
+    url(r'systemrole/add_role/$', systemRole.AddSystemRole.as_view()),
+    url(r'systemrole/update_info/(?P<pk>[a-z]+)/$', systemRole.UpdateSystemRole.as_view()),
     url(r'systemrole/get_token_by_role/$', systemRole.GetTokenByRole.as_view()),
 
     url(r'leftmenu/list/$', Menu.LeftMenuList.as_view()),

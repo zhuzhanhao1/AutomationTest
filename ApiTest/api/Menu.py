@@ -15,25 +15,31 @@ class LeftMenuList(APIView):
     '''
     头部导航菜单
     '''
-    def get(self, request, format=None):
+    def get_level_one_menu(self):
         '''
         :param request:
         :param format:
-        :return: 头部导航菜单-dict格式
+        :return: 头部导航菜单-dict格式-一级菜单
         '''
+        left = {}
         leftmenu_single = LeftMenu.objects.filter(area="single")
         leftmenu_single_serializer = LeftMenuSerializers(leftmenu_single, many=True)
         leftmenu_process = LeftMenu.objects.filter(area="process")
         leftmenu_process_serializer = LeftMenuSerializers(leftmenu_process, many=True)
         leftmenu_systemeSttings = LeftMenu.objects.filter(area="systemeSttings")
         leftmenu_systemeSttings_serializer = LeftMenuSerializers(leftmenu_systemeSttings, many=True)
-        left = {}
         left["single"] = leftmenu_single_serializer.data
         left['process'] = leftmenu_process_serializer.data
         left["systemeSttings"] = leftmenu_systemeSttings_serializer.data
         return left
 
     def post(self, request, format=None):
+        '''
+        新建一级菜单
+        :param request:
+        :param format:
+        :return:
+        '''
         serializer = LeftMenuSerializers(data=request.data)
         if serializer.is_valid():
             # .save()是调用SnippetSerializer中的create()方法
@@ -42,17 +48,19 @@ class LeftMenuList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ChildMenuList(APIView):
+class ChildMenuList(LeftMenuList):
     '''
-    左侧导航菜单
+    左侧二级菜单，继承一级菜单
     '''
     def get(self, request, format=None):
         '''
-        :param request: 头部导航菜单返回的dict，将子菜单拼接上去
+        :param request: 二级菜单参数，评级一级菜单
         :param format:
         :return:
         '''
-        left = LeftMenuList().get(request, format=None)
+        left = self.get_level_one_menu()
+        print(left)
+
         ermsapi = ChildMenu.objects.filter(classification__title="ERMS接口测试")
         ermsapi_erializer = ChildMenuSerializers(ermsapi, many=True)
 
@@ -72,6 +80,12 @@ class ChildMenuList(APIView):
         return Response(left)
 
     def post(self, request, format=None):
+        '''
+        新建二级菜单
+        :param request:
+        :param format:
+        :return:
+        '''
         serializer = ChildMenuSerializers(data=request.data)
         if serializer.is_valid():
             # .save()是调用SnippetSerializer中的create()方法
