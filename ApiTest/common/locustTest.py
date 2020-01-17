@@ -2,7 +2,7 @@ from locust import HttpLocust, TaskSet, task, between
 import json,os
 import pymysql
 
-class UserBehavior(TaskSet):
+class LocustTest(TaskSet):
 
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
@@ -17,8 +17,7 @@ class UserBehavior(TaskSet):
         cursor.execute("select * from ApiTest_locustapi where caseid ='1'")
         db.commit()
         data = cursor.fetchone()
-        print(data)
-        print(type(data))
+        #关闭数据库链接
         db.close()
         return data[2],data[3],data[4],data[5],data[6]
 
@@ -28,9 +27,12 @@ class UserBehavior(TaskSet):
             print("get 请求")
             headers = json.loads(self.headers)
             params = json.loads(self.params) if self.params != "" else None
-            print(params)
             with self.client.get(url = self.url, headers=headers, params=params,catch_response=True) as res:
-                print(res.json())
+                pass
+            try:
+                print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
+            except Exception as e:
+                return res.text
 
         elif self.method == 'post':
             print("post 请求")
@@ -41,14 +43,55 @@ class UserBehavior(TaskSet):
                 data = json.loads(self.data)
                 data = data if any(data) == True else None
                 with self.client.post(url=self.url, headers=headers, params=params, data=json.dumps(data), catch_response=True) as res:
-                    print(res.json())
+                    pass
             else:
                 with self.client.post(url=self.url, headers=headers, params=params, catch_response=True) as res:
-                    print(res.json())
+                    pass
+            try:
+                print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
+            except Exception as e:
+                return res.text
+
+        elif self.method == "put":
+            print("put 请求")
+            headers = json.loads(self.headers)
+            headers["Content-Type"] = "application/json"
+            params = json.loads(self.params) if self.params != "" else None
+            if self.data == '[]':
+                data = json.loads(self.data)
+                res = self.client.put(url=self.url, params=params, data=json.dumps(data), headers=headers)
+            elif self.data:
+                # data = eval(data)
+                data = json.loads(self.data)
+                data = data if any(data) == True else None
+                res = self.client.put(url=self.url, params=params, data=json.dumps(data), headers=headers)
+            else:
+                res = self.client.put(url=self.url, params=params, data=None, headers=headers)
+            try:
+                print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
+            except Exception as e:
+                return res.text
+
+        elif self.method == "delete":
+            print("delete 请求")
+            headers = json.loads(self.headers)
+            params = json.loads(self.params) if self.params != "" else None
+            if self.data:
+                headers["Content-Type"] = "application/json"
+                data = json.loads(self.data)
+                with self.client.delete(url=self.url, headers=headers, params=params, data=json.dumps(data), catch_response=True) as res:
+                    pass
+            else:
+                with self.client.delete(url=self.url, headers=headers, params=params, catch_response=True) as res:
+                    pass
+            try:
+                print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
+            except Exception as e:
+                return res.text
 
 
 class WebsiteUser(HttpLocust):
-    task_set = UserBehavior
+    task_set = LocustTest   #定义此 HttpLocust 的执行行为的 TaskSet 类
     wait_time = between(1, 3)
 
 if __name__ == "__main__":

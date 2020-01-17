@@ -440,7 +440,7 @@
 		</div>
 	</div>
 
-    <!--负责人-->
+    <!--性能测试-->
 	<div class="layui-row" id="locust" style="display: none;">
 		<div class="layui-col-md11">
 
@@ -1226,7 +1226,6 @@
                     value: data.result,
                     shade: false,
 					title:data.casename+"响应结果",
-                    //anim: 4,//从左滚动进来
 					maxmin:true,
                     skin: "layui-layer-rim",//hui
                     closeBtn: 0,
@@ -1242,7 +1241,7 @@
                             zIndex: layer.zIndex,
                             maxmin: true, //开启最大化最小化按钮
                             area: ['600px', '1200px'],
-                            content: "/detail/?id=" + data.caseid,
+                            content: "/detail/?singleid=" + data.caseid,
                         });
                         layer.full(index);
                     },

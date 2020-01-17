@@ -37,7 +37,8 @@ ermsapi = {
     "common_folder": "通用文件夹管理接口",
     "category": "门类模块接口",
     "admin": "admin平台接口",
-    "metadata": "元数据平台接口"
+    "metadata": "元数据平台接口",
+    "transfer_form":"移交表单管理接口"
 }
 
 tdrapi = {
