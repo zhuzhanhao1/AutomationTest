@@ -318,12 +318,16 @@ class ProcessApiTest(APIView):
                                             depend_value.append(dependvalue)
 
                                     params_body = params if replace_position == "params" else body
-                                    print("体内容取值开开始。。。。")
+                                    print(params_body)
+                                    print("替换取值开开始。。。。")
                                     replace_value = []
                                     for i in range(len(replaceKey_key)):
+                                        print(i)
                                         replacevalue = jsonpath.jsonpath(params_body, replaceKey_key[i])[
                                             replaceKey[replaceKey_key[i]]]
+                                        print(11)
                                         print(replacevalue)
+                                        print(22)
                                         if type(replacevalue) is list:
                                             replacevalue = replacevalue[0]
                                         replace_value.append(replacevalue)

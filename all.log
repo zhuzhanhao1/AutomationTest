@@ -11063,3 +11063,30 @@ Traceback (most recent call last):
     raise ConnectionError(e, request=request)
 requests.exceptions.ConnectionError: HTTPConnectionPool(host='amberdata.cnhttp', port=80): Max retries exceeded with url: //amberdata.cn/ermsapi/policy/get_retention_policy_list (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x10b0b6240>: Failed to establish a new connection: [Errno 8] nodename nor servname provided, or not known',))
 2020-01-19 19:38:39,563,2788,django.server,ERROR,basehttp.py:124,"POST /processapi/run/ HTTP/1.1" 500 22344
+2020-01-19 22:01:08,019,2856,django.request,ERROR,exception.py:135,Internal Server Error: /processapi/run/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 187, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 185, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/views/decorators/csrf.py", line 58, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/views/generic/base.py", line 68, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/ProcessApiTest.py", line 239, in post
+    dependkey = eval(depend_key)
+  File "<string>", line 1
+    {"$..[?(@.code=="WS")].id":0}
+                      ^
+SyntaxError: invalid syntax
+2020-01-19 22:01:08,132,2856,django.server,ERROR,basehttp.py:124,"POST /processapi/run/ HTTP/1.1" 500 17476
