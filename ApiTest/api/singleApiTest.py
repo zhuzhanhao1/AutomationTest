@@ -43,7 +43,7 @@ class SingleApiTest(APIView):
                 return body_replaced
             else:
                 return body
-        else:
+        elif type(body) is dict:
             body = json.dumps(body, ensure_ascii=False, sort_keys=True, indent=2)
             if "＜" in body or "＞" in body:
                 print('存在需要替换的符号')

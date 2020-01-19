@@ -26,7 +26,8 @@ class LocustTest(TaskSet):
         if self.method == "get":
             print("get 请求")
             headers = json.loads(self.headers)
-            params = json.loads(self.params) if self.params != None  else None
+
+            params = json.loads(self.params) if self.params != None and self.params != ""  else None
             with self.client.get(url = self.url, headers=headers, params=params,catch_response=True) as res:
                 pass
             try:
@@ -38,7 +39,7 @@ class LocustTest(TaskSet):
             print("post 请求")
             headers = json.loads(self.headers)
             headers["Content-Type"] = "application/json"
-            params = json.loads(self.params) if self.params != None else None
+            params = json.loads(self.params) if self.params != None and self.params != ""  else None
             if self.data:
                 data = json.loads(self.data)
                 data = data if any(data) == True else None
@@ -56,7 +57,7 @@ class LocustTest(TaskSet):
             print("put 请求")
             headers = json.loads(self.headers)
             headers["Content-Type"] = "application/json"
-            params = json.loads(self.params) if self.params != None else None
+            params = json.loads(self.params) if self.params != None and self.params != ""  else None
             if self.data == '[]':
                 data = json.loads(self.data)
                 res = self.client.put(url=self.url, params=params, data=json.dumps(data), headers=headers)
@@ -75,7 +76,7 @@ class LocustTest(TaskSet):
         elif self.method == "delete":
             print("delete 请求")
             headers = json.loads(self.headers)
-            params = json.loads(self.params) if self.params != None else None
+            params = json.loads(self.params) if self.params != None and self.params != ""  else None
             if self.data:
                 headers["Content-Type"] = "application/json"
                 data = json.loads(self.data)

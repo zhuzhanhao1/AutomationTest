@@ -1691,6 +1691,7 @@
                             },
                             success: function (data) {
                                 let msg = JSON.parse(data).msg;
+                                console.log(msg);
                                 layer.msg(msg, {
                                     icon: 6,
                                     offset: 't',

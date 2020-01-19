@@ -128,6 +128,8 @@ class UpdateProcessApi(APIView):
             data = {"replace_key": replace_key}
             serializer = ProcessApiReplaceKeySerializers(snippet, data=data)
         elif replace_position:
+            if replace_position not in ["params","body"]:
+                replace_position = None
             data = {"replace_position": replace_position}
             serializer = ProcessApiReplacePositionSerializers(snippet, data=data)
 

@@ -35,7 +35,7 @@ class SingleApiList(APIView):
     """
     def get(self, request, format=None):
 
-        casename = request.GET.get("casename", "")     #搜索名字
+        casename = request.GET.get("casename", "")          #搜索名字
         belong = request.GET.get("belong", "")              #所属模块
         system = request.GET.get("system", "")              #所属系统
 
@@ -71,12 +71,12 @@ class AddSingleApi(APIView):
     '''
     创建单一接口
     '''
-    def parameter_check(self):
+    def parameter_check(self,system):
         """
         验证参数
         """
         L = []
-        all = SingleApi.objects.all()
+        all = SingleApi.objects.filter(system=system)
         for i in all:
             L.append(i.sortid)
         Newsordid = max(L) + 1
@@ -84,10 +84,12 @@ class AddSingleApi(APIView):
 
     def post(self, request, format=None):
         serializer = SingleApiSerializers(data=request.data)
+        sortid = self.parameter_check(request.data["system"])
         if serializer.is_valid():
             # .save()是调用SnippetSerializer中的create()方法
             serializer.save()
-            return Response(data={"code": "201", "msg": "操作成功"}, status=status.HTTP_201_CREATED)
+            SingleApi.objects.filter(url=request.data["url"]).update(sortid=sortid)
+            return Response({"code": "201", "msg": "操作成功"}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 

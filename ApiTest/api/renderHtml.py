@@ -71,12 +71,19 @@ tdrapi = {
     "borrowing_apply": "借阅申请接口",
     "borrowing_apply_archives": "借阅档案申请接口",
     "subject_relation": "专题档案接口",
-    "record": "Record接口"
+    "record": "Record接口",
+    "admin":"admin平台接口",
+    "subject":"专题接口",
+    "department":"部门管理接口"
 }
 
 erms_process_api = {
-    "login":"登录过程接口",
-    "data_form_config":"数据表单配置接口"
+    "login":"登录流程",
+    "data_form_config":"数据表单配置流程",
+    "report":"统计报表配置流程",
+    "policy":"保留处置策略流程",
+    "category":"类目保管期限流程",
+
 }
 
 tdr_process_api = {

@@ -52,7 +52,40 @@ class ProcessApiTest(APIView):
         ip = SystemRole.objects.get(identity=identity).ip
         return token,ip
 
-    def check_greater_less_is_exist(self,body):
+    def check_english_greater_less_is_exist(self,response):
+        '''
+        判断请求体或者响应结果中是否存在<>,将其替换为中文的＜＞，layui数据表格bug，暂且这么处理
+        :param response:
+        :return: 需要替换后的数据
+        '''
+        if type(response) is str:
+            if "<" in response or ">" in response:
+                print('存在需要替换的符号')
+                less = response.replace("<", "＜")
+                response_replaced = less.replace(">", "＞")
+                return response_replaced
+            else:
+                return response
+
+        elif type(response) is dict or type(response) is list:
+            response = json.dumps(response, ensure_ascii=False, sort_keys=True, indent=2)
+            if "<" in response or ">" in response:
+                print('存在需要替换的符号')
+                less = response.replace("<", "＜")
+                response_replaced = less.replace(">", "＞")
+                return response_replaced
+            else:
+                return response
+
+        elif type(response) is bool:
+            return str(response)
+
+        else:
+            print(type(response))
+            print(response)
+            return response
+
+    def check_chinese_greater_less_is_exist(self,body):
         '''
         判断请求体或者响应结果中是否存在<>,将其替换为中文的＜＞，layui数据表格bug，暂且这么处理
         :param body:
@@ -66,7 +99,8 @@ class ProcessApiTest(APIView):
                 return body_replaced
             else:
                 return body
-        else:
+
+        elif type(body) is dict or type(body) is list:
             body = json.dumps(body, ensure_ascii=False, sort_keys=True, indent=2)
             if "＜" in body or "＞" in body:
                 print('存在需要替换的符号')
@@ -128,7 +162,7 @@ class ProcessApiTest(APIView):
             depend_id = content[0].get("depend_id", "")  # depend_id数据
             check_params = self.parameter_check(identity,url,method)
             token,ip = self.get_token_ip_by_identity(identity)            # 根据用户身份获取请求头Token数据
-            body = self.check_greater_less_is_exist(body)
+            body = self.check_chinese_greater_less_is_exist(body)
 
             if check_params:
                 return check_params
@@ -138,9 +172,12 @@ class ProcessApiTest(APIView):
                 print(response)
                 endtime = time.time()
                 runtime = round(endtime - starttime, 3)
-                djson = self.check_greater_less_is_exist(response)
+
+                djson = self.check_english_greater_less_is_exist(response)
+
                 id = ProcessApi.objects.get(caseid=caseid)
                 data = {"result":djson,"duration":runtime}
+                print(data)
                 serializer = ProcessApiResponseSerializers(id, data=data)
                 # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
                 if serializer.is_valid():
@@ -175,7 +212,7 @@ class ProcessApiTest(APIView):
 
                 result = self.parameter_check(identity, url, method)
                 token,ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
-                body = self.check_greater_less_is_exist(body)
+                body = self.check_chinese_greater_less_is_exist(body)
 
                 if result:
                     return result
@@ -230,7 +267,7 @@ class ProcessApiTest(APIView):
                                 print(params_body)
                                 starttime = time.time()
                                 response = RequestMethod(token).run_main(method, ip+url, params_body, json.dumps(
-                                    body)) if replace_position == "params" else RequestMethod(token).run_main(method, url,
+                                    body)) if replace_position == "params" else RequestMethod(token).run_main(method, ip+url,
                                                                                                    json.dumps(params),
                                                                                                    params_body)
                                 endtime = time.time()
@@ -299,7 +336,7 @@ class ProcessApiTest(APIView):
                                     print(params_body)
                                     starttime = time.time()
                                     response = RequestMethod(token).run_main(method, ip+url, params_body, json.dumps(
-                                        body)) if replace_position == "params" else RequestMethod(token).run_main(method, url,
+                                        body)) if replace_position == "params" else RequestMethod(token).run_main(method, ip+url,
                                                                                                        json.dumps(params),params_body)
                                     endtime = time.time()
                                     runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
@@ -327,7 +364,8 @@ class ProcessApiTest(APIView):
                         print(e)
                         response = "异常的id为:" + str(caseid) + "," + "json.loads()读取字符串报错"
 
-                djson = self.check_greater_less_is_exist(response)
+
+                djson = self.check_english_greater_less_is_exist(response)
                 self.check_result_is_fail(response, caseid)
 
                 id = ProcessApi.objects.get(caseid=caseid)
