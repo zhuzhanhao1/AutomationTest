@@ -78,11 +78,15 @@ tdrapi = {
 }
 
 erms_process_api = {
-    "login":"登录流程",
-    "data_form_config":"数据表单配置流程",
-    "report":"统计报表配置流程",
-    "policy":"保留处置策略流程",
-    "category":"类目保管期限流程",
+    "login": "登录流程",
+    "data_form_config": "数据表单配置流程",
+    "report": "统计报表配置流程",
+    "policy": "保留处置策略流程",
+    "category": "类目保管期限流程",
+    "acl": "访问控制策略流程",
+    "view": "视图自定义流程",
+    "document_collection":"文件收集流程",
+    "filing": "文件整理流程"
 
 }
 

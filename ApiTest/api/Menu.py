@@ -59,7 +59,7 @@ class ChildMenuList(LeftMenuList):
         :return:
         '''
         left = self.get_level_one_menu()
-        print(left)
+        # print(left)
 
         ermsapi = ChildMenu.objects.filter(classification__title="ERMS接口测试")
         ermsapi_erializer = ChildMenuSerializers(ermsapi, many=True)
