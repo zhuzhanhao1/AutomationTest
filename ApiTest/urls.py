@@ -1,7 +1,7 @@
 from django.conf.urls import url
-from ApiTest.api import renderHtml,singleApiList,systemRole,Menu,\
-    quickTest,singleApiTest,Link,systemLog,processApiList,ProcessApiTest,\
-    publicApi
+from ApiTest.api import renderHtml,singleApiList,systemRole,Menu, \
+    Link, processApiList, publicApi
+from ApiTest.api.interfaceTest import ProcessApiTest, quickTest, singleApiTest
 from rest_framework.urlpatterns import format_suffix_patterns
 
 
@@ -14,8 +14,9 @@ urlpatterns = [
     url(r'singleapi/$', renderHtml.singleapi_views),
     url(r'processapi/$', renderHtml.processapi_views),
     url(r'detail/$', renderHtml.apiDetail_views),
-    url(r'link/$', renderHtml.link_views),
+    url(r'^link/$', renderHtml.link_views),
     url(r'testurl/$', renderHtml.testurl_views),
+    url(r'systemlog/$', renderHtml.systemlog_views),
     url(r'test/$', renderHtml.test),
 
 
@@ -52,6 +53,10 @@ urlpatterns = [
     url(r'quicktest/run/$', quickTest.RunQuickTest.as_view()),
 
     url(r'link/list/$', Link.LinkList.as_view()),
+    url(r'link/add_link/$', Link.LinkList.as_view()),
+    url(r'link/update_link/(?P<pk>[0-9]+)/$', Link.LinkList.as_view()),
+
+
     url(r'Testurl/list/$', Link.TesturlList.as_view()),
 
 

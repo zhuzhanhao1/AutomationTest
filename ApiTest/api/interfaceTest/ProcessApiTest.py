@@ -28,6 +28,7 @@ class ProcessApiTest(APIView):
     failed_ids = []
 
     def get(self, request, format=None):
+
         '''
         :param request:
         :param format:
@@ -162,7 +163,8 @@ class ProcessApiTest(APIView):
         dic = {}
         num = 0
         for i in content:
-            print("当前执行第"+str(num)+"号接口")
+
+            print("当前执行第" + str(num) + "号接口:"+i.get("casename",""))
             caseid = i.get("caseid","")
             identity = i.get("identity", "")    # 用户身份
             url = i.get("url", "")              # 登录地址
@@ -173,7 +175,6 @@ class ProcessApiTest(APIView):
             depend_key = i.get("depend_key","")
             replace_key = i.get("replace_key","")
             replace_position = i.get("replace_position","")
-            print()
 
             result = self.parameter_check(identity, url, method)
             token,ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据

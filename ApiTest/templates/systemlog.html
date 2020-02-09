@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>CodePen - Staggered LandIn Text</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
+
+        body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(rgba(16, 16, 16, 0.8), rgba(16, 16, 16, 0.8)), url(https://i.loli.net/2019/10/18/buDT4YS6zUMfHst.jpg);
+            background-size: cover;
+        }
+
+        p {
+            margin: 0 9em;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .landIn {
+            display: flex;
+            flex-wrap: wrap;
+            line-height: 1.8;
+            color: white;
+            font-family: Lora, serif;
+            white-space: pre;
+        }
+
+        .landIn span {
+            animation: landIn 0.8s ease-out both;
+        }
+
+        @keyframes landIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<p class="landIn">还没确定记录那些数据，暂时先放。数据表待明确。。。。</p>
+<!-- partial -->
+<script>
+    "use strict";
+    var landInTexts = document.querySelectorAll(".landIn");
+    landInTexts.forEach(function (landInText) {
+        var letters = landInText.textContent.split("");
+        landInText.textContent = "";
+        letters.forEach(function (letter, i) {
+            var span = document.createElement("span");
+            span.textContent = letter;
+            span.style.animationDelay = i * 0.05 + "s";
+            landInText.append(span);
+        });
+    });
+</script>
+
+</body>
+</html>

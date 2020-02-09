@@ -19,4 +19,7 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('ApiTest.urls')),
+    # url(r'^processapi/', include('ApiTest.urls')),
+    # url(r'^publicapi', include('ApiTest.urls')),
+    # url(r'^systemrole', include('ApiTest.urls')),
 ]

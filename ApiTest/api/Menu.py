@@ -24,10 +24,13 @@ class LeftMenuList(APIView):
         left = {}
         leftmenu_single = LeftMenu.objects.filter(area="single")
         leftmenu_single_serializer = LeftMenuSerializers(leftmenu_single, many=True)
+
         leftmenu_process = LeftMenu.objects.filter(area="process")
         leftmenu_process_serializer = LeftMenuSerializers(leftmenu_process, many=True)
+
         leftmenu_systemeSttings = LeftMenu.objects.filter(area="systemeSttings")
         leftmenu_systemeSttings_serializer = LeftMenuSerializers(leftmenu_systemeSttings, many=True)
+
         left["single"] = leftmenu_single_serializer.data
         left['process'] = leftmenu_process_serializer.data
         left["systemeSttings"] = leftmenu_systemeSttings_serializer.data

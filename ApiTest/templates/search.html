@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Testapi-搜索</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
 
     <link rel="icon" href="./../static/images/favicon%202.ico">
@@ -13,7 +14,193 @@
 
     <script src="./../static/jquery-3.4.1/jquery-3.4.1.min.js" type="text/javascript"></script>
     <script src="./../static/js/layui2.5.5/layui.js"></script>
+    <style>
+        /*底部动画*/
+        @import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
+        @import url("https://fonts.googleapis.com/css?family=Bubblegum+Sans&display=swap");
 
+        p {
+            margin: 0 9em;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .landIn {
+            display: flex;
+            flex-wrap: wrap;
+            line-height: 1.8;
+            color: white;
+            font-family: Lora, serif;
+            white-space: pre;
+        }
+
+        .landIn span {
+            animation: landIn 0.8s ease-out both;
+        }
+
+        @keyframes landIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bubbling {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            color: black;
+            font-size: 2.5rem;
+            font-family: 'Bubblegum Sans', cursive;
+            {#font-weight: bold;#}
+            text-transform: uppercase;
+        }
+
+        .bubble {
+            position: absolute;
+            background: white;
+            border-radius: 100%;
+        }
+
+        {#shizhong#}
+        .clock {
+            display: -webkit-box;
+            display: flex;
+            position: fixed;
+            top:8px;
+            right:10px;
+        }
+
+        .clock .divider {
+            font-size: 33px;
+            line-height: 51px;
+            font-style: normal;
+        }
+
+        .clock .flip {
+            position: relative;
+            width: 30px;
+            height: 50px;
+            margin: 2px;
+            font-size: 33px;
+            line-height: 50px;
+            text-align: center;
+            background: #231f20;
+            border: 1px solid black;
+            border-radius: 10px;
+            box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+            -webkit-box-reflect: below 1px linear-gradient(transparent, rgba(0, 0, 0, 0.4));
+        }
+
+        .clock .flip .digital::before, .clock .flip .digital::after {
+            position: absolute;
+            content: attr(data-number);
+            left: 0;
+            right: 0;
+            color: white;
+            background: #231f20;
+            overflow: hidden;
+            -webkit-perspective: 160px;
+            perspective: 160px;
+        }
+
+        .clock .flip .digital::before {
+            top: 0;
+            bottom: 50%;
+            border-bottom: 1px solid #231f20;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .clock .flip .digital::after {
+            top: 50%;
+            bottom: 0;
+            line-height: 0;
+            border-radius: 0 0 10px 10px;
+        }
+
+        .clock .flip .back::before,
+        .clock .flip .front::after {
+            z-index: 1;
+        }
+
+        .clock .flip .back::after {
+            z-index: 2;
+        }
+
+        .clock .flip .front::before {
+            z-index: 3;
+        }
+
+        .clock .flip .back::after {
+            -webkit-transform-origin: center top;
+            transform-origin: center top;
+            -webkit-transform: rotateX(0.5turn);
+            transform: rotateX(0.5turn);
+        }
+
+        .clock .flip.running .front::before {
+            -webkit-transform-origin: center bottom;
+            transform-origin: center bottom;
+            -webkit-animation: frontFlipDown 0.6s ease-in-out;
+            animation: frontFlipDown 0.6s ease-in-out;
+            box-shadow: 0 -2px 6px rgba(255, 255, 255, 0.3);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .clock .flip.running .back::after {
+            -webkit-animation: backFlipDown 0.6s ease-in-out;
+            animation: backFlipDown 0.6s ease-in-out;
+        }
+
+        @-webkit-keyframes frontFlipDown {
+            to {
+                -webkit-transform: rotateX(0.5turn);
+                transform: rotateX(0.5turn);
+            }
+        }
+
+        @keyframes frontFlipDown {
+            to {
+                -webkit-transform: rotateX(0.5turn);
+                transform: rotateX(0.5turn);
+            }
+        }
+
+        @-webkit-keyframes backFlipDown {
+            to {
+                -webkit-transform: rotateX(0);
+                transform: rotateX(0);
+            }
+        }
+
+        @keyframes backFlipDown {
+            to {
+                -webkit-transform: rotateX(0);
+                transform: rotateX(0);
+            }
+        }
+        h1{
+            position: fixed;
+            left: 30px;
+            width: 80px;
+            padding-left:0px;
+            {#background-color: black;#}
+            text-align: center;
+            {#border: 1px solid black;#}
+            {#border-radius: 10px;#}
+            {#box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);#}
+        }
+        .header h1{
+            padding-right: 30px;
+        }
+
+
+    </style>
 </head>
 
 
@@ -23,276 +210,310 @@
 <div class="header_box">
     <div class="header">
         <div class="nav">
-            <h1 style="position: fixed;left: 30px;">
-                <span>Search</span>
+            <h1>
+                <span class="bubbling">首页</span>
             </h1>
-            <h3 style="position: fixed;right: 10px;">
-                <span id="nowTime" class="logo"></span>
-            </h3>
+{#            <h3 style="position: fixed;right: 10px;color: white;">#}
+{#                <span id="nowTime" class="logo"></span>#}
+{#            </h3>#}
+            <div class="clock">
+                <div class="flip">
+                    <div class="digital front" data-number="0"></div>
+                    <div class="digital back" data-number="1"></div>
+                </div>
+                <div class="flip">
+                    <div class="digital front" data-number="0"></div>
+                    <div class="digital back" data-number="1"></div>
+                </div>
+                <em class="divider">:</em>
+                <div class="flip">
+                    <div class="digital front" data-number="0"></div>
+                    <div class="digital back" data-number="1"></div>
+                </div>
+                <div class="flip">
+                    <div class="digital front" data-number="0"></div>
+                    <div class="digital back" data-number="1"></div>
+                </div>
+                <em class="divider">:</em>
+                <div class="flip">
+                    <div class="digital front" data-number="0"></div>
+                    <div class="digital back" data-number="1"></div>
+                </div>
+                <div class="flip">
+                    <div class="digital front" data-number="0"></div>
+                    <div class="digital back" data-number="1"></div>
+                </div>
+            </div>
         </div>
-
     </div>
 </div>
 <!-- end-header -->
+<div>
+    <!--更新用户信息-->
+    <div class="layui-row" id="update_role_info" style="display: none;">
+        <div class="layui-col-md11">
+            <form class="layui-form" lay-filter="update_role_info">
 
-<!--更新用户信息-->
-<div class="layui-row" id="update_role_info" style="display: none;">
-    <div class="layui-col-md11">
-        <form class="layui-form" lay-filter="update_role_info">
-
-            <div class="layui-form-item" style="margin-top: 20px;">
-                <button type="button" class="layui-btn layui-btn-warm" onclick="gettoken()"
-                        style="float: right;margin-left: 10px;">获取Token
-                </button>
-                <button type="button" class="layui-btn layui-btn-warm" onclick="get_user_info()"
-                        style="float: right;">用户信息
-                </button>
-            </div>
-            <div class="layui-form-item" style="margin-top: 20px;">
-                <label class="layui-form-label">所属系统</label>
-                <div class="layui-input-block">
-                    <input type="radio" name="system" value="erms" title="数据档案室">
-                    <input type="radio" name="system" value="transfer" title="移交接收系统">
-                    <input type="radio" name="system" value="tdr" title="数字档案馆">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">角色</label>
-                <div class="layui-input-block erms" style="display: none;">
-                    <input type="radio" name="identity" value="sysadmin" title="系统管理员">
-                    <input type="radio" name="identity" value="admin" title="单位管理员">
-                    <input type="radio" name="identity" value="ast" title="单位档案员">
-                </div>
-                <div class="layui-input-block transfer" style="display: none;">
-                    <input type="radio" name="identity" value="transferadmin" title="数据管理员">
-                    <input type="radio" name="identity" value="sjzjy" title="数据质检员">
-                    <input type="radio" name="identity" value="sjshy" title="数据审核员">
-                </div>
-                <div class="layui-input-block tdr" style="display: none;">
-                    <input type="radio" name="identity" value="tdradmin" title="系统管理员">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">账号</label>
-                <div class="layui-input-block">
-                    <input type="text" id="username" name="username" required lay-verify="required"
-                           placeholder="请输入账号" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">密码</label>
-                <div class="layui-input-block">
-                    <input type="text" id="password" name="password" required lay-verify="required"
-                           placeholder="请输入密码" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <div class="layui-input-block">
-                    <button class="layui-btn layui-btn-warm" lay-submit lay-filter="update_role_info"
-                            style="float: right;margin-left:5px;">立即提交
+                <div class="layui-form-item" style="margin-top: 20px;">
+                    <button type="button" class="layui-btn layui-btn-warm" onclick="gettoken()"
+                            style="float: right;margin-left: 10px;">获取Token
                     </button>
-                    <button type="reset" style="float: right;" class="layui-btn layui-btn-primary">重置</button>
-                </div>
-            </div>
-        </form>
-    </div>
-</div>
-
-<!--获取令牌-->
-<div class="layui-row" id="get_token" style="display: none;">
-    <div class="layui-col-md11">
-        <form class="layui-form" lay-filter="get_token">
-
-            <div class="layui-form-item" style="margin-top: 20px;">
-                <label class="layui-form-label">系统角色</label>
-                <div class="layui-input-block">
-                    {% for item,value in role.items %}
-                        <input type="checkbox" class="token" name="{{ item }}" value="{{ item }}" title="{{ value }}"
-                               checked>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="layui-form-item">
-                <label class="layui-form-label">IP地址</label>
-                <div class="layui-input-block">
-                    <input type="text" name="ip" required lay-verify="required" value="http://amberdata.cn"
-                           placeholder="请输入ip地址" autocomplete="off" class="layui-input">
-                </div>
-            </div>
-
-            <div class="layui-form-item" style="margin-top: 30px;">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="get_token"
-                            style="float:right;background-color: yellowgreen;">立即提交
+                    <button type="button" class="layui-btn layui-btn-warm" onclick="get_user_info()"
+                            style="float: right;">用户信息
                     </button>
                 </div>
-            </div>
-        </form>
-        +
+                <div class="layui-form-item" style="margin-top: 20px;">
+                    <label class="layui-form-label">所属系统</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="system" value="erms" title="数据档案室">
+                        <input type="radio" name="system" value="transfer" title="移交接收系统">
+                        <input type="radio" name="system" value="tdr" title="数字档案馆">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色</label>
+                    <div class="layui-input-block erms" style="display: none;">
+                        <input type="radio" name="identity" value="sysadmin" title="系统管理员">
+                        <input type="radio" name="identity" value="admin" title="单位管理员">
+                        <input type="radio" name="identity" value="ast" title="单位档案员">
+                    </div>
+                    <div class="layui-input-block transfer" style="display: none;">
+                        <input type="radio" name="identity" value="transferadmin" title="数据管理员">
+                        <input type="radio" name="identity" value="sjzjy" title="数据质检员">
+                        <input type="radio" name="identity" value="sjshy" title="数据审核员">
+                    </div>
+                    <div class="layui-input-block tdr" style="display: none;">
+                        <input type="radio" name="identity" value="tdradmin" title="系统管理员">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">账号</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="username" name="username" required lay-verify="required"
+                               placeholder="请输入账号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">密码</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="password" name="password" required lay-verify="required"
+                               placeholder="请输入密码" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn layui-btn-warm" lay-submit lay-filter="update_role_info"
+                                style="float: right;margin-left:5px;">立即提交
+                        </button>
+                        <button type="reset" style="float: right;" class="layui-btn layui-btn-primary">重置</button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
 
-<!--负责人-->
-<div class="layui-row" id="head" style="display: none;">
-    <div class="layui-col-md11">
-        <form class="layui-form" lay-filter="head">
-            <div class="layui-form-item" style="margin-top: 25px;">
-                <label class="layui-form-label">负责人:</label>
-                <div class="layui-input-block">
-                    <select name="head" lay-verify="required">
-                        <option value="老张">老张</option>
-                        <option value="老王">老王</option>
-                        <option value="老李">老李</option>
-                        <option value="老江">老江</option>
-                        <option value="老刘">老刘</option>
-                    </select>
+    <!--获取令牌-->
+    <div class="layui-row" id="get_token" style="display: none;">
+        <div class="layui-col-md11">
+            <form class="layui-form" lay-filter="get_token">
+
+                <div class="layui-form-item" style="margin-top: 20px;">
+                    <label class="layui-form-label">系统角色</label>
+                    <div class="layui-input-block">
+                        {% for item,value in role.items %}
+                            <input type="checkbox" class="token" name="{{ item }}" value="{{ item }}"
+                                   title="{{ value }}"
+                                   checked>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item layui-form-text">
-                <label class="layui-form-label">描述</label>
-                <div class="layui-input-block">
-                    <textarea name="describe" placeholder="请输入内容" class="layui-textarea"></textarea>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">IP地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="ip" required lay-verify="required" value="http://amberdata.cn"
+                               placeholder="请输入ip地址" autocomplete="off" class="layui-input">
+                    </div>
                 </div>
-            </div>
-            <div class="layui-form-item" style="margin-top: 45px;">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="update_apicase"
-                            style="float: right;background-color: cornflowerblue;">确定
-                    </button>
+
+                <div class="layui-form-item" style="margin-top: 30px;">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="get_token"
+                                style="float:right;background-color: yellowgreen;">立即提交
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+            +
+        </div>
     </div>
-</div>
 
-<!--重复执行-->
-<div class="layui-row" id="repeat_run" style="display: none;">
-    <div class="layui-col-md11">
-        <div class="layui-tab">
-          <ul class="layui-tab-title">
-            <li class="layui-this">单线程执行</li>
-            <li>多线程执行</li>
-          </ul>
-          <div class="layui-tab-content">
-            <div class="layui-tab-item layui-show">
-                <form class="layui-form" lay-filter="repeat">
-
-                    <div class="layui-form-item" style="margin-top: 30px;">
-                        <label class="layui-form-label">执行次数</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="runtime" required lay-verify="required" placeholder="请输入执行次数"
-                                   autocomplete="off" class="layui-input">
-                        </div>
+    <!--负责人-->
+    <div class="layui-row" id="head" style="display: none;">
+        <div class="layui-col-md11">
+            <form class="layui-form" lay-filter="head">
+                <div class="layui-form-item" style="margin-top: 25px;">
+                    <label class="layui-form-label">负责人:</label>
+                    <div class="layui-input-block">
+                        <select name="head" lay-verify="required">
+                            <option value="老张">老张</option>
+                            <option value="老王">老王</option>
+                            <option value="老李">老李</option>
+                            <option value="老江">老江</option>
+                            <option value="老刘">老刘</option>
+                        </select>
                     </div>
-
-
-                    <div class="layui-form-item" style="margin-top: 30px;">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit lay-filter="repeat"
-                                    style="float: right;background-color: cornflowerblue;">立即提交
-                            </button>
-                            <button type="reset" class="layui-btn layui-btn-primary" style="float: right;margin-right: 10px;">重置</button>
-                        </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="describe" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
-                </form>
+                </div>
+                <div class="layui-form-item" style="margin-top: 45px;">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="update_apicase"
+                                style="float: right;background-color: cornflowerblue;">确定
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--重复执行-->
+    <div class="layui-row" id="repeat_run" style="display: none;">
+        <div class="layui-col-md11">
+            <div class="layui-tab">
+                <ul class="layui-tab-title">
+                    <li class="layui-this">单线程执行</li>
+                    <li>多线程执行</li>
+                </ul>
+                <div class="layui-tab-content">
+                    <div class="layui-tab-item layui-show">
+                        <form class="layui-form" lay-filter="repeat">
+
+                            <div class="layui-form-item" style="margin-top: 30px;">
+                                <label class="layui-form-label">执行次数</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="runtime" required lay-verify="required"
+                                           placeholder="请输入执行次数"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+
+                            <div class="layui-form-item" style="margin-top: 30px;">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="repeat"
+                                            style="float: right;background-color: cornflowerblue;">立即提交
+                                    </button>
+                                    <button type="reset" class="layui-btn layui-btn-primary"
+                                            style="float: right;margin-right: 10px;">重置
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="layui-tab-item">
+                        <form class="layui-form" lay-filter="repeat">
+
+                            <div class="layui-form-item" style="margin-top: 30px;">
+                                <label class="layui-form-label">执行次数</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="runtime" required lay-verify="required"
+                                           placeholder="请输入执行次数"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+                            <div class="layui-form-item">
+                                <label class="layui-form-label">线程数</label>
+                                <div class="layui-input-block">
+                                    <input type="text" name="concurrency" required lay-verify="required"
+                                           placeholder="请输入线程数"
+                                           autocomplete="off" class="layui-input">
+                                </div>
+                            </div>
+
+                            <div class="layui-form-item" style="margin-top: 30px;">
+                                <div class="layui-input-block">
+                                    <button class="layui-btn" lay-submit lay-filter="repeat"
+                                            style="float: right;background-color: cornflowerblue;">立即提交
+                                    </button>
+                                    <button type="reset" class="layui-btn layui-btn-primary"
+                                            style="float: right;margin-right: 10px;">重置
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
             </div>
-            <div class="layui-tab-item">
-                <form class="layui-form" lay-filter="repeat">
+        </div>
+    </div>
 
-                    <div class="layui-form-item" style="margin-top: 30px;">
-                        <label class="layui-form-label">执行次数</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="runtime" required lay-verify="required" placeholder="请输入执行次数"
-                                   autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">线程数</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="concurrency" required lay-verify="required" placeholder="请输入线程数"
-                                   autocomplete="off" class="layui-input">
-                        </div>
-                    </div>
-
-                    <div class="layui-form-item" style="margin-top: 30px;">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit lay-filter="repeat"
-                                    style="float: right;background-color: cornflowerblue;">立即提交
-                            </button>
-                            <button type="reset" class="layui-btn layui-btn-primary" style="float: right;margin-right: 10px;">重置</button>
-                        </div>
-                    </div>
-                </form>
+    <!--进度条-->
+    <div class="layui-row" id="jindutiao" style="display: none;">
+        <div class="layui-col-md11">
+            <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="demo">
+                <div class="layui-progress-bar" lay-percent="0%"></div>
             </div>
-          </div>
+        </div>
+    </div>
+
+    <!--性能测试-->
+    <div class="layui-row" id="locust" style="display: none;">
+        <div class="layui-col-md11">
+
+            <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 20px;">
+                <a href="http://localhost:8089/" style="font-size: 20px;color: #1E9FFF;padding-left: 20px;"
+                   target="_blank">点击前往-->Start
+                    new Locust swarm</a>
+            </blockquote>
+
+            <blockquote class="layui-elem-quote" style="margin-top: 20px;padding-left: 20px;">注意:如果测试结束，请回到此页面关闭8089端口进程
+            </blockquote>
+
+            <form class="layui-form" lay-filter="locust">
+
+                <div class="layui-form-item" style="margin-top: 20px;">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="locust"
+                                style="float: right;background-color: cornflowerblue;">关闭8089端口
+                        </button>
+                    </div>
+                </div>
+
+            </form>
         </div>
     </div>
 </div>
 
-<!--进度条-->
-<div class="layui-row" id="jindutiao" style="display: none;">
-    <div class="layui-col-md11">
-        <div class="layui-progress layui-progress-big" lay-showpercent="true" lay-filter="demo">
-            <div class="layui-progress-bar" lay-percent="0%"></div>
-        </div>
-    </div>
-</div>
-
-<!--性能测试-->
-<div class="layui-row" id="locust" style="display: none;">
-    <div class="layui-col-md11">
-
-        <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 20px;">
-            <a href="http://localhost:8089/" style="font-size: 20px;color: #1E9FFF;padding-left: 20px;" target="_blank">点击前往-->Start
-                new Locust swarm</a>
-        </blockquote>
-
-        <blockquote class="layui-elem-quote" style="margin-top: 20px;padding-left: 20px;">注意:如果测试结束，请回到此页面关闭8089端口进程
-        </blockquote>
-
-        <form class="layui-form" lay-filter="locust">
-
-            <div class="layui-form-item" style="margin-top: 20px;">
-                <div class="layui-input-block">
-                    <button class="layui-btn" lay-submit lay-filter="locust"
-                            style="float: right;background-color: cornflowerblue;">关闭8089端口
-                    </button>
-                </div>
-            </div>
-
-        </form>
-    </div>
-</div>
 
 <!--serch页面-->
 <div class="">
-    <div style="text-align: center;margin: 0 auto;width: 350px;margin-top: 10%;">
-        <img src="./../static/images/1575792094_207136.png"/>
-    </div>
+
     <form onsubmit="submitFn(this, event);">
+
         <div class="search-wrapper">
             <div class="input-holder">
                 <input type="text" class="search-input" placeholder="请输入接口名称或URL或责任者等等"/>
                 <button class="search-icon" onclick="searchToggle(this, event);"><span></span></button>
             </div>
+
             <span class="close" onclick="searchToggle(this, event);"></span>
-            <div class="result-container">
-            </div>
+
         </div>
     </form>
 </div>
 
 <div class="footer">
-    <p class="copyright">
-        有事没事的测试一下，你会发现其实还有很多的问题等你去发现<br/>
-        人生苦短，我用Python
-    </p>
+    <p class="landIn">The automation test platform is convenient for everyone to use</p>
 </div>
 
 <!--表格-->
 <script type="text/javascript">
 
-    function searchToggle(obj, evt){
+    function searchToggle(obj, evt) {
         var container = $(obj).closest('.search-wrapper');
 
         if (!container.hasClass('active')) {
@@ -344,7 +565,11 @@
                         , url: '/singleapi/search?key=' + value
                         , toolbar: '#toolbarDemo'
                         , defaultToolbar: [
-                            'filter', {title: '导出数据', layEvent: 'export_case', icon: 'layui-icon-download-circle'}, {
+                            'filter', {
+                                title: '导出数据',
+                                layEvent: 'export_case',
+                                icon: 'layui-icon-download-circle'
+                            }, {
                                 title: '全屏显示',
                                 layEvent: 'fullScreen',
                                 icon: 'layui-icon-top'
@@ -358,54 +583,67 @@
                         , loading: false
                         , height: 'full-225'
                         , cols: [[ //表头, fixed: 'left'
-                {type: 'checkbox'}
-                , {field: 'identity', title: '', width: 70, align: "center", templet: "#identityTpl"}
-                , {field: 'casename', title: '接口名称', width: 250, align: "left", excel: {color:'0040ff',bgColor:'f3fef3'}, templet: "#casenameTpl"}// filter: true
-                , {field: 'url', title: '请求路径', width: 250, align: "left",templet:function (res) {
-						var a = res.url.split("/");
-						return '<span>' + a[a.length-1] + '</span>'
-                    }}
-                , {field: 'method', title: '请求方式', width: 90, align: "left", templet: "#methodTpl"}
-                , {field: 'params', title: 'Query参数', align: "left", event: 'params'}
-                , {field: 'body', title: 'Body参数',  event: 'body',  align: "left"}
-                , {
-                    field: 'durantion',
-                    title: '响应时长',
-                    align: "left",
-                    sort: true,
-					width: 100,
-                    event: "durantion",
-                    templet: function (res) {
-                        if (res.duration < 1) {
-                            let a = String(res.duration * 1000) + "毫秒";
-                            return '<span>' + a + '</span>'
-                        } else if (res.duration >= 1 && res.duration < 3) {
-                            let b = String(res.duration) + "秒";
-                            return '<span style="color: cornflowerblue;">' + b + '</span>'
-                        } else {
-                            let b = String(res.duration) + "秒";
-                            return '<span style="color: deeppink;">' + b + '</span>'
-                        }
-                    }
-                }
-                , {
-                    field: 'result', title: '响应结果', align: "left",  event:"detail", templet: function (res) {
-                         if(res.result == null) {
-                             return '<span>' + res.result + '</span>'
-                         }else if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1) {
-                            let b = JSON.parse(res.result);
-                            return '<span style="color: red;">' + JSON.stringify(b["message"]) + '</span>'
-                        }else if(res.result != ""){
-                            let a = JSON.parse(res.result);
-                            return '<span>' + JSON.stringify(a) + '</span>'
-                        } else {
-                            return '<span>' + res.result + '</span>'
-                        }
-                    }
-                }
-                , {field: 'head', title: '负责人', width: 80, align: "left",event:"head"}//merge: true行合并
+                            {type: 'checkbox'}
+                            , {field: 'identity', title: '', width: 70, align: "center", templet: "#identityTpl"}
+                            , {
+                                field: 'casename',
+                                title: '接口名称',
+                                width: 250,
+                                align: "left",
+                                excel: {color: '0040ff', bgColor: 'f3fef3'},
+                                templet: "#casenameTpl"
+                            }// filter: true
+                            , {
+                                field: 'url', title: '请求路径', width: 250, align: "left", templet: function (res) {
+                                    var a = res.url.split("/");
+                                    return '<span>' + a[a.length - 1] + '</span>'
+                                }
+                            }
+                            , {field: 'method', title: '请求方式', width: 90, align: "left", templet: "#methodTpl"}
+                            , {field: 'params', title: 'Query参数', align: "left", event: 'params'}
+                            , {field: 'body', title: 'Body参数', event: 'body', align: "left"}
+                            , {
+                                field: 'durantion',
+                                title: '响应时长',
+                                align: "left",
+                                sort: true,
+                                width: 100,
+                                event: "durantion",
+                                templet: function (res) {
+                                    if (res.duration < 1) {
+                                        let a = String(res.duration * 1000) + "毫秒";
+                                        return '<span>' + a + '</span>'
+                                    } else if (res.duration >= 1 && res.duration < 3) {
+                                        let b = String(res.duration) + "秒";
+                                        return '<span style="color: cornflowerblue;">' + b + '</span>'
+                                    } else {
+                                        let b = String(res.duration) + "秒";
+                                        return '<span style="color: deeppink;">' + b + '</span>'
+                                    }
+                                }
+                            }
+                            , {
+                                field: 'result',
+                                title: '响应结果',
+                                align: "left",
+                                event: "detail",
+                                templet: function (res) {
+                                    if (res.result == null) {
+                                        return '<span>' + res.result + '</span>'
+                                    } else if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1) {
+                                        let b = JSON.parse(res.result);
+                                        return '<span style="color: red;">' + JSON.stringify(b["message"]) + '</span>'
+                                    } else if (res.result != "") {
+                                        let a = JSON.parse(res.result);
+                                        return '<span>' + JSON.stringify(a) + '</span>'
+                                    } else {
+                                        return '<span>' + res.result + '</span>'
+                                    }
+                                }
+                            }
+                            , {field: 'head', title: '负责人', width: 80, align: "left", event: "head"}//merge: true行合并
 
-            ]]
+                        ]]
                         , done: function (res) {   //返回数据执行回调函数
                             layer.close(index);    //返回数据关闭loading
                             soulTable.render(this);
@@ -537,7 +775,7 @@
                                                 //async: false,
                                                 data: {
                                                     "caseid": ids,
-                                                    "isprocess":"no"
+                                                    "isprocess": "no"
                                                 },
                                                 //请求前的处理,加载loading
                                                 beforeSend: function () {
@@ -1217,7 +1455,7 @@
                         //next下一个兄弟元素
                         //匹配input中的name元素
                         {% for item in role %}
-                            if($("input[name^="+data.field.{{ item }}+"]").next("div").hasClass("layui-form-checked")){
+                            if ($("input[name^=" + data.field.{{ item }} + "]").next("div").hasClass("layui-form-checked")) {
                                 l.push('{{ item }}');
                             }
                         {% endfor %}
@@ -1451,43 +1689,167 @@
     {% verbatim %}{{#  } }}{% endverbatim %}
 </script>
 <!--时间-->
-<script type="text/javascript">
-    layui.use('jquery', function () {
-        var $ = layui.$;
-        //建造实例
-        $('.app-header-menuicon').on('click', function () {
-            $('.header-down-nav').toggleClass('down-nav')
-        })
+{#<script type="text/javascript">#}
+{#    layui.use('jquery', function () {#}
+{#        var $ = layui.$;#}
+{#        //建造实例#}
+{#        $('.app-header-menuicon').on('click', function () {#}
+{#            $('.header-down-nav').toggleClass('down-nav')#}
+{#        })#}
+{#    });#}
+{#    //获取系统时间#}
+{#    var newDate = '';#}
+{#    getLangDate();#}
+{##}
+{#    //值小于10时，在前面补0#}
+{#    function dateFilter(date) {#}
+{#        if (date < 10) {#}
+{#            return "0" + date;#}
+{#        }#}
+{#        return date;#}
+{#    }#}
+{##}
+{#    function getLangDate() {#}
+{#        var dateObj = new Date(); //表示当前系统时间的Date对象#}
+{#        var year = dateObj.getFullYear(); //当前系统时间的完整年份值#}
+{#        var month = dateObj.getMonth() + 1; //当前系统时间的月份值#}
+{#        var date = dateObj.getDate(); //当前系统时间的月份中的日#}
+{#        var day = dateObj.getDay(); //当前系统时间中的星期值#}
+{#        var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];#}
+{#        var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串#}
+{#        var hour = dateObj.getHours(); //当前系统时间的小时值#}
+{#        var minute = dateObj.getMinutes(); //当前系统时间的分钟值#}
+{#        var second = dateObj.getSeconds(); //当前系统时间的秒钟值#}
+{#        var timeValue = "" + ((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午"); //当前时间属于上午、晚上还是下午#}
+{#        newDate = dateFilter(year) + "年" + dateFilter(month) + "月" + dateFilter(date) + "日 " + " " + dateFilter(hour) + ":" + dateFilter(minute) + ":" + dateFilter(second);#}
+{#        document.getElementById("nowTime").innerHTML = timeValue + "好！" + newDate + "　" + week;#}
+{#        setTimeout("getLangDate()", 1000);#}
+{#    }#}
+{#</script>#}
+
+{#底部动画#}
+<script>
+    "use strict";
+    var landInTexts = document.querySelectorAll(".landIn");
+    landInTexts.forEach(function (landInText) {
+        var letters = landInText.textContent.split("");
+        landInText.textContent = "";
+        letters.forEach(function (letter, i) {
+            var span = document.createElement("span");
+            span.textContent = letter;
+            span.style.animationDelay = i * 0.05 + "s";
+            landInText.append(span);
+        });
     });
-    //获取系统时间
-    var newDate = '';
-    getLangDate();
-
-    //值小于10时，在前面补0
-    function dateFilter(date) {
-        if (date < 10) {
-            return "0" + date;
-        }
-        return date;
-    }
-
-    function getLangDate() {
-        var dateObj = new Date(); //表示当前系统时间的Date对象
-        var year = dateObj.getFullYear(); //当前系统时间的完整年份值
-        var month = dateObj.getMonth() + 1; //当前系统时间的月份值
-        var date = dateObj.getDate(); //当前系统时间的月份中的日
-        var day = dateObj.getDay(); //当前系统时间中的星期值
-        var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-        var week = weeks[day]; //根据星期值，从数组中获取对应的星期字符串
-        var hour = dateObj.getHours(); //当前系统时间的小时值
-        var minute = dateObj.getMinutes(); //当前系统时间的分钟值
-        var second = dateObj.getSeconds(); //当前系统时间的秒钟值
-        var timeValue = "" + ((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午"); //当前时间属于上午、晚上还是下午
-        newDate = dateFilter(year) + "年" + dateFilter(month) + "月" + dateFilter(date) + "日 " + " " + dateFilter(hour) + ":" + dateFilter(minute) + ":" + dateFilter(second);
-        document.getElementById("nowTime").innerHTML = timeValue + "好！" + newDate + "　" + week;
-        setTimeout("getLangDate()", 1000);
-    }
 </script>
+
+<script>
+    "use strict";
+    // For a better performance, use requestAnimationFrame instead of setInterval
+    // https://css-tricks.com/snippets/javascript/replacements-setinterval-using-requestanimationframe/
+    var requestInterval = function (fn, delay) {
+        var start = new Date().getTime();
+        var handle = {value: 0};
+        var loop = function () {
+            handle.value = requestAnimationFrame(loop);
+            var current = new Date().getTime();
+            var delta = current - start;
+            if (delta >= delay) {
+                fn();
+                start = new Date().getTime();
+            }
+        };
+        handle.value = requestAnimationFrame(loop);
+        return handle;
+    };
+    var sample = function (arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    };
+    var bubbleSizes = [3, 6, 9, 12];
+    var bubbleText = document.querySelector(".bubbling");
+    var bubblePositions = Array.from(Array(bubbleText.offsetWidth).keys());
+    requestInterval(function () {
+        var bubbleSize = sample(bubbleSizes);
+        var bubblePosition = sample(bubblePositions);
+        var bubble = document.createElement("div");
+        bubble.className = "bubble";
+        bubble.style.width = bubbleSize + "px";
+        bubble.style.height = bubbleSize + "px";
+        bubble.style.left = bubblePosition + "px";
+        bubbleText.append(bubble);
+        var bubbleAnimation = bubble.animate([{bottom: "10px", opacity: 1}, {bottom: "180%", opacity: 0.6}], {
+            fill: "forwards",
+            duration: 3000
+        });
+        bubbleAnimation.onfinish = function () {
+            return bubble.remove();
+        };
+    }, 300);
+</script>
+
+<script>
+    "use strict";
+    var Flipper = /** @class */ (function () {
+        function Flipper(node, currentTime, nextTime) {
+            this.isFlipping = false;
+            this.duration = 600;
+            this.flipNode = node;
+            this.frontNode = node.querySelector(".front");
+            this.backNode = node.querySelector(".back");
+            this.setFrontTime(currentTime);
+            this.setBackTime(nextTime);
+        }
+
+        Flipper.prototype.setFrontTime = function (time) {
+            this.frontNode.dataset.number = time;
+        };
+        Flipper.prototype.setBackTime = function (time) {
+            this.backNode.dataset.number = time;
+        };
+        Flipper.prototype.flipDown = function (currentTime, nextTime) {
+            var _this = this;
+            if (this.isFlipping) {
+                return false;
+            }
+            this.isFlipping = true;
+            this.setFrontTime(currentTime);
+            this.setBackTime(nextTime);
+            this.flipNode.classList.add("running");
+            setTimeout(function () {
+                _this.flipNode.classList.remove("running");
+                _this.isFlipping = false;
+                _this.setFrontTime(nextTime);
+            }, this.duration);
+        };
+        return Flipper;
+    }());
+    var getTimeFromDate = function (date) {
+        return date
+            .toTimeString()
+            .slice(0, 8)
+            .split(":")
+            .join("");
+    };
+    var flips = document.querySelectorAll(".flip");
+    var now = new Date();
+    var nowTimeStr = getTimeFromDate(new Date(now.getTime() - 1000));
+    var nextTimeStr = getTimeFromDate(now);
+    var flippers = Array.from(flips).map(function (flip, i) {
+        return new Flipper(flip, nowTimeStr[i], nextTimeStr[i]);
+    });
+    setInterval(function () {
+        var now = new Date();
+        var nowTimeStr = getTimeFromDate(new Date(now.getTime() - 1000));
+        var nextTimeStr = getTimeFromDate(now);
+        for (var i = 0; i < flippers.length; i++) {
+            if (nowTimeStr[i] === nextTimeStr[i]) {
+                continue;
+            }
+            flippers[i].flipDown(nowTimeStr[i], nextTimeStr[i]);
+        }
+    }, 1000);
+</script>
+
 </body>
 
 </html>

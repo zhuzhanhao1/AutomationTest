@@ -274,6 +274,8 @@ def testurl_views(request):
     '''
     return render(request, 'testUrl.html')
 
+def systemlog_views(request):
+    return render(request, 'systemlog.html')
 
 
 def test(request):

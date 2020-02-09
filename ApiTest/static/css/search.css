@@ -29,7 +29,7 @@ a:hover {
 
 .process-centent {
     margin-top: 5%;
-{#margin-top: -30px;#}
+    /*{#margin-top: -30px;#}*/
 }
 
 html, body {
@@ -39,7 +39,7 @@ html, body {
 body {
     padding: 0px;
     margin: 0px;
-    background: url(./../../static/images/banner2.jpg);
+    background: linear-gradient(rgba(1, 1, 1, 0.05), rgba(16, 16, 16, 0.05)),url(./../../static/images/banner2.jpg);
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
@@ -256,3 +256,4 @@ body {
         width: 200px;
     }
 }
+

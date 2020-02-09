@@ -16,7 +16,6 @@ class SingleApiDetail(APIView):
     """
     获取单一接口详情
     """
-
     def get_object(self, pk):
         try:
             return SingleApi.objects.get(caseid=pk)

@@ -1,5 +1,7 @@
 import requests,json
-import sys,os
+import sys
+import os
+
 cur_path = os.path.dirname(os.path.realpath(__file__))
 cur_path1 = os.path.dirname(os.path.realpath(cur_path))
 cur_path2 = os.path.dirname(os.path.realpath(cur_path1))
