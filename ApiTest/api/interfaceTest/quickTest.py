@@ -1,36 +1,22 @@
-# Create your views here.
 import json
-
-from rest_framework import viewsets
-from ApiTest.models import SystemRole
-from ApiTest.serializers import SingleApiSerializers
-from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from ApiTest.common.quickMthod import QuickMothod
-
-from rest_framework.parsers import JSONParser
-'''
-JSONParser: 表示只能解析content - type:application / json头
-JSONParser: 表示只能解析content - type:application / x - www - form - urlencoded头
-'''
-
+ret = {"code":1000}
 
 class RunQuickTest(APIView):
 
     def parameter_check(self, datas):
         """
-        验证参数
-        :param data:datas
-        :return:参数有误
+        验证必传参数 method, url, headers
         """
         try:
-            # 必传参数 method, url, headers
-            if not datas["Method"] or not datas["addURL"] or not datas["addmergeheaders"]:
-                return Response({"code": 400, "msg": "参数有误"}, status=status.HTTP_400_BAD_REQUEST)
-        except KeyError:
-            return Response({"code": 400, "msg": "参数有误"}, status=status.HTTP_400_BAD_REQUEST)
+            if not datas["Method"] or not datas["addURL"]:
+                ret["error"] = "必填参数method或URL不存在"
+        except Exception as e:
+            ret["error"] = "未知错误"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request, format=None):
         '''

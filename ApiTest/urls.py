@@ -29,7 +29,7 @@ urlpatterns = [
     url(r'singleapi/update_case/(?P<pk>[0-9]+)/$', singleApiList.UpdateSingleApi.as_view()),
     url(r'singleapi/detail_case/(?P<pk>[0-9]+)/$', singleApiList.SingleApiDetail.as_view()),
     url(r'singleapi/locust/(?P<pk>[0-9]+)/$', singleApiTest.LocustSingApi.as_view()),
-    url(r'singleapi/close_locust/$', singleApiTest.CloseLocust.as_view()),
+    url(r'singleapi/close_locust/$', singleApiTest.LocustSingApi.as_view()),
 
     url(r'processapi/list/$', processApiList.ProcessApiList.as_view()),
     url(r'processapi/add_case/$', processApiList.AddProcessApi.as_view()),
@@ -47,8 +47,7 @@ urlpatterns = [
     url(r'systemrole/update_info/(?P<pk>[a-z]+)/$', systemRole.UpdateSystemRole.as_view()),
     url(r'systemrole/get_token_by_role/$', systemRole.GetTokenByRole.as_view()),
 
-    url(r'leftmenu/list/$', Menu.LeftMenuList.as_view()),
-    url(r'childmenu/list/$', Menu.ChildMenuList.as_view()),
+    url(r'childmenu/list/$', Menu.MenuList.as_view()),
 
     url(r'quicktest/run/$', quickTest.RunQuickTest.as_view()),
 

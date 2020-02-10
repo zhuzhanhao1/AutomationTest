@@ -583,9 +583,7 @@
                     $.ajax({
                         cache: false,
                         url: "/publicapi/sort/",
-                        dataType: 'text',
                         type: 'POST',
-                        //async: false,
                         data: {
                             "caseids": JSON.stringify(l),
                             "belong": "{{ belong }}",
@@ -593,20 +591,23 @@
                             "type": "single"
                         },
                         success: function (data) {
-                            let msg = JSON.parse(data).msg;
-                            layer.msg(msg, {
-                                offset: 't',
-                                icon: 6,
-                            });
+                            if (data.code === 1000) {
+                                layer.msg(data.msg, {
+                                    icon: 6, offset: "t"
+                                })
+                            } else {
+                                layer.msg(data.error, {
+                                    icon: 5, offset: "t"
+                                })
+                            }
                             $(".layui-laypage-btn").click();
                         },
-                        error: function (data) {
-                            console.log(data);
-                            layer.msg(data, {
-                                offset: 't',
-                                icon: 5
+                        error: function () {
+                            layer.msg("回调失败", {
+                                icon: 5,
+                                offset: 't'
                             });
-                        }
+                        },
                     });
                 }
 
@@ -814,9 +815,8 @@
                         $.ajax({
                             cache: false,
                             url: "/singleapi/run/",
-                            dataType: 'json',
+                            {#dataType: 'json',#}
                             type: 'POST',
-                            //async: false,
                             data: {
                                 "request": JSON.stringify(l)
                             },
@@ -829,47 +829,53 @@
                                 });
                             },
                             success: function (data) {
-                                res = JSON.stringify(data, null, 4);
-                                layer.prompt({
-                                    formType: 2,//多行文本
-                                    value: res,
-                                    title: '响应结果',
-                                    maxmin: true, //允许全屏最小化
-                                    anim: 4,//从左滚动进来
-                                    //shade: 0.6, //遮罩透明度
-                                    skin: "layui-layer-rim",
-                                    //监听取消按钮
-                                    zIndex: layer.zIndex,
-                                    shade: false,
-                                    btn: ["json.cn", "关闭"],
-                                    yes: function () {
-                                        layer.open({
-                                            type: 2,
-                                            title: "json.cn",
-                                            //shadeClose: true,
-                                            shade: false,
-                                            zIndex: layer.zIndex,
-                                            maxmin: true, //开启最大化最小化按钮
-                                            area: ['893px', '600px'],
-                                            content: 'https://www.json.cn',
-                                            success: function () {
-                                                layer.setTop(layero);
-                                            }
-                                        });
+                                console.log(data);
+                                if (data.code === 1000) {
+                                    res = JSON.stringify(data.msg, null, 4);
+                                    layer.prompt({
+                                        formType: 2,//多行文本
+                                        value: res,
+                                        title: '响应结果',
+                                        maxmin: true, //允许全屏最小化
+                                        anim: 4,//从左滚动进来
+                                        //shade: 0.6, //遮罩透明度
+                                        skin: "layui-layer-rim",
+                                        zIndex: layer.zIndex,
+                                        shade: false,
+                                        btn: ["json.cn", "关闭"],
+                                        yes: function () {
+                                            layer.open({
+                                                type: 2,
+                                                title: "json.cn",
+                                                //shadeClose: true,
+                                                shade: false,
+                                                zIndex: layer.zIndex,
+                                                maxmin: true, //开启最大化最小化按钮
+                                                area: ['893px', '600px'],
+                                                content: 'https://www.json.cn',
+                                                success: function () {
+                                                    layer.setTop(layero);
+                                                }
+                                            });
 
-                                    },
-                                    btn2: function (index, layro) {//这里就是你要的
-                                        layer.close(index);
-                                        $(".layui-laypage-btn").click();
-                                    },
-                                    area: ['800px', '600px'] //自定义文本域宽高
-                                });
+                                        },
+                                        btn2: function (index, layro) {//这里就是你要的
+                                            layer.close(index);
+                                            $(".layui-laypage-btn").click();
+                                        },
+                                        area: ['800px', '600px'] //自定义文本域宽高
+                                    });
+                                } else {
+                                    layer.msg(data.error, {
+                                        icon: 5, offset: "t"
+                                    })
+                                }
+
                             },
-                            error: function (data) {
-                                let res = JSON.stringify(data, null, 4);
-                                layer.msg(res, {
+                            error: function () {
+                                layer.msg("回调失败", {
                                     icon: 5,
-                                    offset: 't',
+                                    offset: 't'
                                 });
                             },
                             complete: function () {
@@ -901,9 +907,7 @@
                                 $.ajax({
                                     cache: false,
                                     url: "/publicapi/dingding/",
-                                    dataType: 'text',
                                     type: 'GET',
-                                    //async: false,
                                     data: {
                                         "caseid": ids,
                                         "isprocess": "no"
@@ -917,17 +921,19 @@
                                         });
                                     },
                                     success: function (data) {
-                                        console.log(data);
-                                        let msg = JSON.parse(data).msg;
-                                        layer.msg(msg, {
-                                            icon: 6,
-                                            offset: 't',
-                                        });
-
+                                        if (data.code === 1000) {
+                                            layer.msg(data.msg, {
+                                                icon: 6, offset: "t"
+                                            })
+                                        } else {
+                                            layer.msg(data.error, {
+                                                icon: 5, offset: "t"
+                                            })
+                                        }
+                                        $(".layui-laypage-btn").click();
                                     },
-                                    error: function (data) {
-                                        console.log(data);
-                                        layer.msg(data, {
+                                    error: function () {
+                                        layer.msg("回调失败", {
                                             icon: 5,
                                             offset: 't'
                                         });
@@ -1013,27 +1019,28 @@
                         $.ajax({
                             cache: false,
                             url: "/singleapi/del_case/0/",
-                            dataType: 'text',
                             type: 'DELETE',
-                            //async: false,
                             data: {
                                 "ids": JSON.stringify(l),
                             },
                             success: function (data) {
-                                let msg = JSON.parse(data).msg;
-                                layer.msg(msg, {
-                                    offset: 't',
-                                    icon: 6,
-                                });
+                                if (data.code === 1000) {
+                                    layer.msg(data.msg, {
+                                        icon: 6, offset: "t"
+                                    })
+                                } else {
+                                    layer.msg(data.error, {
+                                        icon: 5, offset: "t"
+                                    })
+                                }
                                 $(".layui-laypage-btn").click();
                             },
-                            error: function (data) {
-                                console.log(data);
-                                layer.msg("查看控制台", {
-                                    offset: 't',
-                                    icon: 5
+                            error: function () {
+                                layer.msg("回调失败", {
+                                    icon: 5,
+                                    offset: 't'
                                 });
-                            }
+                            },
                         });
                     });
                     break;
@@ -1242,7 +1249,6 @@
                             url: "/singleapi/locust/1/",
                             dataType: 'json',
                             type: 'PUT',
-                            //async: false,
                             data: {
                                 "request": JSON.stringify(l)
                             },
@@ -1265,28 +1271,23 @@
                                                 $.ajax({
                                                     cache: false,
                                                     url: "/singleapi/close_locust/",
-                                                    dataType: 'json',
                                                     type: 'GET',
                                                     success: function (data) {
-                                                        console.log(data);
-                                                        if (data.code == 200) {
+                                                        if (data.code === 1000) {
                                                             layer.msg(data.msg, {
-                                                                offset: 't',
-                                                                icon: 6,
-                                                            });
-                                                        } else if (data.code == 500) {
-                                                            layer.msg(data.msg, {
-                                                                offset: 't',
-                                                                icon: 5,
-                                                            });
+                                                                icon: 6, offset: "t"
+                                                            })
+                                                        } else {
+                                                            layer.msg(data.error, {
+                                                                icon: 5, offset: "t"
+                                                            })
                                                         }
-
+                                                        $(".layui-laypage-btn").click();
                                                     },
-                                                    error: function (data) {
-                                                        console.log(data);
-                                                        layer.msg(data, {
+                                                    error: function () {
+                                                        layer.msg("回调失败", {
                                                             icon: 5,
-                                                            offset: 't',
+                                                            offset: 't'
                                                         });
                                                     },
                                                     complete: function () {
@@ -1302,22 +1303,22 @@
                                 });
                             },
                             success: function (data) {
-                                console.log(data);
-                                layer.msg(data.msg, {
-                                    offset: 't',
-                                    icon: 6,
-                                });
+                                if (data.code === 1000) {
+                                    layer.msg(data.msg, {
+                                        icon: 6, offset: "t"
+                                    })
+                                } else {
+                                    layer.msg(data.error, {
+                                        icon: 5, offset: "t"
+                                    })
+                                }
+                                $(".layui-laypage-btn").click();
                             },
-                            error: function (data) {
-                                console.log(data);
-                                let res = JSON.stringify(data, null, 4);
-                                layer.msg(data, {
+                            error: function () {
+                                layer.msg("回调失败", {
                                     icon: 5,
-                                    offset: 't',
+                                    offset: 't'
                                 });
-                            },
-                            complete: function () {
-                                //layer.close(l_index);
                             }
                         });
                     }

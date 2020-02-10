@@ -10,7 +10,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+ret = {"code":1000}
 
 class SingleApiDetail(APIView):
     """
@@ -165,15 +165,20 @@ class DelSingleApi(APIView):
 
     def delete(self, request, pk, format=None):
         #批量删除
-        if pk == '0':
-            for i in json.loads(request.data['ids']):
-                self.get_object(i).delete()
-            return Response({"code": "204", "msg": "操作成功"},status=status.HTTP_200_OK)
-        #单个删除
-        else:
-            snippet = self.get_object(pk)
-            snippet.delete()
-            return Response({"code": "204", "msg": "操作成功"},status=status.HTTP_200_OK)
+        try:
+            if pk == '0':
+                for i in json.loads(request.data['ids']):
+                    self.get_object(i).delete()
+                ret["msg"] = "批量删除成功"
+            #单个删除
+            else:
+                snippet = self.get_object(pk)
+                snippet.delete()
+                ret["msg"] = "单个删除成功"
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "删除失败"
+        return Response(ret)
 
 
 class SearchSingleApi(APIView):
