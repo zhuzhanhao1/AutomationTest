@@ -4,7 +4,7 @@ layui.use(['form','layer','table'],function(){
     //友链列表
     var tableIns = table.render({
         elem: '#linkList',
-        url : '/Testurl/list/',
+        url : '/api/v1/testurl/list/',
         //page : true,
         //cellMinWidth : 95,
         //height : "full-104",

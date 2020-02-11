@@ -1,8 +1,5 @@
-# Create your views here.
 import json
 from django.db.models import Q
-from django.shortcuts import render
-from rest_framework import viewsets
 from ApiTest.models import SingleApi
 from ApiTest.serializers import SingleApiSerializers,SingleApiParamsSerializers,SingleApiBodySerializers,SingleApiHeadSerializers
 from django.core.paginator import Paginator
@@ -10,7 +7,7 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-ret = {"code":1000}
+
 
 class SingleApiDetail(APIView):
     """
@@ -22,7 +19,7 @@ class SingleApiDetail(APIView):
         except SingleApi.DoesNotExist:
             raise Http404
 
-    def get(self, request, pk, format=None):
+    def get(self, request, pk, *args, **kwargs):
         snippet = self.get_object(pk)
         serializer = SingleApiSerializers(snippet)
         return Response(serializer.data)
@@ -32,7 +29,7 @@ class SingleApiList(APIView):
     """
     单一接口列表
     """
-    def get(self, request, format=None):
+    def get(self, request, *args ,**kwargs):
 
         casename = request.GET.get("casename", "")          #搜索名字
         belong = request.GET.get("belong", "")              #所属模块
@@ -55,8 +52,8 @@ class SingleApiList(APIView):
                 apilists = SingleApi.objects.filter(system=system).order_by("sortid")
 
         serializer = SingleApiSerializers(apilists, many=True)
-        pageindex = request.GET.get('page', 1)  # 页数
-        pagesize = request.GET.get("limit", 30)  # 每页显示数量
+        pageindex = request.GET.get('page', 1)      # 页数
+        pagesize = request.GET.get("limit", 30)     # 每页显示数量
         pageInator = Paginator(serializer.data, pagesize)
         # 分页
         contacts = pageInator.page(pageindex)
@@ -67,9 +64,7 @@ class SingleApiList(APIView):
 
 
 class AddSingleApi(APIView):
-    '''
-    创建单一接口
-    '''
+
     def parameter_check(self,system):
         """
         验证参数
@@ -79,17 +74,31 @@ class AddSingleApi(APIView):
         for i in all:
             L.append(i.sortid)
         Newsordid = max(L) + 1
+        print("最大的排序号为：" + str(Newsordid))
         return Newsordid
 
-    def post(self, request, format=None):
-        serializer = SingleApiSerializers(data=request.data)
-        sortid = self.parameter_check(request.data["system"])
-        if serializer.is_valid():
-            # .save()是调用SnippetSerializer中的create()方法
-            serializer.save()
-            SingleApi.objects.filter(url=request.data["url"]).update(sortid=sortid)
-            return Response({"code": "201", "msg": "操作成功"}, status=status.HTTP_201_CREATED)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    def post(self, request, *args, **kwargs):
+        '''
+        创建单一接口
+        '''
+        ret = {"code": 1000}
+        try:
+            data = request.data
+            system = data.get("system","")
+            url = data.get("url","")
+            sortid = self.parameter_check(system)
+            serializer = SingleApiSerializers(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                SingleApi.objects.filter(url=url).update(sortid=sortid)
+                ret["msg"] = "新建单一接口成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except:
+            ret["code"] = 1001
+            ret["error"] = "新建单一接口失败"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
 
 class UpdateSingleApi(APIView):
@@ -98,79 +107,91 @@ class UpdateSingleApi(APIView):
     """
     def get_object(self, pk):
         try:
-            print(pk)
             return SingleApi.objects.get(caseid=pk)
         except SingleApi.DoesNotExist:
             raise Http404
 
-    def put(self, request, pk, format=None):
+    def put(self, request, pk, *args, **kwargs):
         '''
-        :param request: 整理内容
-        :param pk: 唯一id
-        :param format:
-        :return:
+        更新单一接口
         '''
-        snippet = self.get_object(pk)
-        serializer = SingleApiSerializers(snippet, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data={"code": "201", "msg": "操作成功"},status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-    def get(self, request, pk, format=None):
-        '''
-        :param request: 责任者
-        :param pk: 唯一id
-        :param format:
-        :return:
-        '''
-        head = request.GET.get("head","")
-        snippet = self.get_object(pk)
-        serializer = SingleApiHeadSerializers(snippet, data={"head":head})
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data={"code": "201", "msg": "操作成功"},status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-    def post(self, request, pk, format=None):
-        '''
-        :param request: params或者body
-        :param pk: 唯一id
-        :param format:
-        :return: 如果是params则修改parmas的值，否则修改body的值
-        '''
-        snippet = self.get_object(pk)
+        ret = {"code": 1000}
         try:
-            a = request.data["params"]
-            print(a)
-            serializer = SingleApiParamsSerializers(snippet, data=request.data)
+            snippet = self.get_object(pk)
+            serializer = SingleApiSerializers(snippet, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "编辑单一接口成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
         except:
-            serializer = SingleApiBodySerializers(snippet, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data={"code": "201", "msg": "操作成功"},status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            ret["code"] = 1001
+            ret["error"] = "编辑单一接口失败"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
+    def get(self, request, pk, *args, **kwargs):
+        '''
+        编辑责任者
+        '''
+        ret = {"code": 1000}
+        try:
+            head = request.GET.get("head","")
+            snippet = self.get_object(pk)
+            serializer = SingleApiHeadSerializers(snippet, data={"head":head})
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "编辑责任者成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except:
+            ret["code"] = 1001
+            ret["error"] = "编辑责任者失败"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def post(self, request, pk, *args, **kwargs):
+        '''
+        如果是params则修改parmas的值，否则修改body的值
+        '''
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            try:
+                serializer = SingleApiParamsSerializers(snippet, data=request.data)
+            except:
+                serializer = SingleApiBodySerializers(snippet, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "编辑params/body成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "编辑params/body失败"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
 class DelSingleApi(APIView):
-    """
-    删除单一接口
-    """
+
     def get_object(self, pk):
         try:
             return SingleApi.objects.get(caseid=pk)
         except SingleApi.DoesNotExist:
             raise Http404
 
-    def delete(self, request, pk, format=None):
-        #批量删除
+    def delete(self, request, pk, *args, **kwargs):
+        """
+        删除单一接口，批量删除单一接口
+        根据PK来区分
+        """
+        ret = {"code": 1000}
         try:
             if pk == '0':
                 for i in json.loads(request.data['ids']):
                     self.get_object(i).delete()
                 ret["msg"] = "批量删除成功"
-            #单个删除
             else:
                 snippet = self.get_object(pk)
                 snippet.delete()
@@ -182,29 +203,30 @@ class DelSingleApi(APIView):
 
 
 class SearchSingleApi(APIView):
-    """
-    列表检索
-    """
-    def get(self, request, format=None):
+
+    def get(self, request, *args, **kwargs):
         '''
-        :param request: 检索的字段
-        :param format:
-        :return: 检索包含的名称、路径、负责人的列表集合
+        检索包含的名称、路径、负责人的列表字典
         '''
-        data = request.GET.get("key", "")
-        print(data)
-        if data:
-            apilist = SingleApi.objects.filter(Q(casename__contains=data)| Q(belong__contains=data) | Q(url__contains=data) | Q(head__contains=data))
-        else:
-            apilist = SingleApi.objects.filter()
-        serializer = SingleApiSerializers(apilist, many=True)
-        pageindex = request.GET.get('page', 1)  # 页数
-        pagesize = request.GET.get("limit", 10)  # 每页显示数量
-        pageInator = Paginator(serializer.data, pagesize)
-        contacts = pageInator.page(pageindex)
-        res = []
-        for contact in contacts:
-            res.append(contact)
-        return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
+        ret = {"code": 1000}
+        try:
+            data = request.GET.get("key", "")
+            if data:
+                apilist = SingleApi.objects.filter(Q(casename__contains=data)| Q(belong__contains=data) | Q(url__contains=data) | Q(head__contains=data))
+            else:
+                apilist = SingleApi.objects.filter()
+            serializer = SingleApiSerializers(apilist, many=True)
+            pageindex = request.GET.get('page', 1)  # 页数
+            pagesize = request.GET.get("limit", 10)  # 每页显示数量
+            pageInator = Paginator(serializer.data, pagesize)
+            contacts = pageInator.page(pageindex)
+            res = []
+            for contact in contacts:
+                res.append(contact)
+            return Response(data={"code": 1000, "msg": "", "count": len(serializer.data), "data": res})
+        except Exception as e:
+            ret["code"] = 1001
+            ret["msg"] = "检索列表返回失败"
+        return Response(ret)
 
 

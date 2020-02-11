@@ -1,4 +1,3 @@
-# Create your views here.
 import json
 import threading
 import time
@@ -10,17 +9,16 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from ApiTest.common.requestMothod import RequestMethod
-
-ret = {"code": 1000}
+from ApiTest.common.quickMthod import QuickMothod
 
 
 class SingleApiTest(APIView):
-
+    '''
+    单一接口测试
+    '''
     def get_token_ip_by_identity(self, identity):
         '''
         获取角色请求令牌和ip
-        :param identity: 用户角色
-        :return: 请求令牌
         '''
         token = SystemRole.objects.get(identity=identity).token
         ip = SystemRole.objects.get(identity=identity).ip
@@ -29,8 +27,6 @@ class SingleApiTest(APIView):
     def check_greater_less_is_exist(self, body):
         '''
         判断请求体或者响应结果中是否存在<>,将其替换为中文的＜＞，layui数据表格bug，暂且这么处理
-        :param body:
-        :return: 需要替换后的数据
         '''
         if type(body) is str:
             if "＜" in body or "＞" in body:
@@ -52,8 +48,7 @@ class SingleApiTest(APIView):
 
     def check_result_is_fail(self, result):
         '''
-        :param body:
-        :return: 错误的接口数
+        检验结果是否包含错误信息
         '''
         failed_num = 0
         result = json.dumps(result, ensure_ascii=False, sort_keys=True, indent=2)
@@ -63,9 +58,7 @@ class SingleApiTest(APIView):
 
     def parameter_check(self, identity, url, method):
         """
-        验证参数
-        :param data:datas
-        :return:参数有误
+        验证请求参数
         """
         try:
             # 必传参数 method, url, headers
@@ -77,10 +70,11 @@ class SingleApiTest(APIView):
             ret["error"] = "Key错误"
         return ret
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         '''
-        接口响应结果，JOSN格式化数据
+        执行接口测试
         '''
+        ret = {"code": 1000}
         datas = request.data
         content = json.loads(datas.get("request", ""))
         L = []
@@ -134,21 +128,25 @@ class RepeatRunSingleApi(SingleApiTest):
     num_progress = 0
     repeat_result = {}
 
-    def get(self, request, format=None):
-        print('show_api----------' + str(RepeatRunSingleApi.num_progress))
-        # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
-        if RepeatRunSingleApi.num_progress == 100:
-            RepeatRunSingleApi.num_progress = 0
-            return Response(100)
-        # 当进度不是百分之百的时候，返回当前进度
-        else:
-            return Response(RepeatRunSingleApi.num_progress)
-
-    def post(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         '''
-        :param request: request.data
-        :param format: None
-        :return: 接口响应结果，JOSN格式化数据
+        进度读取
+        '''
+        try:
+            print('show_api----------' + str(RepeatRunSingleApi.num_progress))
+            # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
+            if RepeatRunSingleApi.num_progress == 100:
+                RepeatRunSingleApi.num_progress = 0
+                return Response(100)
+            # 当进度不是百分之百的时候，返回当前进度
+            else:
+                return Response(RepeatRunSingleApi.num_progress)
+        except Exception as e:
+            return Response(100)
+
+    def post(self, request, *args, **kwargs):
+        '''
+        创建线程组执行接口测试
         '''
         datas = request.data
         content = json.loads(datas["request"])
@@ -213,6 +211,14 @@ class RepeatRunSingleApi(SingleApiTest):
             return Response(self.repeat_result)
 
     def repeat_run(self, start, end, content, runtime_concurrency=None, concurrency=None):
+        '''
+        :param start: 线程循环运行的开始数
+        :param end:   线程循环运行的结束数
+        :param content: 请求的参数
+        :param runtime_concurrency: 运行的次数
+        :param concurrency: 线程数
+        :return: 接口运行的结果
+        '''
         cnt = 0
         for num in range(start, end):
             L = []
@@ -224,9 +230,6 @@ class RepeatRunSingleApi(SingleApiTest):
                 body = i.get("body", "")  # body数据
                 params = "" if params == None else params
                 body = "" if body == None else body
-                # result = self.parameter_check(identity, url, method)
-                # if result["code"] == 1001:
-                #     return Response(ret)
                 token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
                 body = self.check_greater_less_is_exist(body)
                 try:
@@ -256,8 +259,7 @@ class LocustSingApi(APIView):
 
     def get_token_ip_by_identity(self, identity):
         '''
-        :param identity: 用户角色
-        :return: 角色请求令牌、ip
+        角色请求令牌、ip
         '''
         token = SystemRole.objects.get(identity=identity).token
         ip = SystemRole.objects.get(identity=identity).ip
@@ -269,10 +271,11 @@ class LocustSingApi(APIView):
         except LocustApi.DoesNotExist:
             raise Http404
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         '''
         关闭蝗虫(性能测试端口)
         '''
+        ret = {"code": 1000}
         locust_process = os.popen('lsof -i:8089').readlines()[-1]
         res = locust_process.split(" ")
         res_filter = list(filter(None, res))
@@ -287,16 +290,14 @@ class LocustSingApi(APIView):
             ret["error"] = "Failed closing locust"
         return Response(ret)
 
-    def put(self, request, pk):
+    def put(self, request, pk, *args, **kwargs):
         '''
-        :param request: 请求压测的接口参数
-        :param pk: 唯一id
-        :return:蝗虫任务8089端口开启，返回成功提示
+        蝗虫任务8089端口开启，返回成功提示
         '''
+        ret = {"code": 1000}
         datas = request.data
         content = json.loads(datas["request"])[0]
         identity = content.get("identity", "")  # 用户身份
-
         token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据和IP
         headers = json.dumps({"accessToken": token})
         content["header"] = headers
@@ -312,3 +313,47 @@ class LocustSingApi(APIView):
             return Response(ret)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
+class RunQuickTest(APIView):
+
+    def parameter_check(self, datas):
+        """
+        验证必传参数 method, url, headers
+        """
+        ret = {"code": 1000}
+        try:
+            if not datas["Method"] or not datas["addURL"]:
+                ret["code"] = 1001
+                ret["error"] = "必填参数method或URL不存在"
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "未知错误"
+        return ret
+
+    def post(self, request, *args, **kwargs):
+        '''
+        执行快速接口测试
+        '''
+        ret = {"code": 1000}
+        datas = request.data
+        method=datas["Method"]
+        url=datas["addURL"]
+        headers=datas["addmergeheaders"]
+        params=datas["addmergeformdatas"]
+        body=datas["body"]
+        #参数校验
+        result = self.parameter_check(datas)
+        if result["code"] == 1001:
+            return Response(ret)
+        try:
+            response = QuickMothod().run_main(method, url, headers, params, body)
+            response = json.dumps(response, ensure_ascii=False, sort_keys=True, indent=2)
+            ret["msg"] = "快速测试接口执行成功"
+            ret["data"] = response
+        except TypeError as e:
+            ret["code"] = 1001
+            ret["error"] = "操作或函数应用于不适当类型的对象"
+        except json.decoder.JSONDecodeError as e:
+            ret["code"] = 1001
+            ret["error"] = "json.loads()读取字符串报错"
+        return Response(ret)

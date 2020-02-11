@@ -196,7 +196,7 @@
                     form.val("add_link");
                     form.on('submit(add_link)', function (data) {
                         $.ajax({
-                            url: "/link/add_link/",
+                            url: "/api/v1/link/add_link/",
                             type: 'POST',
                             data: JSON.stringify({
                                 "logo": data.field.logo,

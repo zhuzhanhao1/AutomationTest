@@ -6,16 +6,15 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 import json, xlrd
 
-ret = {"code": 1000}
-
 
 class PublicApiSort(APIView):
-    def post(self, request):
+
+    def post(self, request, *args, **kwargs):
         '''
         :param request: 【排序后id的顺序】、属于什么模块、属于什么系统、是单一接口的还是流出接口的
-        :param format:
         :return: 将排序号按照id的顺序重新生成
         '''
+        ret = {"code": 1000}
         data = request.data
         caseids = json.loads(data.get("caseids", ""))
         belong = data.get("belong", "")
@@ -56,10 +55,11 @@ class PublicApiSort(APIView):
 
 class PublicApiDingDingNotice(APIView):
 
-    def get(self, request):
+    def get(self, request, *args, **kwargs):
         '''
         发送钉钉消息
         '''
+        ret = {"code": 1000}
         try:
             ids = request.GET.get("caseid", "").split(",")[:-1]
             isporcess = request.GET.get("isprocess", "")
@@ -80,11 +80,12 @@ class PublicApiDingDingNotice(APIView):
 
 class PublicApiImport(APIView):
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         '''
         :param request:
         :return: 导入数据
         '''
+        ret = {"code": 1000}
         f = request.FILES.get('file')  # sheet名
         excel_type = f.name.split('.')[1]
         if excel_type in ['xlsx', 'xls']:

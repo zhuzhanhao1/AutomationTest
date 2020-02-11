@@ -86,12 +86,16 @@ INSTALLED_APPS = [
 
 ]
 
-# REST_FRAMEWORK = {
-#     'DEFAULT_RENDERER_CLASSES': (
-#         'rest_framework.renderers.JSONRenderer',
-#         'rest_framework.renderers.BrowsableAPIRenderer',
-#     ),
-# }
+# REST全局配置
+REST_FRAMEWORK = {
+    #JSONRenderer：以JSON的格式返回、BaseRenderer：数据嵌套到HTML中展示
+    "DEFAULT_RENDERER_CLASSES": ["rest_framework.renderers.JSONRenderer"],
+    #全局版本控制
+    "DEFAULT_VERSIONING_CLASS":"rest_framework.versioning.URLPathVersioning",
+    "ALLOWED_VERSIONS" : ["v1","v2"],   #允许的版本
+    "VERSION_PARAM":"version",          #版本默认传参
+    "DEFAULT_VERSION":"v1",             #默认版本号为V1,当没有传版本号时
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -174,6 +178,9 @@ USE_L10N = True
 
 USE_TZ = True
 
+#设置可跨域
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/

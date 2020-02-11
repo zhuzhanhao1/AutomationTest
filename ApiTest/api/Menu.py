@@ -1,13 +1,9 @@
-from django.db.models import Q
-from django.shortcuts import render
-from rest_framework import viewsets
 from ApiTest.models import LeftMenu, ChildMenu
 from ApiTest.serializers import LeftMenuSerializers, ChildMenuSerializers
-from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-
+ret = {"code":1000}
 
 class MenuList(APIView):
     '''
@@ -33,37 +29,39 @@ class MenuList(APIView):
         left["systemeSttings"] = leftmenu_systemeSttings_serializer.data
         return left
 
-    def get(self, request, format=None):
+    def get(self, request, *args, **kwargs):
         '''
         二级菜单参数，评级一级菜单
         '''
-        left = self.get_level_one_menu()
+        try:
+            left = self.get_level_one_menu()
 
-        ermsapi = ChildMenu.objects.filter(classification__title="ERMS接口测试")
-        ermsapi_erializer = ChildMenuSerializers(ermsapi, many=True)
+            ermsapi = ChildMenu.objects.filter(classification__title="ERMS接口测试")
+            ermsapi_erializer = ChildMenuSerializers(ermsapi, many=True)
 
-        tdrapi = ChildMenu.objects.filter(classification__title="TDR接口测试")
-        tdrapi_erializer = ChildMenuSerializers(tdrapi, many=True)
+            tdrapi = ChildMenu.objects.filter(classification__title="TDR接口测试")
+            tdrapi_erializer = ChildMenuSerializers(tdrapi, many=True)
 
-        ermsprocess = ChildMenu.objects.filter(classification__title="ERMS接口流程测试")
-        ermsprocess_erializer = ChildMenuSerializers(ermsprocess, many=True)
+            ermsprocess = ChildMenu.objects.filter(classification__title="ERMS接口流程测试")
+            ermsprocess_erializer = ChildMenuSerializers(ermsprocess, many=True)
 
-        tdrprocess = ChildMenu.objects.filter(classification__title="TDR接口流程测试")
-        tdrprocess_erializer = ChildMenuSerializers(tdrprocess, many=True)
+            tdrprocess = ChildMenu.objects.filter(classification__title="TDR接口流程测试")
+            tdrprocess_erializer = ChildMenuSerializers(tdrprocess, many=True)
 
-        #拼接二级菜单到主菜单
-        left["single"][1]['children'] = ermsapi_erializer.data
-        left["single"][2]['children'] = tdrapi_erializer.data
-        left['process'][0]['children'] = ermsprocess_erializer.data
-        left['process'][1]['children'] = tdrprocess_erializer.data
-        return Response(left)
+            #拼接二级菜单到主菜单
+            left["single"][1]['children'] = ermsapi_erializer.data
+            left["single"][2]['children'] = tdrapi_erializer.data
+            left['process'][0]['children'] = ermsprocess_erializer.data
+            left['process'][1]['children'] = tdrprocess_erializer.data
+            return Response(left)
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "请检查后台代码"
+            return ret
 
-    def post(self, request, format=None):
+    def post(self, request, *args, **kwargs):
         '''
-        新建二级菜单
-        :param request:
-        :param format:
-        :return:
+        新建二级菜单，暂时通过admin创建，暂放
         '''
         serializer = ChildMenuSerializers(data=request.data)
         if serializer.is_valid():

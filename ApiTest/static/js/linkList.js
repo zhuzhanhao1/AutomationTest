@@ -4,7 +4,7 @@ layui.use(['form', 'layer', 'table'], function () {
     //友链列表
     var tableIns = table.render({
         elem: '#linkList',
-        url: '/link/list/',
+        url: '/api/v1/link/list/',
         toolbar: '#toolbarDemo',
 
         page: {groups: 5}, //开启分页
@@ -57,7 +57,7 @@ layui.use(['form', 'layer', 'table'], function () {
                         form.on('submit(update_link)', function (data) {
                             console.log(data.field);
                             $.ajax({
-                                url: "/link/update_link/" + String(id) + "/",
+                                url: "/api/v1/link/update_link/" + String(id) + "/",
                                 type: 'PUT',
                                 data: {
                                     "logo": data.field.logo,

@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.paginator import Paginator
 import json
+ret = {"code":1000}
 
 class LinkList(APIView):
 
@@ -22,23 +23,24 @@ class LinkList(APIView):
         res = []
         for contact in contacts:
             res.append(contact)
-        return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
+        return Response(data={"code": 1000, "msg": "", "count": len(serializer.data), "data": res})
 
 
     def post(self,request,*args,**kwargs):
         '''
         添加友情链接
+        请求头中增加appliaction/json,需要通过request.body接收数据,是字节bytes,需要通过json转换为字典进行序列化
         '''
-        ret = {"code":1000}
         try:
             body = json.loads(request.body)
-            print(body)
             serializer = LinkSerializers(data=body)
             if serializer.is_valid():
                 serializer.save()
                 ret["msg"] = "添加友情链接成功"
                 return Response(ret)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+            return Response(ret, status=status.HTTP_400_BAD_REQUEST)
         except:
             ret["code"] = 1001
             ret["error"] = "添加友情链接失败"
@@ -48,7 +50,6 @@ class LinkList(APIView):
         '''
         编辑友情链接
         '''
-        ret = {"code":1000}
         try:
             pk = kwargs.get("pk")
             obj = Link.objects.filter(id=pk).first()
@@ -57,7 +58,9 @@ class LinkList(APIView):
                 serializer.save()
                 ret["msg"] = "编辑友情链接成功"
                 return Response(ret, status=status.HTTP_200_OK)
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+            return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             ret["code"] = 1001
@@ -67,7 +70,7 @@ class LinkList(APIView):
 
 class TesturlList(APIView):
 
-    def get(self, request):
+    def get(self, request, *args ,**kwargs):
         '''
         日常所需测试网址列表
         '''

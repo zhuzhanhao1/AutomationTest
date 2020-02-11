@@ -255,7 +255,9 @@ iframe {
 
 .topLevelMenus .layui-nav-item.layui-this {
     /*background-color: #1AA094;*/
-    border: 1px solid #1AA094;
+    border-left: 1px solid #1AA094;
+    border-right: 1px solid #1AA094;
+
 }
 
 .top_menu.layui-nav .layui-this:after {
@@ -264,7 +266,9 @@ iframe {
 
 .top_menu .layui-nav-bar, .mobileTopLevelMenus .layui-nav-bar {
     /*background-color: #1AA094;*/
-    border: 1px solid #1AA094;
+    border-left: 1px solid #1AA094;
+    border-right: 1px solid #1AA094;
+
 }
 
 
@@ -607,7 +611,8 @@ iframe {
 
 .header .layui-nav .layui-nav-item, .header .layui-nav .layui-nav-item > a, .header, .logo {
     line-height: 50px !important;
-    max-height: 50px;!important;
+    max-height: 50px;
+!important;
 }
 
 .mobileTopLevelMenus {
@@ -630,7 +635,8 @@ iframe {
 .logo {
     padding: 0px;
 }
-.layui-nav-item .layui-this >a{
+
+.layui-nav-item .layui-this > a {
     color: #0C0C0C;
 }
 
@@ -639,30 +645,39 @@ iframe {
     line-height: 40px;
     color: #fff;
 }
-.layui-bg-black{
-    background-color:inherit!important;
+
+.layui-bg-black {
+    background-color: inherit !important;
 }
-.layui-nav .layui-nav-item > a{
+
+.layui-nav .layui-nav-item > a {
     color: #0C0C0C;
 }
-.layui-nav-itemed>a, .layui-nav-tree .layui-nav-title a, .layui-nav-tree .layui-nav-title a:hover{
-    color:#0C0C0C!important;
+
+.layui-nav-itemed > a, .layui-nav-tree .layui-nav-title a, .layui-nav-tree .layui-nav-title a:hover {
+    color: #0C0C0C !important;
 }
-.layui-nav-tree .layui-nav-child a{
+
+.layui-nav-tree .layui-nav-child a {
     color: #0C0C0C;
 }
-.layui-nav-itemed>.layui-nav-child{
-    background-color:inherit!important;
+
+.layui-nav-itemed > .layui-nav-child {
+    background-color: inherit !important;
 }
-.layui-nav-tree .layui-nav-item{
+
+.layui-nav-tree .layui-nav-item {
     border-bottom: 1px solid lightsteelblue;
 }
- .layui-nav-tree .layui-nav-child a{
-     border-top: 1px solid lightsteelblue;
- }
-.layui-layout-admin .layui-header{
+
+.layui-nav-tree .layui-nav-child a {
+    border-top: 1px solid lightsteelblue;
+}
+
+.layui-layout-admin .layui-header {
     border-bottom: 5px solid #1AA094;
 }
-.layui-nav .layui-nav-more{
-    border-color:black transparent transparent!important;
+
+.layui-nav .layui-nav-more {
+    border-color: black transparent transparent !important;
 }

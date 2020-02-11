@@ -1,11 +1,6 @@
-# Create your views here.
-import os
-
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render
-
 from ApiTest.api.processApiList import AddProcessApi
-from ApiTest.common.dingDingNotice import send_singleapi_link, send_ding
 from ApiTest.models import SingleApi, ProcessApi
 from django.contrib import auth
 
@@ -120,16 +115,14 @@ def logout_views(request):
 
 def index_views(request):
     '''
-    :param request:
-    :return: 首页html
+    首页html
     '''
     return render(request, 'index.html')
 
 
 def home_views(request):
     '''
-    :param request:
-    :return: 首页内嵌ifame
+    首页内嵌ifame
     '''
     global role
     return render(request, 'search.html',{"role":role})
@@ -137,8 +130,7 @@ def home_views(request):
 
 def singleapi_views(request):
     '''
-    :param request: belong、system
-    :return: 单一接口html
+    单一接口html
     '''
     global erms_role,tdrapi,tdr_role,ermsapi
     belong = request.GET.get("belong", "")
@@ -182,13 +174,12 @@ def singleapi_views(request):
 
 def processapi_views(request):
     '''
-    :param request: belong、system
-    :return: 单一接口html
+    单一接口html
     '''
     global erms_role,tdr_role,erms_process_api
     belong = request.GET.get("belong", "")
     system = request.GET.get("system", "")
-    sortid = AddProcessApi().parameter_check()
+    # sortid = AddProcessApi().parameter_check(system)
     if system == "erms":
         #如果belong存在,只返回belong的值
         for i in erms_process_api:
@@ -198,13 +189,13 @@ def processapi_views(request):
                 L.append(belong_value)
                 return render(request, "processApi.html",
                               {"belong_key":belong,"belong": belong_value,
-                                "system": system,"role":erms_role,"apinav":L,"sortid":sortid})
+                                "system": system,"role":erms_role,"apinav":L})
         #如果belong不存在，返回导航的总列表
         l = []
         for a in erms_process_api:
             l.append(erms_process_api.get(a))
         return render(request, "processApi.html",
-                      {"system": system,"role":erms_role,"apinav":l,"sortid":sortid})
+                      {"system": system,"role":erms_role,"apinav":l})
 
     elif system == "tdr":
         #如果belong存在,只返回belong的值
@@ -215,27 +206,25 @@ def processapi_views(request):
                 L.append(belong_value)
                 return render(request, "processApi.html",
                               {"belong_key":belong,"belong": belong_value,
-                                "system": system,"role":tdr_role,"apinav":L,"sortid":sortid})
+                                "system": system,"role":tdr_role,"apinav":L})
         #如果belong不存在，返回导航的总列表
         l = []
         for a in tdr_process_api:
             l.append(tdr_process_api.get(a))
         return render(request, "processApi.html",
-                      {"system": system,"role":tdr_role,"apinav":l,"sortid":sortid})
+                      {"system": system,"role":tdr_role,"apinav":l})
 
 
 def quicktest_views(request):
     '''
-    :param request:
-    :return: 内嵌ifame-快速测试页面
+    内嵌ifame-快速测试页面
     '''
     return render(request, 'quickTest.html')
 
 
 def apiDetail_views(request):
     '''
-    :param request:
-    :return: 详情页面
+    详情页面
     '''
     singleid = request.GET.get("singleid","")
     processid = request.GET.get("processid", "")
@@ -261,20 +250,22 @@ def apiDetail_views(request):
 
 def link_views(request):
     '''
-    :param request:
-    :return: 内嵌ifame-友情链接
+    内嵌ifame-友情链接
     '''
     return render(request, 'link.html')
 
 
 def testurl_views(request):
     '''
-    :param request:
-    :return: 内嵌ifame-测试网址
+    内嵌ifame-测试网址
     '''
     return render(request, 'testUrl.html')
 
+
 def systemlog_views(request):
+    '''
+    :内容ifame-系统日志
+    '''
     return render(request, 'systemlog.html')
 
 

@@ -680,7 +680,7 @@
                                     console.log(l);
                                     $.ajax({
                                         cache: false,
-                                        url: "/singleapi/run/",
+                                        url: "/api/v1/singleapi/run/",
                                         dataType: 'json',
                                         type: 'POST',
                                         //async: false,
@@ -769,7 +769,7 @@
                                             }
                                             $.ajax({
                                                 cache: false,
-                                                url: "/publicapi/dingding/",
+                                                url: "/api/v1/publicapi/dingding/",
                                                 dataType: 'text',
                                                 type: 'GET',
                                                 //async: false,
@@ -897,7 +897,7 @@
                                                     }
                                                     $.ajax({
                                                         cache: false,
-                                                        url: "/singleapi/repeatrun/",
+                                                        url: "/api/v1/singleapi/repeatrun/",
                                                         dataType: 'json',
                                                         type: 'POST',
                                                         //async: false,
@@ -927,7 +927,7 @@
                                                                         var sitv = setInterval(function () {
                                                                             $.ajax({
                                                                                 cache: false,
-                                                                                url: "/singleapi/repeatrun/",
+                                                                                url: "/api/v1/singleapi/repeatrun/",
                                                                                 dataType: 'JSON',
                                                                                 type: 'GET',
                                                                                 //async: false,
@@ -1059,7 +1059,7 @@
                                     console.log(l);
                                     $.ajax({
                                         cache: false,
-                                        url: "/singleapi/locust/1/",
+                                        url: "/api/v1/singleapi/locust/1/",
                                         dataType: 'json',
                                         type: 'PUT',
                                         //async: false,
@@ -1084,7 +1084,7 @@
                                                         form.on('submit(locust)', function (data) {
                                                             $.ajax({
                                                                 cache: false,
-                                                                url: "/singleapi/close_locust/",
+                                                                url: "/api/v1/singleapi/close_locust/",
                                                                 dataType: 'json',
                                                                 type: 'GET',
                                                                 success: function (data) {
@@ -1196,7 +1196,7 @@
                                 console.log(index);
                                 $.ajax({
                                     cache: false,
-                                    url: "/singleapi/update_case/" + obj.data['caseid'] + '/',
+                                    url: "/api/v1/singleapi/update_case/" + obj.data['caseid'] + '/',
                                     dataType: 'text',
                                     type: 'POST',
                                     async: false,
@@ -1246,7 +1246,7 @@
                                 console.log(index);
                                 $.ajax({
                                     cache: false,
-                                    url: "/singleapi/update_case/" + obj.data['caseid'] + '/',
+                                    url: "/api/v1/singleapi/update_case/" + obj.data['caseid'] + '/',
                                     dataType: 'text',
                                     type: 'POST',
                                     async: false,
@@ -1306,7 +1306,7 @@
                                             console.log(data.field);
                                             $.ajax({
                                                 cache: false,
-                                                url: "/singleapi/update_case/" + String(caseid) + "/",
+                                                url: "/api/v1/singleapi/update_case/" + String(caseid) + "/",
                                                 dataType: 'text',
                                                 type: 'PUT',
                                                 //async: false,
@@ -1377,7 +1377,7 @@
                                         form.on('submit(update_apicase)', function (data) {
                                             $.ajax({
                                                 cache: false,
-                                                url: "/singleapi/update_case/" + obj.data['caseid'] + '/',
+                                                url: "/api/v1/singleapi/update_case/" + obj.data['caseid'] + '/',
                                                 dataType: 'text',
                                                 type: 'GET',
                                                 //async: false,
@@ -1461,7 +1461,7 @@
                         {% endfor %}
                         $.ajax({
                             cache: false,
-                            url: "/systemrole/get_token_by_role/",
+                            url: "/api/v1/systemrole/get_token_by_role/",
                             dataType: 'text',
                             type: 'POST',
                             //async: false
@@ -1550,7 +1550,7 @@
                     form.on('submit(update_role_info)', function (data) {
                         $.ajax({
                             cache: false,
-                            url: "/systemrole/update_info/" + data.field.identity + "/",
+                            url: "/api/v1/systemrole/update_info/" + data.field.identity + "/",
                             dataType: 'text',
                             type: 'PUT',
                             //async: false,
