@@ -60,6 +60,7 @@ class SingleApiTest(APIView):
         """
         验证请求参数
         """
+        ret = {"code":1000}
         try:
             # 必传参数 method, url, headers
             if not identity or not url or not method:
@@ -89,7 +90,7 @@ class SingleApiTest(APIView):
             body = "" if body == None else body
             result = self.parameter_check(identity, url, method)
             if result["code"] == 1001:
-                return Response(ret)
+                return Response(result)
             token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
             print(token, ip)
             body = self.check_greater_less_is_exist(body)

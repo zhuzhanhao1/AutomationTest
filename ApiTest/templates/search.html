@@ -56,8 +56,7 @@
             color: black;
             font-size: 2.5rem;
             font-family: 'Bubblegum Sans', cursive;
-            {#font-weight: bold;#}
-            text-transform: uppercase;
+        {#font-weight: bold;#} text-transform: uppercase;
         }
 
         .bubble {
@@ -71,8 +70,8 @@
             display: -webkit-box;
             display: flex;
             position: fixed;
-            top:8px;
-            right:10px;
+            top: 8px;
+            right: 10px;
         }
 
         .clock .divider {
@@ -184,18 +183,17 @@
                 transform: rotateX(0);
             }
         }
-        h1{
+
+        h1 {
             position: fixed;
             left: 30px;
             width: 80px;
-            padding-left:0px;
-            {#background-color: black;#}
-            text-align: center;
-            {#border: 1px solid black;#}
-            {#border-radius: 10px;#}
-            {#box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);#}
+            padding-left: 0px;
+        {#background-color: black;#} text-align: center;
+        {#border: 1px solid black;#}{#border-radius: 10px;#}{#box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);#}
         }
-        .header h1{
+
+        .header h1 {
             padding-right: 30px;
         }
 
@@ -213,9 +211,9 @@
             <h1>
                 <span class="bubbling">首页</span>
             </h1>
-{#            <h3 style="position: fixed;right: 10px;color: white;">#}
-{#                <span id="nowTime" class="logo"></span>#}
-{#            </h3>#}
+            {#            <h3 style="position: fixed;right: 10px;color: white;">#}
+            {#                <span id="nowTime" class="logo"></span>#}
+            {#            </h3>#}
             <div class="clock">
                 <div class="flip">
                     <div class="digital front" data-number="0"></div>
@@ -255,7 +253,7 @@
             <form class="layui-form" lay-filter="update_role_info">
 
                 <div class="layui-form-item" style="margin-top: 20px;">
-                    <button type="button" class="layui-btn layui-btn-warm" onclick="gettoken()"
+                    <button type="button" class="layui-btn layui-btn-warm" onclick="get_token()"
                             style="float: right;margin-left: 10px;">获取Token
                     </button>
                     <button type="button" class="layui-btn layui-btn-warm" onclick="get_user_info()"
@@ -562,7 +560,7 @@
                     var index = layer.load(0); //添加laoding,0-2两种方式
                     table.render({
                         elem: '#test'
-                        , url: '/singleapi/search?key=' + value
+                        , url: '/api/v1/singleapi/search?key=' + value
                         , toolbar: '#toolbarDemo'
                         , defaultToolbar: [
                             'filter', {
@@ -770,9 +768,7 @@
                                             $.ajax({
                                                 cache: false,
                                                 url: "/api/v1/publicapi/dingding/",
-                                                dataType: 'text',
                                                 type: 'GET',
-                                                //async: false,
                                                 data: {
                                                     "caseid": ids,
                                                     "isprocess": "no"
@@ -786,20 +782,21 @@
                                                     });
                                                 },
                                                 success: function (data) {
-                                                    console.log(data);
-                                                    let msg = JSON.parse(data).msg;
-                                                    layer.msg(msg, {
-                                                        icon: 6,
-                                                        offset: 't',
-                                                    });
-
+                                                    if (data.code === 1000) {
+                                                        layer.msg(data.msg, {
+                                                            icon: 6, offset: "t"
+                                                        })
+                                                    } else {
+                                                        layer.msg(data.error, {
+                                                            icon: 5, offset: "t"
+                                                        })
+                                                    }
+                                                    $(".layui-laypage-btn").click();
                                                 },
                                                 error: function (data) {
-                                                    console.log(data);
-                                                    layer.msg(data, {
+                                                    layer.msg("回调失败", {
                                                         icon: 5,
-                                                        offset: 't',
-                                                        anim: 6
+                                                        offset: 't'
                                                     });
                                                 },
                                                 complete: function () {
@@ -900,7 +897,6 @@
                                                         url: "/api/v1/singleapi/repeatrun/",
                                                         dataType: 'json',
                                                         type: 'POST',
-                                                        //async: false,
                                                         data: datas,
                                                         //请求前的处理,加载loading
                                                         beforeSend: function () {
@@ -961,9 +957,7 @@
 
                                                         },
                                                         success: function (data) {
-                                                            if (data.status_code == 500) {
-                                                                layer.msg(data.msg, {icon: 5, offset: "t"});
-                                                            } else if (data.status_code == 401) {
+                                                            if (data.status_code == 500 || data.status_code == 401) {
                                                                 layer.msg(data.msg, {icon: 5, offset: "t"});
                                                             } else {
                                                                 var strjson = JSON.stringify(data, null, 4);
@@ -998,7 +992,6 @@
                                                                     },
                                                                     btn2: function (index, layro) {//这里就是你要的
                                                                         layer.close(index);
-                                                                        //layer.closeAll();
                                                                         $(".layui-laypage-btn").click();
                                                                     }
                                                                 });
@@ -1062,7 +1055,6 @@
                                         url: "/api/v1/singleapi/locust/1/",
                                         dataType: 'json',
                                         type: 'PUT',
-                                        //async: false,
                                         data: {
                                             "request": JSON.stringify(l)
                                         },
@@ -1089,12 +1081,12 @@
                                                                 type: 'GET',
                                                                 success: function (data) {
                                                                     console.log(data);
-                                                                    if (data.code == 200) {
+                                                                    if (data.code == 1000) {
                                                                         layer.msg(data.msg, {
                                                                             offset: 't',
                                                                             icon: 6,
                                                                         });
-                                                                    } else if (data.code == 500) {
+                                                                    } else if (data.code == 1001) {
                                                                         layer.msg(data.msg, {
                                                                             offset: 't',
                                                                             icon: 5,
@@ -1104,7 +1096,7 @@
                                                                 },
                                                                 error: function (data) {
                                                                     console.log(data);
-                                                                    layer.msg(data, {
+                                                                    layer.msg("回调失败", {
                                                                         icon: 5,
                                                                         offset: 't',
                                                                     });
@@ -1197,29 +1189,29 @@
                                 $.ajax({
                                     cache: false,
                                     url: "/api/v1/singleapi/update_case/" + obj.data['caseid'] + '/',
-                                    dataType: 'text',
                                     type: 'POST',
                                     async: false,
                                     data: {
-                                        //"ids": obj.data['caseid'],
                                         "params": value
                                     },
+                                    //"ids": obj.data['caseid'],
                                     success: function (data) {
-                                        let a = JSON.parse(data).msg;
-                                        layer.msg(a, {
-                                            offset: 't',
-                                            anim: 2,
-                                            icon: 6,
-                                        });
+                                        if (data.code === 1000) {
+                                            layer.msg(data.msg, {
+                                                icon: 6, offset: "t"
+                                            })
+                                        } else {
+                                            layer.msg(data.error, {
+                                                icon: 5, offset: "t"
+                                            })
+                                        }
                                     },
                                     error: function (data) {
-                                        console.log(data);
-                                        layer.msg(data, {
-                                            offset: 't',
-                                            anim: 2,
-                                            area: ["200px", "50px"],
+                                        layer.msg("回调失败", {
+                                            icon: 5,
+                                            offset: 't'
                                         });
-                                    }
+                                    },
                                 });
                                 //同步更新缓存对应的值
                                 obj.update({
@@ -1254,20 +1246,23 @@
                                         "body": value
                                     },
                                     success: function (data) {
-                                        let a = JSON.parse(data).msg;
-                                        layer.msg(a, {
-                                            offset: 't',
-                                            anim: 2,
-                                            icon: 6,
-                                        });
+                                        if (data.code === 1000) {
+                                            layer.msg(data.msg, {
+                                                icon: 6, offset: "t"
+                                            })
+                                        } else {
+                                            layer.msg(data.error, {
+                                                icon: 5, offset: "t"
+                                            })
+                                        }
+                                        $(".layui-laypage-btn").click();
                                     },
                                     error: function (data) {
-                                        console.log(data);
-                                        layer.msg(data, {
-                                            offset: 't',
-                                            icon: '5'
+                                        layer.msg("回调失败", {
+                                            icon: 5,
+                                            offset: 't'
                                         });
-                                    }
+                                    },
                                 });
                                 //同步更新缓存对应的值
                                 obj.update({
@@ -1326,20 +1321,21 @@
                                                     l_index = layer.load(0, {shade: [0.5, '#DBDBDB']});
                                                 },
                                                 success: function (data) {
-                                                    let msg = JSON.parse(data).msg;
-                                                    layer.msg(msg, {
-                                                        icon: 6,
-                                                        offset: 't',
-                                                        time: 3000//默认三秒
-                                                    });
+                                                    if (data.code === 1000) {
+                                                        layer.msg(data.msg, {
+                                                            icon: 6, offset: "t"
+                                                        })
+                                                    } else {
+                                                        layer.msg(data.error, {
+                                                            icon: 5, offset: "t"
+                                                        })
+                                                    }
                                                     $(".layui-laypage-btn").click();
                                                 },
                                                 error: function (data) {
-                                                    console.log(data);
-                                                    layer.msg(data, {
+                                                    layer.msg("回调失败", {
                                                         icon: 5,
-                                                        offset: 't',
-                                                        anim: 2,
+                                                        offset: 't'
                                                     });
                                                 },
                                                 complete: function () {
@@ -1378,26 +1374,26 @@
                                             $.ajax({
                                                 cache: false,
                                                 url: "/api/v1/singleapi/update_case/" + obj.data['caseid'] + '/',
-                                                dataType: 'text',
                                                 type: 'GET',
-                                                //async: false,
                                                 data: {
                                                     "head": data.field.head
                                                 },
                                                 success: function (data) {
-                                                    layer.msg(data, {
-                                                        icon: 6,
-                                                        offset: 't',
-                                                        anim: 2,
-                                                    });
+                                                    if (data.code === 1000) {
+                                                        layer.msg(data.msg, {
+                                                            icon: 6, offset: "t"
+                                                        })
+                                                    } else {
+                                                        layer.msg(data.error, {
+                                                            icon: 5, offset: "t"
+                                                        })
+                                                    }
                                                     $(".layui-laypage-btn").click();
                                                 },
                                                 error: function (data) {
-                                                    console.log(data);
-                                                    layer.msg(data, {
+                                                    layer.msg("回调失败", {
                                                         icon: 5,
-                                                        offset: 't',
-                                                        anim: 2,
+                                                        offset: 't'
                                                     });
                                                 },
                                                 complete: function () {
@@ -1462,37 +1458,26 @@
                         $.ajax({
                             cache: false,
                             url: "/api/v1/systemrole/get_token_by_role/",
-                            dataType: 'text',
-                            type: 'POST',
-                            //async: false
+                            type: 'PUT',
                             data: {
-                                //"system": '',
                                 "role": JSON.stringify(l),
                                 "ip": data.field.ip
                             },
                             success: function (data) {
-                                let msg = JSON.parse(data);
-                                console.log(msg);
-                                if (data.indexOf("Failed") != -1) {
-                                    layer.msg(data, {
-                                        icon: 5,
-                                        offset: 't',
-                                        anim: 2,
-                                    });
+                                if (data.code === 1000) {
+                                    layer.msg(data.msg, {
+                                        icon: 6, offset: "t"
+                                    })
                                 } else {
-                                    layer.msg(msg.msg, {
-                                        icon: 6,
-                                        offset: 't',
-                                        anim: 2,
-                                    });
+                                    layer.msg(data.error, {
+                                        icon: 5, offset: "t"
+                                    })
                                 }
                             },
                             error: function (data) {
-                                console.log(data);
-                                layer.msg(data, {
+                                layer.msg("回调失败", {
                                     icon: 5,
-                                    offset: 't',
-                                    anim: 2,
+                                    offset: 't'
                                 });
                             },
                             complete: function () {
@@ -1551,33 +1536,26 @@
                         $.ajax({
                             cache: false,
                             url: "/api/v1/systemrole/update_info/" + data.field.identity + "/",
-                            dataType: 'text',
                             type: 'PUT',
-                            //async: false,
                             data: {
                                 "username": data.field.username,
                                 "password": data.field.password
                             },
                             success: function (data) {
-                                console.log("成功返回了.");
-                                console.log(typeof (data));
-                                let a = JSON.parse(data).msg;
-                                layer.msg(a, {
-                                    icon: 6,
-                                    offset: 't',
-                                    anim: 2,
-                                });
+                                if (data.code === 1000) {
+                                    layer.msg(data.msg, {
+                                        icon: 6, offset: "t"
+                                    })
+                                } else {
+                                    layer.msg(data.error, {
+                                        icon: 5, offset: "t"
+                                    })
+                                }
                             },
                             error: function (data) {
-                                let b = data.responseText;
-                                {#console.log(b);#}
-                                {#console.log(typeof (b));#}
-                                {#let a = JSON.stringify(b, null, 4);#}
-                                {#console.log(a);#}
-                                layer.msg(b, {
+                                layer.msg("回调失败", {
                                     icon: 5,
-                                    offset: 't',
-                                    anim: 2,
+                                    offset: 't'
                                 });
                             },
                             complete: function () {
@@ -1608,7 +1586,7 @@
                 var table = layui.table;
                 table.render({
                     elem: '#templateTable'
-                    , url: "/systemrole/list/"
+                    , url: "/api/v1/systemrole/list/"
                     //, limit: 11
                     //, height: 'full-200'
                     //,page:true

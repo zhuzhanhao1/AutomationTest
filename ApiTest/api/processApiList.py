@@ -9,7 +9,6 @@ from django.core.paginator import Paginator
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
 
 
 class ProcessApiList(APIView):
@@ -50,16 +49,17 @@ class ProcessApiList(APIView):
 
 class AddProcessApi(APIView):
     '''
-    创建单一接口
+    创建流程接口
     '''
     def parameter_check(self,system):
         """
         验证参数
         """
         L = []
-        all = ProcessApi.objects.filter(system=system)
-        for i in all:
-            L.append(i.sortid)
+        sortid_queryset = ProcessApi.objects.filter(system=system).values("sortid") #[{"sortid":0},{}]
+        for i in sortid_queryset:
+            L.append(i.get("sortid"))
+        print(L)
         Newsordid = max(L) + 1
         print("最大的排序号为：" + str(Newsordid))
         return Newsordid
@@ -69,21 +69,20 @@ class AddProcessApi(APIView):
         try:
             data = request.data
             system = data.get("system", "")
-            url = data.get("url", "")
             sortid = self.parameter_check(system)
+            print(sortid)
             serializer = AddProcessApiSerializers(data=request.data)
             if serializer.is_valid():
-                # .save()是调用SnippetSerializer中的create()方法
                 serializer.save()
-                ProcessApi.objects.filter(url=url).update(sortid=sortid)
-                ret["msg"] = "新建单一接口成功"
+                ProcessApi.objects.filter(sortid=None).update(sortid=sortid)
+                ret["msg"] = "新建流程接口成功"
                 return Response(ret)
             ret["code"] = 1001
             ret["error"] = str(serializer.errors)
         except:
             ret["code"] = 1001
-            ret["error"] = "新建单一接口失败"
-        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+            ret["error"] = "新建流程接口失败"
+        return Response(ret)
 
 
 class UpdateProcessApi(APIView):
@@ -108,14 +107,14 @@ class UpdateProcessApi(APIView):
             serializer = AddProcessApiSerializers(snippet, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                ret["msg"] = "编辑流程接口成功"
+                ret["msg"] = "编辑成功"
                 return Response(ret)
             ret["code"] = 1001
             ret["error"] = str(serializer.errors)
         except:
             ret["code"] = 1001
-            ret["error"] = "编辑流程接口失败"
-        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+            ret["error"] = "编辑失败"
+        return Response(ret)
 
     def get(self, request, pk, *args, **kwargs):
         '''
@@ -162,7 +161,7 @@ class UpdateProcessApi(APIView):
         except Exception as e:
             ret["code"] = 1001
             ret["error"] = "编辑失败"
-        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+        return Response(ret)
 
 
 
@@ -187,7 +186,7 @@ class UpdateProcessApi(APIView):
         except Exception as e:
             ret["code"] = 1001
             ret["error"] = "编辑params/body失败"
-        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+        return Response(ret)
 
 class DelProcessApi(APIView):
     """
@@ -199,13 +198,14 @@ class DelProcessApi(APIView):
         except ProcessApi.DoesNotExist:
             raise Http404
 
-    def delete(self, request, pk,*args, **kwargs):
+    def delete(self, request, pk, *args, **kwargs):
         #批量删除
         ret = {"code": 1000}
         try:
             if pk == '0':
-                for i in json.loads(request.data['ids']):
-                    self.get_object(i).delete()
+                for i in json.loads(request.data.get("ids")):
+                    print(i)
+                    self.get_object(i.get("caseid2")).delete()
                 ret["msg"] = "批量删除成功"
             #单个删除
             else:
@@ -214,5 +214,5 @@ class DelProcessApi(APIView):
                 ret["msg"] = "单个删除成功"
         except Exception as e:
             ret["code"] = 1001
-            ret["error"] = "编辑params/body失败"
-        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+            ret["error"] = "删除失败"
+        return Response(ret)

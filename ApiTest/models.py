@@ -176,7 +176,7 @@ class ProcessApi(models.Model):
     depend_key = models.CharField(max_length=500,verbose_name="依赖的key",null=True,blank=True)
     replace_key = models.CharField(max_length=500,verbose_name="替换的key",null=True,blank=True)
     replace_position = models.CharField(max_length=50,verbose_name="替换的内容区域", null=True,blank=True)
-    sortid = models.IntegerField(verbose_name="排序号",default=1)
+    sortid = models.IntegerField(verbose_name="排序号",null=True,blank=True)
     system = models.CharField(max_length=50, verbose_name="所属系统")
     duration = models.FloatField(verbose_name="响应时长",null=True,blank=True)
     head = models.CharField(max_length=200, verbose_name="负责人",null=True,blank=True)

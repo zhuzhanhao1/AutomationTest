@@ -70,9 +70,9 @@ class AddSingleApi(APIView):
         验证参数
         """
         L = []
-        all = SingleApi.objects.filter(system=system)
-        for i in all:
-            L.append(i.sortid)
+        sortid_queryset = SingleApi.objects.filter(system=system).values("sortid") #[{"caseid":0},{}]
+        for i in sortid_queryset:
+            L.append(i.get("sortid"))
         Newsordid = max(L) + 1
         print("最大的排序号为：" + str(Newsordid))
         return Newsordid
@@ -85,12 +85,12 @@ class AddSingleApi(APIView):
         try:
             data = request.data
             system = data.get("system","")
-            url = data.get("url","")
             sortid = self.parameter_check(system)
+
             serializer = SingleApiSerializers(data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                SingleApi.objects.filter(url=url).update(sortid=sortid)
+                SingleApi.objects.filter(sortid=None).update(sortid=sortid)
                 ret["msg"] = "新建单一接口成功"
                 return Response(ret)
             ret["code"] = 1001
@@ -98,7 +98,7 @@ class AddSingleApi(APIView):
         except:
             ret["code"] = 1001
             ret["error"] = "新建单一接口失败"
-        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+        return Response(ret)
 
 
 class UpdateSingleApi(APIView):
@@ -223,7 +223,7 @@ class SearchSingleApi(APIView):
             res = []
             for contact in contacts:
                 res.append(contact)
-            return Response(data={"code": 1000, "msg": "", "count": len(serializer.data), "data": res})
+            return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
         except Exception as e:
             ret["code"] = 1001
             ret["msg"] = "检索列表返回失败"

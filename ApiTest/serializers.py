@@ -123,7 +123,7 @@ class AddProcessApiSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = ProcessApi
-        fields = ('caseid', 'casename', 'identity', 'url','method','params','body','belong','system','sortid',
+        fields = ('caseid', 'casename', 'identity', 'url','method','params','body','belong','system',
                   'head','depend_id','depend_key','replace_key','replace_position')  # 需要序列化的属性
 
 
