@@ -23,21 +23,26 @@ urlpatterns = [
     url(r'processapi/update_case/(?P<pk>[0-9]+)/$', processApiList.UpdateProcessApi.as_view()),
     url(r'processapi/run/$', ProcessApiTest.ProcessApiTest.as_view()),
     url(r'processapi/result_list/$', ProcessApiTest.ProcessApiResultTest.as_view()),
+
     # 公共方法
     url(r'publicapi/sort/$', publicApi.PublicApiSort.as_view()),
     url(r'publicapi/dingding/$', publicApi.PublicApiDingDingNotice.as_view()),
     url(r'publicapi/import_case/$', publicApi.PublicApiImport.as_view()),
+
     # 测试系统角色
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),
     url(r'systemrole/add_role/$', systemRole.AddSystemRole.as_view()),
     url(r'systemrole/update_info/(?P<pk>[a-z]+)/$', systemRole.UpdateSystemRole.as_view()),
     url(r'systemrole/get_token_by_role/$', systemRole.GetTokenByRole.as_view()),
+
     # 菜单
     url(r'menu/list/$', Menu.MenuList.as_view()),
+
     # 友情链接
     url(r'link/list/$', Link.LinkList.as_view()),
     url(r'link/add_link/$', Link.LinkList.as_view()),
     url(r'link/update_link/(?P<pk>[0-9]+)/$', Link.LinkList.as_view()),
+
     # 测试网址
     url(r'testurl/list/$', Link.TesturlList.as_view()),
 ]

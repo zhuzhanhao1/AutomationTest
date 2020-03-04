@@ -74,6 +74,7 @@
                                     <input type="radio" name="method" value="post" title="POST">
                                     <input type="radio" name="method" value="put" title="PUT">
                                     <input type="radio" name="method" value="delete" title="Delete">
+                                    <input type="radio" name="method" value="file" title="File">
                                 </div>
                             </div>
 
@@ -168,6 +169,7 @@
                                     <input type="radio" name="method" value="post" title="POST">
                                     <input type="radio" name="method" value="put" title="PUT">
                                     <input type="radio" name="method" value="delete" title="Delete">
+                                    <input type="radio" name="method" value="file" title="File">
                                 </div>
                             </div>
 
@@ -304,6 +306,7 @@
                                     <input type="radio" name="method" value="post" title="POST">
                                     <input type="radio" name="method" value="put" title="PUT">
                                     <input type="radio" name="method" value="delete" title="Delete">
+                                    <input type="radio" name="method" value="file" title="File">
                                 </div>
                             </div>
 
@@ -399,6 +402,7 @@
                                     <input type="radio" name="method" value="post" title="POST">
                                     <input type="radio" name="method" value="put" title="PUT">
                                     <input type="radio" name="method" value="delete" title="Delete">
+                                    <input type="radio" name="method" value="file" title="File">
                                 </div>
                             </div>
 
@@ -1008,7 +1012,6 @@
                             dic['method'] = data[i]['method'];
                             dic['params'] = data[i]['params'];
                             dic['body'] = data[i]['body'];
-                            //dic['isprocess'] = data[i]['isprocess'];
                             dic['depend_id'] = data[i]['depend_id'];
                             dic['depend_key'] = data[i]['depend_key'];
                             dic['replace_key'] = data[i]['replace_key'];
@@ -1084,229 +1087,234 @@
 
                             },
                             success: function (data) {
-                                console.log(data);
-                                console.log(typeof (data));
+                                console.log(data);//object
                                 if (len > 0) {
-                                    console.log("我先进来的");
-                                    let failcases = data.failcases;
-                                    let errors = data.errors;
-                                    let pass = len - errors;
-                                    console.log(typeof (errors))
-                                    var result = layer.open({
-                                        type: 1,
-                                        title: false,
-                                        shade: false,
-                                        area: ['80%', '80%'],
-                                        //content: $("#process_result").html(),
-                                        content: '<div style="padding:15px;">' +
-                                            //'<blockquote class="layui-elem-quote">所属项目：ERMS数字档案室系统</blockquote>'+
-                                            '<fieldset class="layui-elem-field">' +
-                                            '<legend>执行结果</legend>' +
-                                            '<div class="layui-field-box">' +
-                                            '<label>用例总数：</label>' +
-                                            '<span style="color: blue" id="all_num"></span>、' +
-                                            '<label>成功的用例数：</label>' +
-                                            '<span style="color: yellowgreen" id="success_num"></span>、' +
-                                            '<label>失败的用例数：</label>' +
-                                            '<span style="color: red" id="fail_num"></span>' +
-                                            '</div>' +
-                                            '</fieldset>' +
-                                            '<fieldset class="layui-elem-field layui-field-title">' +
-                                            '<legend>执行失败的接口用例列表</legend>' +
-                                            '<div class="layui-field-box" style="padding: 15px;">' +
-                                            '<table class="layui-hide" id="templateTable"  lay-filter="templateTable"></table>' +
-                                            '</div>' +
-                                            '</fieldset>' +
-                                            '</div>',
-                                        success: function (data) {
-                                            document.getElementById("all_num").innerText = len;
-                                            $("#success_num").html(pass);
-                                            $("#fail_num").html(errors);
+                                    if(data.errors > 0){
+                                        let failcases = data.failcases;
+                                        let errors = data.errors;
+                                        let pass = len - errors;
+                                        console.log(typeof (errors))
+                                        var result = layer.open({
+                                            type: 1,
+                                            title: false,
+                                            shade: false,
+                                            area: ['80%', '80%'],
+                                            //content: $("#process_result").html(),
+                                            content: '<div style="padding:15px;">' +
+                                                //'<blockquote class="layui-elem-quote">所属项目：ERMS数字档案室系统</blockquote>'+
+                                                '<fieldset class="layui-elem-field">' +
+                                                '<legend>执行结果</legend>' +
+                                                '<div class="layui-field-box">' +
+                                                '<label>用例总数：</label>' +
+                                                '<span style="color: blue" id="all_num"></span>、' +
+                                                '<label>成功的用例数：</label>' +
+                                                '<span style="color: yellowgreen" id="success_num"></span>、' +
+                                                '<label>失败的用例数：</label>' +
+                                                '<span style="color: red" id="fail_num"></span>' +
+                                                '</div>' +
+                                                '</fieldset>' +
+                                                '<fieldset class="layui-elem-field layui-field-title">' +
+                                                '<legend>执行失败的接口用例列表</legend>' +
+                                                '<div class="layui-field-box" style="padding: 15px;">' +
+                                                '<table class="layui-hide" id="templateTable"  lay-filter="templateTable"></table>' +
+                                                '</div>' +
+                                                '</fieldset>' +
+                                                '</div>',
+                                            success: function (data) {
+                                                document.getElementById("all_num").innerText = len;
+                                                $("#success_num").html(pass);
+                                                $("#fail_num").html(errors);
 
-                                            var myTable = table.render({
-                                                elem: '#templateTable'
-                                                , url: '/api/v1/processapi/result_list/'
-                                                , page: true
-                                                , toolbar: '#resultDemo'
-                                                //, height: 'full-20'
-                                                , limit: 10
-                                                , cols: [[
-                                                    {type: 'checkbox'}
-                                                    , {field: 'casename', title: '接口名称', align: "left"}
-                                                    , {
-                                                        field: 'duration', width: 100, title: '响应时长', align: "left",
-                                                        templet: function (res) {
-                                                            if (res.duration < 1) {
-                                                                let a = String(res.duration * 1000) + "毫秒";
-                                                                return '<span>' + a + '</span>'
-                                                            } else if (res.duration >= 1 && res.duration < 3) {
-                                                                let b = String(res.duration) + "秒";
-                                                                return '<span style="color: cornflowerblue;">' + b + '</span>'
-                                                            } else {
-                                                                let b = String(res.duration) + "秒";
-                                                                return '<span style="color: deeppink;">' + b + '</span>'
-                                                            }
-                                                        }
-                                                    }
-                                                    , {
-                                                        field: 'result',
-                                                        title: '响应结果',
-                                                        align: "left",
-                                                        event: "detail",
-                                                        templet: function (res) {
-                                                            if (res.result == null) {
-                                                                return '<span>' + res.result + '</span>'
-                                                            } else if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1) {
-                                                                let b = JSON.parse(res.result);
-                                                                return '<span style="color: red;">' + JSON.stringify(b["message"]) + '</span>'
-                                                            } else if (res.result != "") {
-                                                                let a = JSON.parse(res.result);
-                                                                return '<span>' + JSON.stringify(a) + '</span>'
-                                                            } else {
-                                                                return '<span>' + res.result + '</span>'
-                                                            }
-                                                        }
-                                                    }
-                                                    , {field: 'head', width: 90, title: '负责人', align: "left"}
-                                                ]]
-                                                , where: {
-                                                    caseids: JSON.stringify(failcases),
-                                                    system: "{{ system }}"
-                                                }
-                                            });
-                                            //头工具栏事件
-                                            table.on('toolbar(templateTable)', function (obj) {
-                                                var checkStatus = table.checkStatus(obj.config.id);
-                                                //console.log(checkStatus);
-                                                switch (obj.event) {
-                                                    //发送钉钉消息
-                                                    case 'dingding':
-                                                        var data = checkStatus.data;
-                                                        console.log(data);
-                                                        if (data.length == 0) {
-                                                            layer.close(index);
-                                                            layer.msg("请先选中需要发送的接口", {
-                                                                icon: 2,
-                                                                offset: "t"
-                                                            });
-                                                        } else {
-                                                            layer.confirm("你确定要发送接口请求结果给相应的负责人吗？\n注意:请求正常发送所有结果信息，请求失败发送错误内容", {
-                                                                    icon: 3,
-                                                                    btn: ["确定", "取消"]
-                                                                }, function () {
-                                                                    var ids = "";
-                                                                    for (i = 0; i < data.length; i++) {
-                                                                        ids += data[i]["caseid"] + ",";
-                                                                        console.log(ids);
-                                                                    }
-                                                                    $.ajax({
-                                                                        cache: false,
-                                                                        url: "/api/v1/ding_ding/",
-                                                                        type: 'GET',
-                                                                        data: {
-                                                                            "caseid": ids,
-                                                                            "isprocess": "yes"
-                                                                        },
-                                                                        //请求前的处理,加载loading
-                                                                        beforeSend: function () {
-                                                                            document.getElementById("Dingding").setAttribute("disabled", true);
-                                                                            document.getElementById("Dingding").innerHTML = "loading...";
-                                                                            l_index = layer.msg('发送钉钉中，小伙伴请稍候~~', {
-                                                                                icon: 16,
-                                                                                time: false,
-                                                                                shade: 0.5
-                                                                            });
-                                                                            //l_index = layer.load(0, {shade: [0.5, '#DBDBDB']}); //0.1透明度的白色背景
-                                                                        },
-                                                                        success: function (data) {
-                                                                            if (data.code === 1001) {
-                                                                                layer.msg(data.msg, {
-                                                                                    icon: 6,
-                                                                                    offset: 't',
-                                                                                });
-                                                                            } else {
-                                                                                layer.msg(data.error, {
-                                                                                    icon: 5,
-                                                                                    offset: 't',
-                                                                                });
-                                                                            }
-
-
-                                                                        },
-                                                                        error: function (data) {
-                                                                            console.log(data);
-                                                                            layer.msg("回调失败", {
-                                                                                icon: 5,
-                                                                                offset: 't'
-                                                                            });
-                                                                        },
-                                                                        complete: function () {
-                                                                            document.getElementById("Dingding").removeAttribute("disabled");
-                                                                            document.getElementById("Dingding").innerHTML = "钉钉通知";
-                                                                            layer.close(l_index);
-                                                                        }
-                                                                    });
-
-                                                                }, function () {
-                                                                    layer.msg(
-                                                                        "取消发送钉钉消息",
-                                                                        {icon: 1, offset: "t"}
-                                                                    );
+                                                var myTable = table.render({
+                                                    elem: '#templateTable'
+                                                    , url: '/api/v1/processapi/result_list/'
+                                                    , page: true
+                                                    , toolbar: '#resultDemo'
+                                                    //, height: 'full-20'
+                                                    , limit: 10
+                                                    , cols: [[
+                                                        {type: 'checkbox'}
+                                                        , {field: 'casename', title: '接口名称', align: "left"}
+                                                        , {
+                                                            field: 'duration', width: 100, title: '响应时长', align: "left",
+                                                            templet: function (res) {
+                                                                if (res.duration < 1) {
+                                                                    let a = String(res.duration * 1000) + "毫秒";
+                                                                    return '<span>' + a + '</span>'
+                                                                } else if (res.duration >= 1 && res.duration < 3) {
+                                                                    let b = String(res.duration) + "秒";
+                                                                    return '<span style="color: cornflowerblue;">' + b + '</span>'
+                                                                } else {
+                                                                    let b = String(res.duration) + "秒";
+                                                                    return '<span style="color: deeppink;">' + b + '</span>'
                                                                 }
-                                                            );
+                                                            }
                                                         }
-                                                        break;
-                                                }
-
-                                            });
-                                            //监听行工具事件
-                                            table.on('tool(templateTable)', function (obj) {
-                                                var data = obj.data;
-                                                //console.log(obj);
-                                                if (obj.event === 'detail') {
-                                                    console.log(data.result);
-                                                    //var strjson = JSON.parse(data.result);
-                                                    layer.prompt({
-                                                        formType: 2,//多行文本
-                                                        value: data.result,
-                                                        shade: false,
-                                                        title: data.casename + "响应结果",
-                                                        maxmin: true,
-                                                        skin: "layui-layer-rim",//hui
-                                                        closeBtn: 0,
-                                                        zIndex: layer.zIndex,
-                                                        area: ['750px', '500px'], //自定义文本域宽高
-                                                        btn: ["点我查看详情", "关闭"],
-                                                        yes: function () {
-                                                            var index = layer.open({
-                                                                type: 2,
-                                                                title: data.casename + "详细信息",
-                                                                //shadeClose: true,
-                                                                shade: false,
-                                                                zIndex: layer.zIndex,
-                                                                maxmin: true, //开启最大化最小化按钮
-                                                                area: ['600px', '1200px'],
-                                                                content: "/detail_process_api/?id=" + data.caseid,
-                                                            });
-                                                            layer.full(index);
-                                                        },
-                                                        btn2: function (index) {
-                                                            layer.close(index);
+                                                        , {
+                                                            field: 'result',
+                                                            title: '响应结果',
+                                                            align: "left",
+                                                            event: "detail",
+                                                            templet: function (res) {
+                                                                if (res.result == null) {
+                                                                    return '<span>' + res.result + '</span>'
+                                                                } else if (res.result.indexOf("message") != -1 && res.result.indexOf("error") != -1) {
+                                                                    let b = JSON.parse(res.result);
+                                                                    return '<span style="color: red;">' + JSON.stringify(b["message"]) + '</span>'
+                                                                } else if (res.result != "") {
+                                                                    let a = JSON.parse(res.result);
+                                                                    return '<span>' + JSON.stringify(a) + '</span>'
+                                                                } else {
+                                                                    return '<span>' + res.result + '</span>'
+                                                                }
+                                                            }
                                                         }
-                                                    });
-                                                }
+                                                        , {field: 'head', width: 90, title: '负责人', align: "left"}
+                                                    ]]
+                                                    , where: {
+                                                        caseids: JSON.stringify(failcases),
+                                                        system: "{{ system }}"
+                                                    }
+                                                });
+                                                //头工具栏事件
+                                                table.on('toolbar(templateTable)', function (obj) {
+                                                    var checkStatus = table.checkStatus(obj.config.id);
+                                                    //console.log(checkStatus);
+                                                    switch (obj.event) {
+                                                        //发送钉钉消息
+                                                        case 'dingding':
+                                                            var data = checkStatus.data;
+                                                            console.log(data);
+                                                            if (data.length == 0) {
+                                                                layer.close(index);
+                                                                layer.msg("请先选中需要发送的接口", {
+                                                                    icon: 2,
+                                                                    offset: "t"
+                                                                });
+                                                            } else {
+                                                                layer.confirm("你确定要发送接口请求结果给相应的负责人吗？\n注意:请求正常发送所有结果信息，请求失败发送错误内容", {
+                                                                        icon: 3,
+                                                                        btn: ["确定", "取消"]
+                                                                    }, function () {
+                                                                        var ids = "";
+                                                                        for (i = 0; i < data.length; i++) {
+                                                                            ids += data[i]["caseid"] + ",";
+                                                                            console.log(ids);
+                                                                        }
+                                                                        $.ajax({
+                                                                            cache: false,
+                                                                            url: "/api/v1/ding_ding/",
+                                                                            type: 'GET',
+                                                                            data: {
+                                                                                "caseid": ids,
+                                                                                "isprocess": "yes"
+                                                                            },
+                                                                            //请求前的处理,加载loading
+                                                                            beforeSend: function () {
+                                                                                document.getElementById("Dingding").setAttribute("disabled", true);
+                                                                                document.getElementById("Dingding").innerHTML = "loading...";
+                                                                                l_index = layer.msg('发送钉钉中，小伙伴请稍候~~', {
+                                                                                    icon: 16,
+                                                                                    time: false,
+                                                                                    shade: 0.5
+                                                                                });
+                                                                                //l_index = layer.load(0, {shade: [0.5, '#DBDBDB']}); //0.1透明度的白色背景
+                                                                            },
+                                                                            success: function (data) {
+                                                                                if (data.code === 1001) {
+                                                                                    layer.msg(data.msg, {
+                                                                                        icon: 6,
+                                                                                        offset: 't',
+                                                                                    });
+                                                                                } else {
+                                                                                    layer.msg(data.error, {
+                                                                                        icon: 5,
+                                                                                        offset: 't',
+                                                                                    });
+                                                                                }
 
-                                            });
-                                        },
-                                        btn: ['关闭'],
-                                        yes: function () {
-                                            layer.close(result);
-                                            $(".layui-laypage-btn").click();
-                                        }
-                                    });
 
+                                                                            },
+                                                                            error: function (data) {
+                                                                                console.log(data);
+                                                                                layer.msg("回调失败", {
+                                                                                    icon: 5,
+                                                                                    offset: 't'
+                                                                                });
+                                                                            },
+                                                                            complete: function () {
+                                                                                document.getElementById("Dingding").removeAttribute("disabled");
+                                                                                document.getElementById("Dingding").innerHTML = "钉钉通知";
+                                                                                layer.close(l_index);
+                                                                            }
+                                                                        });
+
+                                                                    }, function () {
+                                                                        layer.msg(
+                                                                            "取消发送钉钉消息",
+                                                                            {icon: 1, offset: "t"}
+                                                                        );
+                                                                    }
+                                                                );
+                                                            }
+                                                            break;
+                                                    }
+
+                                                });
+                                                //监听行工具事件
+                                                table.on('tool(templateTable)', function (obj) {
+                                                    var data = obj.data;
+                                                    //console.log(obj);
+                                                    if (obj.event === 'detail') {
+                                                        console.log(data.result);
+                                                        //var strjson = JSON.parse(data.result);
+                                                        layer.prompt({
+                                                            formType: 2,//多行文本
+                                                            value: data.result,
+                                                            shade: false,
+                                                            title: data.casename + "响应结果",
+                                                            maxmin: true,
+                                                            skin: "layui-layer-rim",//hui
+                                                            closeBtn: 0,
+                                                            zIndex: layer.zIndex,
+                                                            area: ['750px', '500px'], //自定义文本域宽高
+                                                            btn: ["点我查看详情", "关闭"],
+                                                            yes: function () {
+                                                                var index = layer.open({
+                                                                    type: 2,
+                                                                    title: data.casename + "详细信息",
+                                                                    //shadeClose: true,
+                                                                    shade: false,
+                                                                    zIndex: layer.zIndex,
+                                                                    maxmin: true, //开启最大化最小化按钮
+                                                                    area: ['600px', '1200px'],
+                                                                    content: "/detail_process_api/?id=" + data.caseid,
+                                                                });
+                                                                layer.full(index);
+                                                            },
+                                                            btn2: function (index) {
+                                                                layer.close(index);
+                                                            }
+                                                        });
+                                                    }
+
+                                                });
+                                            },
+                                            btn: ['关闭'],
+                                            yes: function () {
+                                                layer.close(result);
+                                                $(".layui-laypage-btn").click();
+                                            }
+                                        });
+                                    }else {
+                                        layer.msg("接口执行全部成功",{
+                                            icon: 6,
+                                            offset: 't',
+                                        })
+                                        $(".layui-laypage-btn").click();
+                                    }
                                 } else if (len == 1) {
-                                    console.log("我后进来的");
+                                    //处理单个接口执行
                                     let strjson = JSON.stringify(data, null, 4);
                                     layer.prompt({
                                         formType: 2,//多行文本
@@ -2446,7 +2454,7 @@
     <span style="color: deeppink;">{% verbatim %}DELETE{% endverbatim %}</span>
 
     {% verbatim %}{{# } else if(d.method=== 'file' ) { }} {% endverbatim %}
-    <span style="color: yellowgreen;">{% verbatim %}FILE{% endverbatim %}</span>
+    <span style="color: brown;">{% verbatim %}FILE{% endverbatim %}</span>
 
     {% verbatim %}{{# } else if(d.isMust.indexOf("false") != -1) { }} {% endverbatim %}
     <span style="color: lightslategrey;">{% verbatim %}{{ d.isMust }}{% endverbatim %}</span>

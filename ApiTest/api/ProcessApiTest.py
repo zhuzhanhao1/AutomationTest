@@ -203,6 +203,7 @@ class ProcessApiTest(APIView):
                             dependvalue = dependvalue[0]
                         depend_value.append(dependvalue)
                         print("所有依赖值的列表集" + str(depend_value))
+                        print(depend_value)
 
                         # 替换区域的值，0是Query，1是body
                         replace_area = replaceKey[replaceKey_key[a]]
@@ -229,18 +230,24 @@ class ProcessApiTest(APIView):
                         if a == len(depend_id) - 1:
                             # 如果替换的位置为0，只替换Query中的参数
                             try:
+                                starttime = time.time()
                                 if int(replace_position) == 0:
                                     params = json.dumps(params, ensure_ascii=False, sort_keys=True, indent=2)
                                     for area in range(len(replace_list)):
                                         params = params.replace(replace_value[area], depend_value[area])
+                                    print(params)
                                     response = RequestMethod(token).run_main(method, ip + url, params, json.dumps(body))
 
                                 # 如果替换的位置为1，只替换body中的参数
                                 elif int(replace_position) == 1:
                                     body = json.dumps(body, ensure_ascii=False, sort_keys=True, indent=2)
                                     for area in range(len(replace_list)):
+                                        print(depend_value[area])
                                         body = body.replace(replace_value[area], depend_value[area])
+                                        print(body)
+                                    print(body)
                                     response = RequestMethod(token).run_main(method, ip + url, json.dumps(params), body)
+                                    print(response)
 
                                 # 如果替换的位置为2，替换query和body中的参数
                                 elif int(replace_position) == 2:
@@ -251,7 +258,12 @@ class ProcessApiTest(APIView):
                                             params = params.replace(replace_value[area], depend_value[area])
                                         elif area == 1:
                                             body = body.replace(replace_value[area], depend_value[area])
+                                    print(params)
+                                    print(body)
                                     response = RequestMethod(token).run_main(method, ip + url, params, body)
+                                endtime = time.time()
+                                runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
+                                print("接口执行的消耗时间:" + str(runtime))
 
                             except TypeError as e:
                                 print("类型错误")
@@ -268,6 +280,7 @@ class ProcessApiTest(APIView):
                     response = RequestMethod(token).run_main(method, ip + url, params, body)
                     endtime = time.time()
                     runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
+                    print("接口执行的消耗时间:"+str(runtime))
 
                 except TypeError as e:
                     print(e)
@@ -336,5 +349,5 @@ class ProcessApiResultTest(APIView):
                 datas = {"code": 0, "msg": "", "count": 0, "data": []}
                 return Response(datas)
         except:
-            datas = {"code": 1001, "msg": "请求异常", "count": 0, "data": []}
+            datas = {"code": 0, "msg": "请求异常", "count": 0, "data": []}
             return Response(datas)
