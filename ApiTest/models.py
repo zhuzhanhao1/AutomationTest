@@ -39,6 +39,22 @@ class SingleApi(models.Model):
         verbose_name = '单一接口'
         verbose_name_plural = '单一接口管理'
 
+class SingleApiChild(models.Model):
+    # on_delete=models.CASCADE删除关联数据,与之关联也删除
+    parent_id = models.OneToOneField(verbose_name='父id',to='SingleApi',on_delete=models.CASCADE)
+    parameter_field = models.CharField(max_length=100,verbose_name="字段名")
+    parameter_value = models.CharField(max_length=100, verbose_name="参数值")
+    area_choices = (
+        (1, 'Query'),
+        (2, 'Body')
+    )
+    area = models.IntegerField(verbose_name='参数区域', choices=area_choices, default=1)
+    isMust = models.BooleanField(verbose_name="是否必填",default=True)
+    sample = models.CharField(max_length=999, verbose_name="示例")
+
+    def __str__(self):
+        return '单一接口：'+ self.SingleApi.casename
+
 class LeftMenu(models.Model):
     """
     左侧一级菜单
@@ -138,23 +154,23 @@ class Testurl(models.Model):
         verbose_name_plural = '测试网址'
 
 
-# class SystemLog(models.Model):
-#     """
-#     项目动态
-#     """
-#     id = models.AutoField(primary_key=True)
-#     time = models.DateTimeField(max_length=128, verbose_name='操作时间')
-#     type = models.CharField(max_length=50, verbose_name='操作类型')
-#     operationObject = models.CharField(max_length=50, verbose_name='操作对象')
-#     user = models.CharField(max_length=50,verbose_name='操作人')
-#     description = models.CharField(max_length=1024, blank=True, null=True,  verbose_name='描述')
-#
-#     def __unicode__(self):
-#         return self.type
-#
-#     class Meta:
-#         verbose_name = '操作日志'
-#         verbose_name_plural = '操作日志'
+class SystemLog(models.Model):
+    """
+    项目动态
+    """
+    id = models.AutoField(primary_key=True)
+    time = models.DateTimeField(max_length=128, verbose_name='操作时间')
+    type = models.CharField(max_length=50, verbose_name='操作类型')
+    operationObject = models.CharField(max_length=50, verbose_name='操作对象')
+    user = models.CharField(max_length=50,verbose_name='操作人')
+    description = models.CharField(max_length=1024, blank=True, null=True,  verbose_name='描述')
+
+    def __unicode__(self):
+        return self.type
+
+    class Meta:
+        verbose_name = '操作日志'
+        verbose_name_plural = '操作日志'
 
 
 #流程API接口测试

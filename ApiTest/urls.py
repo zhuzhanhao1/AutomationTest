@@ -15,6 +15,8 @@ urlpatterns = [
     url(r'singleapi/locust/(?P<pk>[0-9]+)/$', singleApiTest.LocustSingApi.as_view()),
     url(r'singleapi/close_locust/$', singleApiTest.LocustSingApi.as_view()),
     url(r'singleapi/quickrun/$', singleApiTest.RunQuickTest.as_view()),
+    #单一接口参数详情
+    url(r'singleapi/parameter_details/$', singleApiList.SingleApiList.as_view()),
 
     # 流程接口测试
     url(r'processapi/list/$', processApiList.ProcessApiList.as_view()),
