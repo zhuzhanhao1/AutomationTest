@@ -41,15 +41,19 @@ class SingleApi(models.Model):
 
 class SingleApiChild(models.Model):
     # on_delete=models.CASCADE删除关联数据,与之关联也删除
-    parent_id = models.OneToOneField(verbose_name='父id',to='SingleApi',on_delete=models.CASCADE)
+    parent_id = models.ForeignKey(verbose_name='父id',to='SingleApi',on_delete=models.CASCADE)
     parameter_field = models.CharField(max_length=100,verbose_name="字段名")
-    parameter_value = models.CharField(max_length=100, verbose_name="参数值")
+    parameter_that = models.CharField(max_length=100, verbose_name="参数说明")
     area_choices = (
         (1, 'Query'),
         (2, 'Body')
     )
     area = models.IntegerField(verbose_name='参数区域', choices=area_choices, default=1)
-    isMust = models.BooleanField(verbose_name="是否必填",default=True)
+    isMust_choices = (
+        (1, '必填'),
+        (2, '非必填')
+    )
+    isMust = models.IntegerField(verbose_name='是否必填', choices=isMust_choices, default=1)
     sample = models.CharField(max_length=999, verbose_name="示例")
 
     def __str__(self):

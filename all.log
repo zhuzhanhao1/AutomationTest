@@ -12991,3 +12991,51 @@ Traceback (most recent call last):
   File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/rest_framework/views.py", line 422, in finalize_response
     % type(response)
 AssertionError: Expected a `Response`, `HttpResponse` or `HttpStreamingResponse` to be returned from the view, but received a `<class 'dict'>`
+2020-03-07 15:00:01,604,5963,django.request,ERROR,exception.py:135,Internal Server Error: /singleapi/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view ApiTest.api.renderHtml.singleapi_views didn't return an HttpResponse object. It returned None instead.
+2020-03-07 15:00:02,033,5963,django.server,ERROR,basehttp.py:124,"GET /singleapi/? HTTP/1.1" 500 60004
+2020-03-07 15:04:18,686,5963,django.request,ERROR,exception.py:135,Internal Server Error: /singleapi/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view ApiTest.api.renderHtml.singleapi_views didn't return an HttpResponse object. It returned None instead.
+2020-03-07 15:04:19,035,5963,django.server,ERROR,basehttp.py:124,"GET /singleapi/? HTTP/1.1" 500 60004
+2020-03-07 15:05:54,265,5963,django.request,ERROR,exception.py:135,Internal Server Error: /singleapi/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view ApiTest.api.renderHtml.singleapi_views didn't return an HttpResponse object. It returned None instead.
+2020-03-07 15:05:54,546,5963,django.server,ERROR,basehttp.py:124,"GET /singleapi/? HTTP/1.1" 500 60004
+2020-03-07 15:09:25,603,5963,django.request,ERROR,exception.py:135,Internal Server Error: /singleapi/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view ApiTest.api.renderHtml.singleapi_views didn't return an HttpResponse object. It returned None instead.
+2020-03-07 15:09:25,865,5963,django.server,ERROR,basehttp.py:124,"GET /singleapi/? HTTP/1.1" 500 60004
+2020-03-07 15:11:10,277,5963,django.request,ERROR,exception.py:135,Internal Server Error: /singleapi/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view ApiTest.api.renderHtml.singleapi_views didn't return an HttpResponse object. It returned None instead.
+2020-03-07 15:11:10,613,5963,django.server,ERROR,basehttp.py:124,"GET /singleapi/? HTTP/1.1" 500 60004
+2020-03-07 15:17:51,044,5963,django.request,ERROR,exception.py:135,Internal Server Error: /singleapi/
+Traceback (most recent call last):
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/exception.py", line 41, in inner
+    response = get_response(request)
+  File "/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/django/core/handlers/base.py", line 198, in _get_response
+    "returned None instead." % (callback.__module__, view_name)
+ValueError: The view ApiTest.api.renderHtml.singleapi_views didn't return an HttpResponse object. It returned None instead.
+2020-03-07 15:17:51,697,5963,django.server,ERROR,basehttp.py:124,"GET /singleapi/?parameter_field=1&parameter_that=&area=1&isMust=1&sample= HTTP/1.1" 500 61172

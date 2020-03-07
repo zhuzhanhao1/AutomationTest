@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import SingleApi, LeftMenu, ChildMenu, SystemRole, Link, Testurl, ProcessApi, LocustApi
+from .models import SingleApi, LeftMenu, ChildMenu, SystemRole, Link, Testurl, ProcessApi, LocustApi, SingleApiChild
 
 
 class SingleApiSerializers(serializers.ModelSerializer):
@@ -203,3 +203,29 @@ class LocustApiSerializers(serializers.ModelSerializer):
     class Meta:
         model = LocustApi
         fields = ('caseid', 'identity', 'url','method','params','body',"header","ip")  # 需要序列化的属性
+
+class ParameterListSer(serializers.ModelSerializer):
+    '''
+        单一接口参数子表
+    '''
+    area = serializers.CharField(source="get_area_display")
+    isMust = serializers.CharField(source="get_isMust_display")
+    class Meta:
+        model = SingleApiChild
+        fields = ["id","parent_id","parameter_field","parameter_that","area","isMust","sample"]
+
+class AddParameterSer(serializers.ModelSerializer):
+    '''
+        单一接口参数子表
+    '''
+    class Meta:
+        model = SingleApiChild
+        fields = ["parent_id","parameter_field","parameter_that","area","isMust","sample"]
+
+class UpdateParameterSer(serializers.ModelSerializer):
+    '''
+        单一接口参数子表
+    '''
+    class Meta:
+        model = SingleApiChild
+        fields = ["parameter_field","parameter_that","area","isMust","sample"]

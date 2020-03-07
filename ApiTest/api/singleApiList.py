@@ -1,7 +1,9 @@
 import json
 from django.db.models import Q
-from ApiTest.models import SingleApi
-from ApiTest.serializers import SingleApiSerializers,SingleApiParamsSerializers,SingleApiBodySerializers,SingleApiHeadSerializers
+from ApiTest.models import SingleApi,SingleApiChild
+from ApiTest.serializers import SingleApiSerializers,SingleApiParamsSerializers,\
+                                SingleApiBodySerializers,SingleApiHeadSerializers,\
+                                ParameterListSer,AddParameterSer,UpdateParameterSer
 from django.core.paginator import Paginator
 from django.http import Http404
 from rest_framework.views import APIView
@@ -23,7 +25,6 @@ class SingleApiDetail(APIView):
         snippet = self.get_object(pk)
         serializer = SingleApiSerializers(snippet)
         return Response(serializer.data)
-
 
 class SingleApiList(APIView):
     """
@@ -62,7 +63,6 @@ class SingleApiList(APIView):
             res.append(contact)
         return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
 
-
 class AddSingleApi(APIView):
 
     def parameter_check(self,system):
@@ -99,7 +99,6 @@ class AddSingleApi(APIView):
             ret["code"] = 1001
             ret["error"] = "新建单一接口失败"
         return Response(ret)
-
 
 class UpdateSingleApi(APIView):
     """
@@ -201,7 +200,6 @@ class DelSingleApi(APIView):
             ret["error"] = "删除失败"
         return Response(ret)
 
-
 class SearchSingleApi(APIView):
 
     def get(self, request, *args, **kwargs):
@@ -227,6 +225,93 @@ class SearchSingleApi(APIView):
         except Exception as e:
             ret["code"] = 1001
             ret["msg"] = "检索列表返回失败"
+        return Response(ret)
+
+
+class SingleApiChildList(APIView):
+    """
+    单一接口子表请求参数列表
+    """
+    def get(self, request, *args ,**kwargs):
+        caseid = request.GET.get("caseid","")
+        queryset = SingleApiChild.objects.filter(parent_id_id=caseid)
+        serializer = ParameterListSer(queryset, many=True)
+        return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": serializer.data})
+
+
+class AddChildParameter(APIView):
+
+    def post(self, request, *args, **kwargs):
+        '''
+        创建单一接口
+        '''
+        ret = {"code": 1000}
+        try:
+            data = request.data
+            serializer = AddParameterSer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "添加参数成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except:
+            ret["code"] = 1001
+            ret["error"] = "添加参数失败"
+        return Response(ret)
+
+
+class UpdateChildParameter(APIView):
+    """
+    更新单一接口
+    """
+    def get_object(self, pk):
+        try:
+            return SingleApiChild.objects.get(id=pk)
+        except SingleApiChild.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, *args, **kwargs):
+        '''
+        更新单一接口
+        '''
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            serializer = UpdateParameterSer(snippet, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "编辑请求参数成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except:
+            ret["code"] = 1001
+            ret["error"] = "编辑请求参数失败"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+
+
+class DelChildParameter(APIView):
+
+    def get_object(self, pk):
+        try:
+            return SingleApiChild.objects.get(id=pk)
+        except SingleApiChild.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, pk, *args, **kwargs):
+        """
+        删除单一接口，批量删除单一接口
+        根据PK来区分
+        """
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            snippet.delete()
+            ret["msg"] = "删除请求参数成功"
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "删除请求参数失败"
         return Response(ret)
 
 

@@ -23,7 +23,7 @@ class LinkList(APIView):
         res = []
         for contact in contacts:
             res.append(contact)
-        return Response(data={"code": 1000, "msg": "", "count": len(serializer.data), "data": res})
+        return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
 
 
     def post(self,request,*args,**kwargs):
