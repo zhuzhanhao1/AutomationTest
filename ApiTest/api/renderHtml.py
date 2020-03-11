@@ -269,6 +269,13 @@ def systemlog_views(request):
     return render(request, 'systemlog.html')
 
 
+def menu_management_views(request):
+    '''
+    :内容ifame-菜单管理
+    '''
+    return render(request, 'menu.html')
+
+
 def test(request):
     all = ProcessApi.objects.filter()
     for i in all:
