@@ -728,7 +728,7 @@
             }//排序
             , size: 'lg'	//大尺寸 /sm小尺寸
             , skin: 'line' //行边框风格 /row列表框风格 /nob无边框风格
-            , limit: 30
+            , limit: 10
             , limits: [10, 20, 30, 100, 200, 500]
             , where: {//额外参数
                 belong: '{{ belong }}',
@@ -750,7 +750,7 @@
                 {type: 'checkbox'}
                 , {title: '操作', toolbar: '#barDemo', width: 80, align: "left"}
                 {#, {field: 'caseid', title: '序号', width: 60, align: "left"}#}
-                //, {field: 'sort', title: '排序号', width: 60,  align: "left"}
+                {#, {field: 'belong', title: '', width: 60,  align: "left"}#}
                 , {field: 'identity', title: '角色', width: 100, align: "left", templet: "#identityTpl"}
                 , {
                     field: 'casename',

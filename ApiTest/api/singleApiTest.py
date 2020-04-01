@@ -92,7 +92,6 @@ class SingleApiTest(APIView):
             if result["code"] == 1001:
                 return Response(result)
             token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
-            print(token, ip)
             body = self.check_greater_less_is_exist(body)
             try:
                 starttime = time.time()
@@ -101,6 +100,7 @@ class SingleApiTest(APIView):
                 endtime = time.time()
                 runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
                 djson = self.check_greater_less_is_exist(response)
+                print(djson)
                 id = SingleApi.objects.get(caseid=caseid)
                 data = {"result": djson, "duration": runtime}
 
@@ -182,7 +182,7 @@ class RepeatRunSingleApi(SingleApiTest):
                 dic["重复执行结果"] = self.repeat_result
                 self.repeat_result = dic
             self.repeat_result["总消耗时间"] = str(runtimes) + "秒"
-            self.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime), 3) * 1000) + "毫秒"
+            self.repeat_result["平均响应时间"] = str(round(runtimes / int(runtime) /int(concurrency), 3) * 1000) + "毫秒"
             self.repeat_result["重复执行次数"] = end
             return Response(self.repeat_result)
         except:

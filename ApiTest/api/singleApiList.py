@@ -55,6 +55,7 @@ class SingleApiList(APIView):
         serializer = SingleApiSerializers(apilists, many=True)
         pageindex = request.GET.get('page', 1)      # 页数
         pagesize = request.GET.get("limit", 30)     # 每页显示数量
+        print(pagesize)
         pageInator = Paginator(serializer.data, pagesize)
         # 分页
         contacts = pageInator.page(pageindex)
