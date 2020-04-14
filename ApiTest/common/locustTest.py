@@ -33,6 +33,9 @@ class LocustTest(TaskSet):
             try:
                 print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
             except Exception as e:
+                print("json解析异常")
+                print(e)
+                print(res.text)
                 return res.text
 
         elif self.method == 'post':
@@ -51,6 +54,9 @@ class LocustTest(TaskSet):
             try:
                 print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
             except Exception as e:
+                print("json解析异常")
+                print(e)
+                print(res.text)
                 return res.text
 
         elif self.method == "put":
@@ -71,6 +77,9 @@ class LocustTest(TaskSet):
             try:
                 print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
             except Exception as e:
+                print("json解析异常")
+                print(e)
+                print(res.text)
                 return res.text
 
         elif self.method == "delete":
@@ -88,6 +97,9 @@ class LocustTest(TaskSet):
             try:
                 print(json.dumps(res.json(), ensure_ascii=False, sort_keys=True, indent=2))
             except Exception as e:
+                print("json解析异常")
+                print(e)
+                print(res.text)
                 return res.text
 
 

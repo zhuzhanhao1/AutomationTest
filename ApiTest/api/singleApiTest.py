@@ -92,6 +92,7 @@ class SingleApiTest(APIView):
             if result["code"] == 1001:
                 return Response(result)
             token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
+            print(ip)
             body = self.check_greater_less_is_exist(body)
             try:
                 starttime = time.time()

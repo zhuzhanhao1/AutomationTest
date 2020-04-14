@@ -158,14 +158,20 @@ class UpdateSingleApi(APIView):
         ret = {"code": 1000}
         try:
             snippet = self.get_object(pk)
-            try:
-                serializer = SingleApiParamsSerializers(snippet, data=request.data)
-            except:
-                serializer = SingleApiBodySerializers(snippet, data=request.data)
-            if serializer.is_valid():
-                serializer.save()
-                ret["msg"] = "编辑params/body成功"
-                return Response(ret)
+            data = request.data
+            for i in data:
+                if i == "body":
+                    serializer = SingleApiBodySerializers(snippet, data=data)
+                    if serializer.is_valid():
+                        serializer.save()
+                        ret["msg"] = "编辑body成功"
+                        return Response(ret)
+                else:
+                    serializer = SingleApiParamsSerializers(snippet, data=data)
+                    if serializer.is_valid():
+                        serializer.save()
+                        ret["msg"] = "编辑params成功"
+                        return Response(ret)
             ret["code"] = 1001
             ret["error"] = str(serializer.errors)
         except Exception as e:

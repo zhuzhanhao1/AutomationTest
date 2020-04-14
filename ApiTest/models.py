@@ -16,7 +16,7 @@ class SingleApi(models.Model):
     """
     单一接口
     """
-    caseid = models.AutoField(primary_key=True,max_length=200,unique=True)
+    caseid = models.AutoField(primary_key=True,unique=True)
     casename = models.CharField(max_length=100,verbose_name="用例名称")
     identity = models.CharField(max_length=50,verbose_name="用户身份")
     url = models.CharField(max_length=250,verbose_name="访问路径")
@@ -213,7 +213,7 @@ class LocustApi(models.Model):
     """
     接口性能测试
     """
-    caseid = models.AutoField(primary_key=True,max_length=200,unique=True)
+    caseid = models.AutoField(primary_key=True,unique=True)
     identity = models.CharField(max_length=50,verbose_name="用户身份")
     url = models.CharField(max_length=250,verbose_name="访问路径")
     method = models.CharField(max_length = 20,verbose_name="请求方式")
