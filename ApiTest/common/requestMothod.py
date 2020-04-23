@@ -8,7 +8,7 @@ cur_path2 = os.path.dirname(os.path.realpath(cur_path1))
 sys.path.append(cur_path2)
 
 
-class RequestMethod():
+class RequestMethod:
 
     def __init__(self,token):
         self.token = token

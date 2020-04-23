@@ -16,6 +16,10 @@ class ProcessApiTest(APIView):
     failed_num = 0
     failed_ids = []
 
+    def clear_num_progress(self):
+        ProcessApiTest.num_progress = 0
+        return
+
     def get(self, request, *args, **kwargs):
 
         '''
@@ -310,6 +314,7 @@ class ProcessApiTest(APIView):
         dic["errors"] = self.failed_num  # 失败的总数
         ProcessApiTest.failed_num = 0
         ProcessApiTest.failed_ids = []
+        # self.clear_num_progress()
         return Response(dic)
 
 
