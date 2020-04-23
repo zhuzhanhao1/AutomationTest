@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="../static/css/processApi.css">
 
     <script src="../static/js/layui2.5.5/layui.js"></script>
+    <style>
+        .layui-nav-itemed > .layui-nav-child{
+            max-height:300px!important;
+            overflow-y: scroll!important;
+        }
+    </style>
 
 </head>
 <body class="layui-layout-body" style="background-color:lightsteelblue;">
@@ -1134,7 +1140,7 @@
                                                     , limit: 10
                                                     , cols: [[
                                                         {type: 'checkbox'}
-                                                        , {field: 'casename', title: '接口名称', align: "left"}
+                                                        , {field: 'casename', title: '接口名称', width: 300,align: "left"}
                                                         , {
                                                             field: 'duration', width: 100, title: '响应时长', align: "left",
                                                             templet: function (res) {
@@ -1153,6 +1159,7 @@
                                                         , {
                                                             field: 'result',
                                                             title: '响应结果',
+                                                            width: 800,
                                                             align: "left",
                                                             event: "detail",
                                                             templet: function (res) {
