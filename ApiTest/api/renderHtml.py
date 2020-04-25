@@ -243,7 +243,8 @@ def apiDetail_views(request):
         "params": id.params,
         "body" : id.body,
         "result" : id.result,
-        "head" : id.head
+        "head" : id.head,
+        "duration":id.duration
     }
     return render(request, "apiDetail.html", {"dic":dic})
 

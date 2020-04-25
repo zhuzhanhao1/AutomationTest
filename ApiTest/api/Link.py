@@ -25,7 +25,6 @@ class LinkList(APIView):
             res.append(contact)
         return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
 
-
     def post(self,request,*args,**kwargs):
         '''
         添加友情链接

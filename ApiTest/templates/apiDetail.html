@@ -13,6 +13,57 @@
 	<link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 
 	<script src="./../static/js/layui2.5.5/layui.js"></script>
+    <style>
+        /*底部动画*/
+        @import url("https://fonts.googleapis.com/css?family=Lora:400,400i,700");
+        @import url("https://fonts.googleapis.com/css?family=Bubblegum+Sans&display=swap");
+
+        p {
+            margin: 0 9em;
+            font-size: 2em;
+            font-weight: 600;
+        }
+
+        .landIn {
+            display: flex;
+            flex-wrap: wrap;
+            line-height: 1.8;
+            color: white;
+            font-family: Lora, serif;
+            white-space: pre;
+        }
+
+        .landIn span {
+            animation: landIn 0.8s ease-out both;
+        }
+
+        @keyframes landIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20%);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .bubbling {
+            position: relative;
+            z-index: 2;
+            display: inline-block;
+            color: black;
+            font-size: 2.5rem;
+            font-family: 'Bubblegum Sans', cursive;
+        {#font-weight: bold;#} text-transform: uppercase;
+        }
+
+        .bubble {
+            position: absolute;
+            background: white;
+            border-radius: 100%;
+        }
+    </style>
 
 
 </head>
@@ -22,7 +73,7 @@
 		padding: 0px;
 	}
 	.layui-col-md6 {
-		width: 12%;
+		width: 10%;
 	}
 
 	.layui-card-body {
@@ -87,7 +138,7 @@
 
 <div style="padding: 20px;background-image: url('./../static/images/banner2.jpg');">
 	<div class="layui-row layui-col-space15">
-		<div class="layui-col-md6" style="width: 24%;">
+		<div class="layui-col-md6" style="width: 22.5%;">
 			<div class="layui-card">
 				<div class="layui-card-header">接口名称:</div>
 				<div class="layui-card-body">
@@ -96,7 +147,7 @@
 			</div>
 		</div>
 
-		<div class="layui-col-md6" style="width: 25%;">
+		<div class="layui-col-md6" style="width: 22.5%;">
 			<div class="layui-card">
 				<div class="layui-card-header">请求地址:</div>
 				<div class="layui-card-body">
@@ -142,6 +193,14 @@
 			</div>
 		</div>
 
+		<div class="layui-col-md6">
+			<div class="layui-card">
+				<div class="layui-card-header">响应时间:</div>
+				<div class="layui-card-body">
+					{{ dic.duration }}
+				</div>
+			</div>
+		</div>
 
 		<div class="layui-col-md12">
 			<div class="layui-card">
@@ -191,10 +250,11 @@
 	</div>
 </div>
 <div class="footer">
-	<p class="copyright">
-		没有什么事情能比找BUG更开心的了<br/>
-		人生苦短，我用Python
-	</p>
+    <p class="landIn">The automation test platform is convenient for everyone to use、人生苦短，我用Python</p>
+{#	<p class="copyright">#}
+{#		没有什么事情能比找BUG更开心的了<br/>#}
+{#		人生苦短，我用Python#}
+{#	</p>#}
 </div>
 
 
@@ -216,6 +276,22 @@
             docE.webkitRequestFullScreen();
         }
     }
+</script>
+
+{#底部动画#}
+<script>
+    "use strict";
+    var landInTexts = document.querySelectorAll(".landIn");
+    landInTexts.forEach(function (landInText) {
+        var letters = landInText.textContent.split("");
+        landInText.textContent = "";
+        letters.forEach(function (letter, i) {
+            var span = document.createElement("span");
+            span.textContent = letter;
+            span.style.animationDelay = i * 0.05 + "s";
+            landInText.append(span);
+        });
+    });
 </script>
 
 </body>

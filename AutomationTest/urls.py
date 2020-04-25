@@ -3,9 +3,10 @@ from django.contrib import admin
 from ApiTest.api import renderHtml
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    #后台返回JSON数据
     url(r'^api/(?P<version>\w+)/', include('ApiTest.urls')),
-
+    # 后台页面
+    url(r'^admin/', admin.site.urls),
     # 返回页面
     url(r'^login/$', renderHtml.login_views),
     url(r'^logout/$', renderHtml.logout_views),
