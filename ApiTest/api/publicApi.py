@@ -55,6 +55,9 @@ class PublicApiSort(APIView):
 
 class PublicApiDingDingNotice(APIView):
 
+    def update_date(self):
+        pass
+
     def get(self, request, *args, **kwargs):
         '''
         发送钉钉消息
