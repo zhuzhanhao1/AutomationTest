@@ -24,7 +24,7 @@ class SingleApiTest(APIView):
         ip = SystemRole.objects.get(identity=identity).ip
         return token, ip
 
-    def check_greater_less_is_exist(self, body):
+    def check_greater_less_is_exist_body(self, body):
         '''
         判断请求体或者响应结果中是否存在<>,将其替换为中文的＜＞，layui数据表格bug，暂且这么处理
         '''
@@ -36,6 +36,7 @@ class SingleApiTest(APIView):
                 return body_replaced
             else:
                 return body
+
         elif type(body) is dict:
             body = json.dumps(body, ensure_ascii=False, sort_keys=True, indent=2)
             if "＜" in body or "＞" in body:
@@ -45,6 +46,30 @@ class SingleApiTest(APIView):
                 return body_replaced
             else:
                 return body
+
+    def check_greater_less_is_exist_response(self, response):
+        '''
+        判断请求体或者响应结果中是否存在<>,将其替换为中文的＜＞，layui数据表格bug，暂且这么处理
+        '''
+        if type(response) is str:
+            if "<" in response or ">" in response:
+                print('存在需要替换的符号')
+                a = response.replace("<", "＜")
+                response_replaced = a.replace(">", "＞")
+                return response_replaced
+            else:
+                return response
+
+        elif type(response) is dict:
+            response = json.dumps(response, ensure_ascii=False, sort_keys=True, indent=2)
+            if ">" in response or "<" in response:
+                print('存在需要替换的符号')
+                a = response.replace("<", "＜")
+                response_replaced = a.replace(">", "＞")
+                return response_replaced
+            else:
+                return response
+
 
     def check_result_is_fail(self, result):
         '''
@@ -93,14 +118,14 @@ class SingleApiTest(APIView):
                 return Response(result)
             token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
             print(ip)
-            body = self.check_greater_less_is_exist(body)
+            body = self.check_greater_less_is_exist_body(body)
             try:
                 starttime = time.time()
                 response = RequestMethod(token).run_main(method, ip + url, params, body)
                 L.append(response)
                 endtime = time.time()
                 runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
-                djson = self.check_greater_less_is_exist(response)
+                djson = self.check_greater_less_is_exist_response(response)
                 print(djson)
                 id = SingleApi.objects.get(caseid=caseid)
                 data = {"result": djson, "duration": runtime}

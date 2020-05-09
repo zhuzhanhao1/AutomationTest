@@ -7,11 +7,11 @@
 
 </head>
 <body>
-    <div id="282220c5686441da9abb1d4edf49bc61" class="chart-container" style="width:900px; height:500px;"></div>
+    <div id="a2c2be19ed184201aaf74b23fdf685e5" class="chart-container" style="width:900px; height:500px;"></div>
     <script>
-        var chart_282220c5686441da9abb1d4edf49bc61 = echarts.init(
-            document.getElementById('282220c5686441da9abb1d4edf49bc61'), 'white', {renderer: 'canvas'});
-        var option_282220c5686441da9abb1d4edf49bc61 = {
+        var chart_a2c2be19ed184201aaf74b23fdf685e5 = echarts.init(
+            document.getElementById('a2c2be19ed184201aaf74b23fdf685e5'), 'white', {renderer: 'canvas'});
+        var option_a2c2be19ed184201aaf74b23fdf685e5 = {
     "animation": true,
     "animationThreshold": 2000,
     "animationDuration": 1000,
@@ -51,10 +51,12 @@
             "type": "bar",
             "name": "Duration",
             "data": [
-                0.298,
+                13.492,
                 0,
                 0,
-                0.166,
+                0,
+                0,
+                0,
                 0
             ],
             "barCategoryGap": "20%",
@@ -120,11 +122,13 @@
                 }
             },
             "data": [
-                "get_unit_list",
-                "update_unit",
-                "create_unit",
-                "get_unit_by_id",
-                "delete_unit_by_group_name"
+                "get_department_list",
+                "get_department_folder_by_group_name",
+                "get_department_by_group_name",
+                "create_department",
+                "get_user_list_in_department",
+                "update_department",
+                "delete_department_by_group_name"
             ]
         }
     ],
@@ -230,9 +234,18 @@
                 }
             }
         }
+    },
+    "dataZoom": {
+        "show": true,
+        "type": "slider",
+        "realtime": true,
+        "start": 20,
+        "end": 80,
+        "orient": "horizontal",
+        "zoomLock": false
     }
 };
-        chart_282220c5686441da9abb1d4edf49bc61.setOption(option_282220c5686441da9abb1d4edf49bc61);
+        chart_a2c2be19ed184201aaf74b23fdf685e5.setOption(option_a2c2be19ed184201aaf74b23fdf685e5);
     </script>
 </body>
 </html>
