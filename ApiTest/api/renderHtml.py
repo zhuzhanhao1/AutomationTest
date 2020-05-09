@@ -276,6 +276,12 @@ def menu_management_views(request):
     '''
     return render(request, 'menu.html')
 
+def echart_report_views(request):
+    '''
+    :内容ifame-菜单管理
+    '''
+    return render(request, 'pyechartReport.html')
+
 
 def test(request):
     all = ProcessApi.objects.filter()
