@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from ApiTest.api import singleApiList, systemRole, Menu, Link, processApiList, \
-                        publicApi, ProcessApiTest, singleApiTest
+                        publicApi, ProcessApiTest, singleApiTest, pyechartExport
 
 urlpatterns = [
     # 单一接口测试
@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'singleapi/locust/(?P<pk>[0-9]+)/$', singleApiTest.LocustSingApi.as_view()),
     url(r'singleapi/close_locust/$', singleApiTest.LocustSingApi.as_view()),
     url(r'singleapi/quickrun/$', singleApiTest.RunQuickTest.as_view()),
+    url(r'singleapi/export_report/$', pyechartExport.EchartExport.as_view()),
     #单一接口参数详情
     url(r'singleapi/parameter_details/$', singleApiList.SingleApiChildList.as_view()),
     url(r'singleapi/add_parameter/$', singleApiList.AddChildParameter.as_view()),

@@ -20,5 +20,6 @@ urlpatterns = [
     url(r'^testurl/$', renderHtml.testurl_views),
     url(r'^systemlog/$', renderHtml.systemlog_views),
     url(r'^menu_management/$', renderHtml.menu_management_views),
+    url(r'^echart_report/$', renderHtml.echart_report_views),
     url(r'test/$', renderHtml.test),
 ]

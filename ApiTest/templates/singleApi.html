@@ -1653,6 +1653,77 @@
                         });
                     }
                     break;
+                //导出报表
+                case 'export_report':
+                    var data = checkStatus.data;
+                    console.log(data);
+                    if (data.length == 0) {
+                        layer.msg("请先选中需要执行的用例", {
+                            icon: 2,
+                            offset: "t"
+                        });
+                    } else {
+                        var l = [];
+                        for (i = 0; i < data.length; i++) {
+                            var dic = {};
+                            console.log(data[i]);
+                            dic["url"] = data[i]["url"];
+                            dic['duration'] = data[i]['duration'];
+                            l.push(dic);
+                        }
+                        console.log(l);
+                    }
+                    $.ajax({
+                            cache: false,
+                            url: "/api/v1/singleapi/export_report/",
+                            type: 'POST',
+                            data: {
+                                "request": JSON.stringify(l)
+                            },
+                            //请求前的处理,加载loading
+                            beforeSend: function () {
+                                l_index = layer.msg('执行接口中，小伙伴请稍候~~', {
+                                    icon: 16,
+                                    time: false,
+                                    shade: 0.5
+                                });
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                if (data.code === 1000) {
+                                    layer.msg(data.msg, {
+                                        icon: 6, offset: "t"
+                                    });
+                                    layer.open({
+                                        type: 2,
+                                        title: "pycharts图表",
+                                        shadeClose: true,
+                                        shade: false,
+                                        zIndex: layer.zIndex,
+                                        maxmin: true, //开启最大化最小化按钮
+                                        area: ['900px', '600px'],
+                                        content: '/echart_report/',
+                                        success: function () {
+                                            layer.setTop(layero);
+                                        }
+                                    });
+                                } else {
+                                    layer.msg(data.error, {
+                                        icon: 5, offset: "t"
+                                    })
+                                }
+
+                            },
+                            error: function () {
+                                layer.msg("回调失败", {
+                                    icon: 5,
+                                    offset: 't'
+                                });
+                            },
+                            complete: function () {
+                                layer.close(l_index);
+                            }
+                        });
             }
 
         });
@@ -2300,6 +2371,7 @@
         <button class="layui-btn layui-btn-sm" lay-event="run_case">执行接口</button>
         <button class="layui-btn layui-btn-sm" lay-event="repeat_run">重复执行</button>
         <button class="layui-btn layui-btn-sm" lay-event="locust">性能测试</button>
+        <button class="layui-btn layui-btn-sm" lay-event="export_report">生成报表</button>
     </div>
 </script>
 <!--子表头按钮 layui-btn-disabled-->

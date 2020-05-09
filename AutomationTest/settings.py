@@ -139,9 +139,9 @@ DATABASES = {
         'USER':'root',
         'PASSWORD':'123456',
         # 'HOST':'127.0.0.1',#mac-localhost
-        # 'HOST':'47.98.56.102',#aliyun
-        'HOST':'192.168.10.78',#home
-        'PORT':'3306',
+        'HOST':'zhuzhanhao.cn',#aliyun
+        # 'HOST':'192.168.10.78',#win-docker
+        'PORT':'3307',
         "CONN_MAX_AGE":9
 
     }
