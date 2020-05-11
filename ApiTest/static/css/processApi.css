@@ -145,3 +145,8 @@
     margin-right: -70px;
 
 }
+
+.mybg{
+    /*display: flex;*/
+    background-image:linear-gradient(to left bottom, hsl(79, 100%, 85%) 0%,hsl(220, 100%, 85%) 100%);
+}

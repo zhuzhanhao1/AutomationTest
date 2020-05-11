@@ -5,7 +5,6 @@ from pyecharts import options as opts
 from pyecharts.charts import Bar
 
 
-
 class EchartExport(APIView):
 
     def post(self, request, *args, **kwargs):
