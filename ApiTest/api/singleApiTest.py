@@ -102,6 +102,7 @@ class SingleApiTest(APIView):
         '''
         ret = {"code": 1000}
         datas = request.data
+        print(datas)
         content = json.loads(datas.get("request", ""))
         L = []
         for i in content:

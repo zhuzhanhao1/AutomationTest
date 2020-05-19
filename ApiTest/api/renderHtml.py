@@ -1,118 +1,23 @@
 from django.http import HttpResponseRedirect,HttpResponse
 from django.shortcuts import render, redirect
-from ApiTest.models import SingleApi, ProcessApi
+from ApiTest.models import SingleApi, ProcessApi, UserProfile
 from django.contrib import auth
 import requests
-
-role = {"ast":"单位档案员","sysadmin":"系统管理员","admin":"单位管理员","tdradmin": "数据管理员"}
-erms_role = {"ast":"单位档案员","sysadmin":"系统管理员","admin":"单位管理员"}
-tdr_role = {"tdradmin": "数据管理员"}
-
-ermsapi = {
-    "unit": "单位接口",
-    "dept": "部门管理接口",
-    "user": "用户管理接口",
-    "record": "Record接口",
-    "policy": "保留处置策略接口",
-    "navigation": "导航管理接口",
-    "data_form/year_check_form": "年检表单特有功能管理接口",
-    "data_form": "数据表单管理接口",
-    "data_form_config": "数据表单配置管理接口",
-    "file_plan": "文件计划管理接口",
-    "document": "文档管理接口",
-    "attribute_mapping_scheme": "映射规则接口",
-    "volume": "案卷管理接口",
-    "archives": "档案管理接口",
-    "class": "类目模块接口",
-    "report": "统计表报模块接口",
-    "deposit_form": "续存记录接口",
-    "view": "视图自定义接口",
-    "acl": "访问控制策略管理",
-    "resource": "资源管理接口",
-    "common_folder": "通用文件夹管理接口",
-    "category": "门类模块接口",
-    "admin": "admin平台接口",
-    "metadata": "元数据平台接口",
-    "transfer_form":"移交表单管理接口"
-}
-
-tdrapi = {
-    "user":"用户管理接口",
-    "unit":"单位接口",
-    "common":"公共操作相关接口",
-    "metadata":"元数据平台接口",
-    "category":"门类模块接口",
-    "appraisal_record":"鉴定记录接口",
-    "appraisal_task":"鉴定任务接口",
-    "resource": "资源管理接口",
-    "retrieval_archives": "调卷单内档案详情",
-    "view": "视图自定义接口",
-    "report": "统计报表模块接口",
-    "archives": "档案管理接口",
-    "using": "档案利用接口",
-    "volume": "案卷管理接口",
-    "attribute_mapping_scheme": "映射规则接口",
-    "document": "文档管理接口",
-    "common_folder": "文件夹接口",
-    "data_form_config": "数据表单配置管理接口",
-    "data_form": "数据表单管理接口",
-    "warehouse": "库房接口",
-    "warehouseLayer": "库房层接口",
-    "warehouse_address": "库房存址接口",
-    "workflow": "工作流引擎接口",
-    "navigation": "导航管理接口",
-    "file_retrieval": "实体调卷管理接口",
-    "usage_archives": "利用档案接口",
-    "borrowing_apply": "借阅申请接口",
-    "borrowing_apply_archives": "借阅档案申请接口",
-    "subject_relation": "专题档案接口",
-    "record": "Record接口",
-    "admin":"admin平台接口",
-    "subject":"专题接口",
-    "department":"部门管理接口"
-}
-
-erms_process_api = {
-    "login": "登录流程",
-    "data_form_config": "数据表单配置流程",
-    "report": "统计报表配置流程",
-    "policy": "保留处置策略流程",
-    "category": "类目保管期限流程",
-    "acl": "访问控制策略流程",
-    "view": "视图自定义流程",
-    "document_collection":"文件收集流程",
-    "filing": "文件整理流程"
-
-}
-
-tdr_process_api = {
-    "login":"登录过程接口"
-}
-
-
+from ApiTest.config.TestdataConfig import *
+from django.contrib.auth.models import User
+import pypinyin
+import random
+from django.contrib.auth.hashers import make_password
 # 用户登录
 def login_views(request):
-    # if request.POST:
-    #     username = request.POST.get('username',"")
-    #     password = request.POST.get('password',"")
-    #     print(username,password)
-    #     user = auth.authenticate(username=username,password=password)  #认证给出的用户名和密码
-    #     if user is not None and user.is_active:    #判断用户名和密码是否有效
-    #         auth.login(request, user)
-    #         request.session['user'] = username  #跨请求的保持user参数
-    #         print(request.session)
-    #         response = HttpResponseRedirect('/index/')
-    #         return response
-    #     else:
-    #         return HttpResponse("账户或者密码错误，请检查")
     return render(request, 'lgoindingding.html')
 
 
 def dingding_login_views(request):
-    """登录验证"""
-
+    '''
+    钉钉扫码登录
+    '''
     if request.method == "GET":
-        ##########二维码认证登录#############
         code = request.GET.get('code', )
         appId = 'dingoa6if6q5jqpwb0sndx'
         appSecret = 'bpipZUwfOxppbNHfIJ8gmwmFClBfOmBnteUWPM4mmmXXNXxRTx_NznlxpC8M0F_1'
@@ -144,44 +49,32 @@ def dingding_login_views(request):
 
         user_info_request = requests.get(
             'https://oapi.dingtalk.com/sns/getuserinfo?sns_token={sns_token}'.format(sns_token=sns_token))
-
         user_info = user_info_request.json()['user_info']
         print(user_info)
-
-        user = auth.authenticate(username=user_info["nick"],password=user_info["unionid"])  #认证给出的用户名和密码
-        print(user)
-        if user is not None and user.is_active:    #判断用户名和密码是否有效
-            auth.login(request, user)
-            request.session['username'] = user_info["nick"]  #跨请求的保持user参数
-            request.session.set_expiry(86400)  # 设置登录过期时间
-            print(request.session)
+        unionid = user_info.get('unionid')
+        openid = user_info.get('openid')
+        user_obj = UserProfile.objects.filter(unionid=unionid).first()
+        print(user_obj)
+        if user_obj:
+            print("当前登录用户已存在！")
+        else:
+            password = make_password("admin")
+            user = User.objects.create(username=pypinyin.slug(user_info["nick"],separator="")+str(random.randint(0,9999)),
+                                       password=password,first_name=user_info["nick"])
+            userprofile = UserProfile.objects.create(user=user,openId=openid,unionid=unionid)
+            print(userprofile)
+        user = UserProfile.objects.get(unionid=unionid)
+        user = User.objects.get(id=user.user_id)
+        request.session['username'] = user.username  # 登录成功后，用户登录信息存>放于session
+        request.session.set_expiry(86400)  # 设置登录过期时间
+        print(request.session)
         return redirect('/index/')
-        # unionid = user_info.get('unionid')
-        # print(unionid)
-        # return HttpResponse("ok")
-        # user_obj = UserInfo.objects.filter(unionid=unionid).first()
-        # request.session['username'] = user_obj.username  # 登录成功后，用户登录信息存>放于session
-        # request.session.set_expiry(86400)  # 设置登录过期时间
-        # content = {'code': 0,
-        #            'msg': 'success',
-        #            'user_info': {
-        #                'user_id': user_obj.id,
-        #                'username': user_obj.username,
-        #                'user_iphone': user_obj.phone,
-        #                'user_email': user_obj.email,
-        #                'user': user_obj.user,
-        #                'D_user': user_obj.D_user
-        #            }
-        #            }
-        # ####################################
-        # content = {'code': 0, 'msg':'success',}
-        # return JsonResponse(data=content,status=status.HTTP_200_OK)
     else:
         return render(request, 'login.html')
 
 def logout_views(request):
     auth.logout(request)
-    return render(request, 'login.html')
+    return render(request, 'lgoindingding.html')
 
 
 def index_views(request):

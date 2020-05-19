@@ -31,7 +31,6 @@ class SingleApiList(APIView):
     单一接口列表
     """
     def get(self, request, *args ,**kwargs):
-
         casename = request.GET.get("casename", "")          #搜索名字
         belong = request.GET.get("belong", "")              #所属模块
         system = request.GET.get("system", "")              #所属系统
@@ -51,7 +50,7 @@ class SingleApiList(APIView):
                 apilists = SingleApi.objects.filter(Q(belong__contains=belong) & Q(system=system)).order_by("sortid")
             else:
                 apilists = SingleApi.objects.filter(system=system).order_by("sortid")
-
+        print(apilists)
         serializer = SingleApiSerializers(apilists, many=True)
         pageindex = request.GET.get('page', 1)      # 页数
         pagesize = request.GET.get("limit", 30)     # 每页显示数量
