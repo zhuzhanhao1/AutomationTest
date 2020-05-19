@@ -306,9 +306,9 @@ iframe {
 
 .user-photo a.img {
     display: block;
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 10px;
+    width: 100px;
+    height: 100px;
+    margin: 10px auto 10px;
 }
 
 .user-photo a.img img {
@@ -319,7 +319,7 @@ iframe {
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
-    border: 3px solid #1AA094;
+    /*border: 3px solid #1AA094;*/
     box-sizing: border-box;
 }
 

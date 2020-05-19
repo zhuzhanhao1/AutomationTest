@@ -81,7 +81,14 @@ def index_views(request):
     '''
     首页html
     '''
-    return render(request, 'index.html')
+    user_id = UserProfile.objects.filter().order_by("-user_id")[:1].first().user_id
+    #获取当前登录名
+    name = User.objects.filter(id=user_id).first().first_name
+    print(name)
+    login_name = {
+        "name":name
+    }
+    return render(request, 'index.html',login_name)
 
 
 def home_views(request):

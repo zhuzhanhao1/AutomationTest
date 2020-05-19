@@ -55,7 +55,7 @@
                 </li>
                 <li class="layui-nav-item" id="userInfo">
                     <a style="color: #0C0C0C!important;" href="javascript:;"><img src="./../static/images/login.png" class="layui-nav-img userAvatar"
-                                                width="35" height="35"><cite class="adminName">朱占豪</cite></a>
+                                                width="35" height="35"><cite class="adminName">{{ name }}</cite></a>
                     <dl class="layui-nav-child">
                         <dd><a href="javascript:;" class="clearCache"><i class="layui-icon" data-icon="&#xe640;">&#xe640;</i><cite>清除缓存</cite><span
                                 class="layui-badge-dot"></span></a></dd>
@@ -82,7 +82,7 @@
             <a class="img" title="我的头像">
                 <img src="./../static/images/login.png" class="userAvatar">
             </a>
-            <p style="color: #0C0C0C;">你好！<span class="userName">朱占豪</span>, 欢迎登录</p>
+{#            <p style="color: #0C0C0C;">你好！<span class="userName">{{ name }}</span>, 欢迎登录</p>#}
         </div>
         <div class="navBar layui-side-scroll" id="navBar">
             <ul class="layui-nav layui-nav-tree">

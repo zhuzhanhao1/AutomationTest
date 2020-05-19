@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^dingding_login/$', renderHtml.dingding_login_views),
     url(r'^logout/$', renderHtml.logout_views),
     url(r'^index/$', renderHtml.index_views),
-    url(r'^home/$', renderHtml.home_views),
+    url(r'^home/', renderHtml.home_views),
     url(r'^quicktest/$', renderHtml.quicktest_views),
     url(r'^singleapi/$', renderHtml.singleapi_views),
     url(r'^processapi/$', renderHtml.processapi_views),

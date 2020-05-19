@@ -562,3 +562,233 @@ Traceback (most recent call last):
     request.session['username'] = user.username  # 登录成功后，用户登录信息存>放于session
 AttributeError: 'UserProfile' object has no attribute 'username'
 2020-05-19 21:51:02,199,8048,django.server,ERROR,basehttp.py:157,"GET /dingding_login/?code=e251151d16173971ad201bb6247dca52&state=STATE HTTP/1.1" 500 73825
+2020-05-19 23:47:19,953,2668,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 84, in index_views
+    dic = UserProfile.objects.filter().order_by("_user_id")[0]
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 313, in __getitem__
+    qs._fetch_all()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 1261, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 57, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 1138, in execute_sql
+    sql, params = self.as_sql()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 490, in as_sql
+    extra_select, order_by, group_by = self.pre_sql_setup()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 52, in pre_sql_setup
+    order_by = self.get_order_by()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 342, in get_order_by
+    field, self.query.get_meta(), default_order=asc))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 720, in find_ordering_name
+    field, targets, alias, joins, path, opts, transform_function = self._setup_joins(pieces, opts, alias)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 755, in _setup_joins
+    field, targets, opts, joins, path, transform_function = self.query.setup_joins(pieces, opts, alias)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1567, in setup_joins
+    names[:pivot], opts, allow_many, fail_on_missing=True,
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1483, in names_to_path
+    "Choices are: %s" % (name, ", ".join(available)))
+django.core.exceptions.FieldError: Cannot resolve keyword '_user_id' into field. Choices are: id, openId, phone, unionid, user, user_id
+2020-05-19 23:47:19,955,2668,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 120987
+2020-05-19 23:56:36,494,9644,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 84, in index_views
+    dic = UserProfile.objects.filter().order_by("user_id")[-1]
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 293, in __getitem__
+    "Negative indexing is not supported."
+AssertionError: Negative indexing is not supported.
+2020-05-19 23:56:36,495,9644,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 73047
+2020-05-19 23:57:39,108,3004,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 84, in index_views
+    dic = UserProfile.objects.filter().order_by("user_id")[-1]
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 293, in __getitem__
+    "Negative indexing is not supported."
+AssertionError: Negative indexing is not supported.
+2020-05-19 23:57:39,109,3004,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 73042
+2020-05-19 23:57:41,019,3004,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 84, in index_views
+    dic = UserProfile.objects.filter().order_by("user_id")[-1]
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 293, in __getitem__
+    "Negative indexing is not supported."
+AssertionError: Negative indexing is not supported.
+2020-05-19 23:57:41,019,3004,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 73042
+2020-05-19 23:57:56,846,10348,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 84, in index_views
+    dic = UserProfile.objects.filter().order_by("user_id")[-1]
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 293, in __getitem__
+    "Negative indexing is not supported."
+AssertionError: Negative indexing is not supported.
+2020-05-19 23:57:56,848,10348,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 73032
+2020-05-19 23:57:57,677,10348,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 84, in index_views
+    dic = UserProfile.objects.filter().order_by("user_id")[-1]
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 293, in __getitem__
+    "Negative indexing is not supported."
+AssertionError: Negative indexing is not supported.
+2020-05-19 23:57:57,678,10348,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 73032
+2020-05-19 23:58:11,636,6272,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 86, in index_views
+    dic = User.objects.filter(id=dic).username
+AttributeError: 'QuerySet' object has no attribute 'username'
+2020-05-19 23:58:11,637,6272,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 69469
+2020-05-19 23:58:12,514,6272,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 86, in index_views
+    dic = User.objects.filter(id=dic).username
+AttributeError: 'QuerySet' object has no attribute 'username'
+2020-05-19 23:58:12,516,6272,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 69469
+2020-05-19 23:59:18,480,348,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 86, in index_views
+    dic = User.objects.filter(id=dic).first().username
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 664, in first
+    for obj in (self if self.ordered else self.order_by('pk'))[:1]:
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 276, in __iter__
+    self._fetch_all()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 1261, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 57, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 1138, in execute_sql
+    sql, params = self.as_sql()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 505, in as_sql
+    where, w_params = self.compile(self.where) if self.where is not None else ("", [])
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 422, in compile
+    sql, params = node.as_sql(self, self.connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\where.py", line 81, in as_sql
+    sql, params = compiler.compile(child)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 422, in compile
+    sql, params = node.as_sql(self, self.connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 177, in as_sql
+    rhs_sql, rhs_params = self.process_rhs(compiler, connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 270, in process_rhs
+    'The QuerySet value for an exact lookup must be limited to '
+ValueError: The QuerySet value for an exact lookup must be limited to one result using slicing.
+2020-05-19 23:59:18,482,348,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 118519
+2020-05-19 23:59:40,760,4796,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 86, in index_views
+    dic = User.objects.filter(id=dic).first()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 664, in first
+    for obj in (self if self.ordered else self.order_by('pk'))[:1]:
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 276, in __iter__
+    self._fetch_all()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 1261, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 57, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 1138, in execute_sql
+    sql, params = self.as_sql()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 505, in as_sql
+    where, w_params = self.compile(self.where) if self.where is not None else ("", [])
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 422, in compile
+    sql, params = node.as_sql(self, self.connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\where.py", line 81, in as_sql
+    sql, params = compiler.compile(child)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 422, in compile
+    sql, params = node.as_sql(self, self.connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 177, in as_sql
+    rhs_sql, rhs_params = self.process_rhs(compiler, connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 270, in process_rhs
+    'The QuerySet value for an exact lookup must be limited to '
+ValueError: The QuerySet value for an exact lookup must be limited to one result using slicing.
+2020-05-19 23:59:40,761,4796,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 118508
+2020-05-20 00:00:04,054,10268,django.request,ERROR,log.py:228,Internal Server Error: /index/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 87, in index_views
+    print(dic)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 252, in __repr__
+    data = list(self[:REPR_OUTPUT_SIZE + 1])
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 276, in __iter__
+    self._fetch_all()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 1261, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 57, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 1138, in execute_sql
+    sql, params = self.as_sql()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 505, in as_sql
+    where, w_params = self.compile(self.where) if self.where is not None else ("", [])
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 422, in compile
+    sql, params = node.as_sql(self, self.connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\where.py", line 81, in as_sql
+    sql, params = compiler.compile(child)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 422, in compile
+    sql, params = node.as_sql(self, self.connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 177, in as_sql
+    rhs_sql, rhs_params = self.process_rhs(compiler, connection)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 270, in process_rhs
+    'The QuerySet value for an exact lookup must be limited to '
+ValueError: The QuerySet value for an exact lookup must be limited to one result using slicing.
+2020-05-20 00:00:04,057,10268,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 118252
