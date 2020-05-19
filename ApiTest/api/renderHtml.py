@@ -1,7 +1,8 @@
 from django.http import HttpResponseRedirect,HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from ApiTest.models import SingleApi, ProcessApi
 from django.contrib import auth
+import requests
 
 role = {"ast":"单位档案员","sysadmin":"系统管理员","admin":"单位管理员","tdradmin": "数据管理员"}
 erms_role = {"ast":"单位档案员","sysadmin":"系统管理员","admin":"单位管理员"}
@@ -91,21 +92,92 @@ tdr_process_api = {
 
 # 用户登录
 def login_views(request):
-    if request.POST:
-        username = request.POST.get('username',"")
-        password = request.POST.get('password',"")
-        print(username,password)
-        user = auth.authenticate(username=username,password=password)  #认证给出的用户名和密码
+    # if request.POST:
+    #     username = request.POST.get('username',"")
+    #     password = request.POST.get('password',"")
+    #     print(username,password)
+    #     user = auth.authenticate(username=username,password=password)  #认证给出的用户名和密码
+    #     if user is not None and user.is_active:    #判断用户名和密码是否有效
+    #         auth.login(request, user)
+    #         request.session['user'] = username  #跨请求的保持user参数
+    #         print(request.session)
+    #         response = HttpResponseRedirect('/index/')
+    #         return response
+    #     else:
+    #         return HttpResponse("账户或者密码错误，请检查")
+    return render(request, 'lgoindingding.html')
+
+
+def dingding_login_views(request):
+    """登录验证"""
+
+    if request.method == "GET":
+        ##########二维码认证登录#############
+        code = request.GET.get('code', )
+        appId = 'dingoa6if6q5jqpwb0sndx'
+        appSecret = 'bpipZUwfOxppbNHfIJ8gmwmFClBfOmBnteUWPM4mmmXXNXxRTx_NznlxpC8M0F_1'
+
+        token = requests.get(
+            'https://oapi.dingtalk.com/sns/gettoken?appid={appId}&appsecret={appSecret}'.format(appId=appId,appSecret=appSecret))
+        access_token = token.json()["access_token"]
+
+        tmp_auth_code = requests.post(
+            "https://oapi.dingtalk.com/sns/get_persistent_code?access_token={access_token}".format(
+                access_token=access_token),
+            json={
+                "tmp_auth_code": code
+            })
+        tmp_code = tmp_auth_code.json()
+        print(tmp_code)
+
+        openid = tmp_code['openid']
+        persistent_code = tmp_code['persistent_code']
+        sns_token_request = requests.post(
+            "https://oapi.dingtalk.com/sns/get_sns_token?access_token={access_token}".format(access_token=access_token),
+            json={
+                "openid": openid,
+                "persistent_code": persistent_code
+            })
+
+        sns_token = sns_token_request.json()['sns_token']
+        print(sns_token)
+
+        user_info_request = requests.get(
+            'https://oapi.dingtalk.com/sns/getuserinfo?sns_token={sns_token}'.format(sns_token=sns_token))
+
+        user_info = user_info_request.json()['user_info']
+        print(user_info)
+
+        user = auth.authenticate(username=user_info["nick"],password=user_info["unionid"])  #认证给出的用户名和密码
+        print(user)
         if user is not None and user.is_active:    #判断用户名和密码是否有效
             auth.login(request, user)
-            request.session['user'] = username  #跨请求的保持user参数
+            request.session['username'] = user_info["nick"]  #跨请求的保持user参数
+            request.session.set_expiry(86400)  # 设置登录过期时间
             print(request.session)
-            response = HttpResponseRedirect('/index/')
-            return response
-        else:
-            return HttpResponse("账户或者密码错误，请检查")
-    return render(request, 'login.html')
-
+        return redirect('/index/')
+        # unionid = user_info.get('unionid')
+        # print(unionid)
+        # return HttpResponse("ok")
+        # user_obj = UserInfo.objects.filter(unionid=unionid).first()
+        # request.session['username'] = user_obj.username  # 登录成功后，用户登录信息存>放于session
+        # request.session.set_expiry(86400)  # 设置登录过期时间
+        # content = {'code': 0,
+        #            'msg': 'success',
+        #            'user_info': {
+        #                'user_id': user_obj.id,
+        #                'username': user_obj.username,
+        #                'user_iphone': user_obj.phone,
+        #                'user_email': user_obj.email,
+        #                'user': user_obj.user,
+        #                'D_user': user_obj.D_user
+        #            }
+        #            }
+        # ####################################
+        # content = {'code': 0, 'msg':'success',}
+        # return JsonResponse(data=content,status=status.HTTP_200_OK)
+    else:
+        return render(request, 'login.html')
 
 def logout_views(request):
     auth.logout(request)

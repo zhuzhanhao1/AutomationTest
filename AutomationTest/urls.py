@@ -9,6 +9,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     # 返回页面
     url(r'^login/$', renderHtml.login_views),
+    url(r'^dingding_login/$', renderHtml.dingding_login_views),
     url(r'^logout/$', renderHtml.logout_views),
     url(r'^index/$', renderHtml.index_views),
     url(r'^home/$', renderHtml.home_views),

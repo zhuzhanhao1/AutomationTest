@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth.models import User
 # Create your models here.
 # python3 manage.py migrate Api --fake
 
@@ -225,3 +225,16 @@ class LocustApi(models.Model):
     class Meta:
         verbose_name = '接口性能测试'
         verbose_name_plural = '接口性能测试'
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='用户', related_name='user')
+    phone = models.CharField(max_length=11, default='无', blank=True, verbose_name='手机号')
+    openId = models.CharField(max_length=50, default=0, verbose_name="唯一标识")
+    unionid = models.CharField(max_length=50, default=0, verbose_name="企业内唯一标识")
+
+    def __unicode__(self):
+        return self.user.username
+
+    def __str__(self):
+        return self.phone

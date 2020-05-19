@@ -155,3 +155,92 @@ Traceback (most recent call last):
     .add_xaxis("访问路径",url_list)
 TypeError: add_xaxis() takes 2 positional arguments but 3 were given
 2020-05-09 22:10:33,554,17644,django.server,ERROR,basehttp.py:157,"POST /api/v1/singleapi/export_report/ HTTP/1.1" 500 16780
+2020-05-19 16:12:34,190,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:34,226,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:34,262,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:34,312,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:34,445,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:34,596,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:34,900,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:35,237,11517,django.request,ERROR,log.py:228,Internal Server Error: /login/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 133, in login
+    openid = tmp_code['openid']
+KeyError: 'openid'
+2020-05-19 16:12:35,242,11517,django.server,ERROR,basehttp.py:157,"GET /login/ HTTP/1.1" 500 68309
