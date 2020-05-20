@@ -40,6 +40,9 @@ class SingleApi(models.Model):
         verbose_name_plural = '单一接口管理'
 
 class SingleApiChild(models.Model):
+    '''
+    单一接口子表
+    '''
     # on_delete=models.CASCADE删除关联数据,与之关联也删除
     parent_id = models.ForeignKey(verbose_name='父id',to='SingleApi',on_delete=models.CASCADE)
     parameter_field = models.CharField(max_length=100,verbose_name="字段名")
@@ -179,6 +182,9 @@ class SystemLog(models.Model):
 
 #流程API接口测试
 class ProcessApi(models.Model):
+    '''
+    流程接口表
+    '''
     caseid = models.AutoField(primary_key=True,unique=True)
     casename = models.CharField(max_length=100,verbose_name="用例名称")
     identity = models.CharField(max_length=50,verbose_name="用户身份")
@@ -228,6 +234,9 @@ class LocustApi(models.Model):
 
 
 class UserProfile(models.Model):
+    '''
+    钉钉用户
+    '''
     user = models.OneToOneField(User, on_delete=models.CASCADE, verbose_name='用户', related_name='user')
     phone = models.CharField(max_length=11, default='无', blank=True, verbose_name='手机号')
     openId = models.CharField(max_length=50, default=0, verbose_name="唯一标识")

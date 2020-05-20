@@ -1,4 +1,4 @@
-from django.http import HttpResponseRedirect,HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from ApiTest.models import SingleApi, ProcessApi, UserProfile
 from django.contrib import auth
@@ -8,8 +8,13 @@ from django.contrib.auth.models import User
 import pypinyin
 import random
 from django.contrib.auth.hashers import make_password
-# 用户登录
+from django_redis import get_redis_connection
+
+
 def login_views(request):
+    '''
+    访问登录首页
+    '''
     return render(request, 'lgoindingding.html')
 
 
@@ -23,7 +28,8 @@ def dingding_login_views(request):
         appSecret = 'bpipZUwfOxppbNHfIJ8gmwmFClBfOmBnteUWPM4mmmXXNXxRTx_NznlxpC8M0F_1'
 
         token = requests.get(
-            'https://oapi.dingtalk.com/sns/gettoken?appid={appId}&appsecret={appSecret}'.format(appId=appId,appSecret=appSecret))
+            'https://oapi.dingtalk.com/sns/gettoken?appid={appId}&appsecret={appSecret}'.format(appId=appId,
+                                                                                                appSecret=appSecret))
         access_token = token.json()["access_token"]
 
         tmp_auth_code = requests.post(
@@ -59,9 +65,10 @@ def dingding_login_views(request):
             print("当前登录用户已存在！")
         else:
             password = make_password("admin")
-            user = User.objects.create(username=pypinyin.slug(user_info["nick"],separator="")+str(random.randint(0,9999)),
-                                       password=password,first_name=user_info["nick"])
-            userprofile = UserProfile.objects.create(user=user,openId=openid,unionid=unionid)
+            user = User.objects.create(
+                username=pypinyin.slug(user_info["nick"], separator="") + str(random.randint(0, 9999)),
+                password=password, first_name=user_info["nick"])
+            userprofile = UserProfile.objects.create(user=user, openId=openid, unionid=unionid)
             print(userprofile)
         user = UserProfile.objects.get(unionid=unionid)
         user = User.objects.get(id=user.user_id)
@@ -72,9 +79,15 @@ def dingding_login_views(request):
     else:
         return render(request, 'login.html')
 
+
 def logout_views(request):
+    # 这个相当于把这个requets里面的user给清除掉，清除掉session_id,注销掉用户
     auth.logout(request)
-    return render(request, 'lgoindingding.html')
+    # 删除Redis缓存的所有数据
+    get_redis_connection("default").flushall()
+    # request.session.flush()
+    # 将session的数据都删除,并且cookies也失效
+    return redirect('/login/')
 
 
 def index_views(request):
@@ -82,13 +95,13 @@ def index_views(request):
     首页html
     '''
     user_id = UserProfile.objects.filter().order_by("-user_id")[:1].first().user_id
-    #获取当前登录名
+    # 获取当前登录名
     name = User.objects.filter(id=user_id).first().first_name
-    print(name)
+    print("当前登录用户：" + name)
     login_name = {
-        "name":name
+        "name": name
     }
-    return render(request, 'index.html',login_name)
+    return render(request, 'index.html', login_name)
 
 
 def home_views(request):
@@ -96,94 +109,90 @@ def home_views(request):
     首页内嵌ifame
     '''
     global role
-    return render(request, 'search.html',{"role":role})
+    return render(request, 'search.html', {"role": role})
 
 
 def singleapi_views(request):
     '''
     单一接口html
+    belong_key:所属模块的键、英文名(用在了面包屑)
+    belong:所属模块的值（中文名，用在了区分模块）
+    system:所属系统
+    role:角色对象
+    apinav:新建、编辑所属模块的select值
     '''
-    global erms_role,tdrapi,tdr_role,ermsapi
+    global erms_role, tdrapi, tdr_role, ermsapi
     belong = request.GET.get("belong", "")
     system = request.GET.get("system", "")
-
+    L = []
     if system == "erms":
-        '''
-            belong_key:所属模块的键、英文名
-            belong:所属模块的值、中文名
-            system:所属系统
-            role:角色对象
-            apinav:新建、编辑所属模块的select值
-        '''
-        #如果belong存在,只返回belong的值
-        for i in ermsapi:
-            if belong == i:
-                L = []
-                belong_value = ermsapi.get(i,"")
-                L.append(belong_value)
-                return render(request, "singleApi.html",{"belong_key":belong,"belong": belong_value, "system": system,"role":erms_role,"apinav":L})
-        #如果belong不存在，返回导航的总列表
-        l = []
-        for a in ermsapi:
-            l.append(ermsapi.get(a))
-        return render(request, "singleApi.html",{"system": system,"role":erms_role,"apinav":l})
+        # 如果belong存在,只返回belong的值
+        if belong in ermsapi.keys():
+            belong_value = ermsapi.get(belong, "")
+            L.append(belong_value)
+            return render(request, "singleApi.html",
+                          {"belong_key": belong, "belong": belong_value, "system": system, "role": erms_role,
+                           "apinav": L})
+        # 如果belong不存在，返回导航的总列表
+        else:
+            for value in ermsapi.values():
+                L.append(value)
+            return render(request, "singleApi.html", {"system": system, "role": erms_role, "apinav": L})
 
     elif system == "tdr":
         # 如果belong存在,只返回belong的值
-        for i in tdrapi:
-            if belong == i:
-                L = []
-                belong_value = tdrapi.get(i,"")
-                L.append(belong_value)
-                return render(request, "singleApi.html",{"belong_key":belong,"belong": belong_value, "system": system,"role":tdr_role,"apinav":L})
+        if belong in tdrapi.keys():
+            belong_value = tdrapi.get(belong, "")
+            L.append(belong_value)
+            return render(request, "singleApi.html",
+                          {"belong_key": belong, "belong": belong_value, "system": system, "role": tdr_role,
+                           "apinav": L})
         # 如果belong不存在，返回导航的总列表
-        l  = []
-        for a in tdrapi:
-            l.append(tdrapi.get(a))
-        return render(request, "singleApi.html",{"system": system,"role":tdr_role,"apinav":l})
+        else:
+            for value in tdrapi.values():
+                L.append(value)
+            return render(request, "singleApi.html", {"system": system, "role": tdr_role, "apinav": L})
 
 
 def processapi_views(request):
     '''
-    单一接口html
+    流程接口html
+    belong_key:所属模块的键、英文名(用在了面包屑)
+    belong:所属模块的值（中文名，用在了区分模块）
+    system:所属系统
+    role:角色对象
+    apinav:新建、编辑所属模块的select值
     '''
-    global erms_role,tdr_role,erms_process_api
+    global erms_role, tdr_role, erms_process_api
     belong = request.GET.get("belong", "")
     system = request.GET.get("system", "")
     # sortid = AddProcessApi().parameter_check(system)
+    L = []
     if system == "erms":
-        #如果belong存在,只返回belong的值
-        for i in erms_process_api:
-            if belong == i:
-                L = []
-                belong_value = erms_process_api.get(i,"")
-                L.append(belong_value)
-                return render(request, "processApi.html",
-                              {"belong_key":belong,"belong": belong_value,
-                                "system": system,"role":erms_role,"apinav":L})
-        #如果belong不存在，返回导航的总列表
-        l = []
-        for a in erms_process_api:
-            l.append(erms_process_api.get(a))
-        return render(request, "processApi.html",
-                      {"system": system,"role":erms_role,"apinav":l})
+        # 如果belong存在,只返回belong的值
+        if belong in ermsapi.keys():
+            belong_value = ermsapi.get(belong, "")
+            L.append(belong_value)
+            return render(request, "processApi.html",{"belong_key": belong, "belong": belong_value,"system": system, "role": erms_role, "apinav": L})
+        else:
+            for value in ermsapi.values():
+                L.append(value)
+        return render(request, "processApi.html",{"system": system, "role": erms_role, "apinav": L})
 
     elif system == "tdr":
-        #如果belong存在,只返回belong的值
-        for i in tdr_process_api:
-            if belong == i:
-                L = []
-                belong_value = tdr_process_api.get(i,"")
-                L.append(belong_value)
-                return render(request, "processApi.html",
-                              {"belong_key":belong,"belong": belong_value,
-                                "system": system,"role":tdr_role,"apinav":L})
-        #如果belong不存在，返回导航的总列表
-        l = []
-        for a in tdr_process_api:
-            l.append(tdr_process_api.get(a))
-        return render(request, "processApi.html",
-                      {"system": system,"role":tdr_role,"apinav":l})
+        # 如果belong存在,只返回belong的值
+        if belong in tdrapi.keys():
+            belong_value = tdrapi.get(belong, "")
+            L.append(belong_value)
+            return render(request, "processApi.html",
+                              {"belong_key": belong, "belong": belong_value,
+                               "system": system, "role": tdr_role, "apinav": L})
+        # 如果belong不存在，返回导航的总列表
+        else:
+            for value in tdrapi.valuse():
+                L.append(value)
+            return render(request, "processApi.html",
+                      {"system": system, "role": tdr_role, "apinav": L})
 
 
 def quicktest_views(request):
@@ -195,9 +204,9 @@ def quicktest_views(request):
 
 def apiDetail_views(request):
     '''
-    详情页面
+    接口详情页面
     '''
-    singleid = request.GET.get("singleid","")
+    singleid = request.GET.get("singleid", "")
     processid = request.GET.get("processid", "")
     if singleid:
         id = SingleApi.objects.get(caseid=singleid)
@@ -212,12 +221,12 @@ def apiDetail_views(request):
         "url": url,
         "method": id.method,
         "params": id.params,
-        "body" : id.body,
-        "result" : id.result,
-        "head" : id.head,
-        "duration":id.duration
+        "body": id.body,
+        "result": id.result,
+        "head": id.head,
+        "duration": id.duration
     }
-    return render(request, "apiDetail.html", {"dic":dic})
+    return render(request, "apiDetail.html", {"dic": dic})
 
 
 def link_views(request):
@@ -247,9 +256,10 @@ def menu_management_views(request):
     '''
     return render(request, 'menu.html')
 
+
 def echart_report_views(request):
     '''
-    :内容ifame-菜单管理
+    :内容ifame-报表
     '''
     return render(request, 'pyechartReport.html')
 
@@ -263,10 +273,8 @@ def test(request):
         e = ""
         for ii in url:
             if a >= 3:
-                e = "/"+ii
+                e = "/" + ii
             w += e
             a += 1
         ProcessApi.objects.filter(caseid=i.caseid).update(url=w)
     return HttpResponse("完成咯")
-
-

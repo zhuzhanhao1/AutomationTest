@@ -102,3 +102,64 @@ layui.use(['form', 'layer', 'table'], function () {
     });
 
 })
+
+
+//添加收藏
+function add_link() {
+    var add_link = layer.open({
+        //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+        type: 1,
+        title: "添加收藏",
+        area: ['40%', ''],
+        shade: 0.6,
+        skin: "layui-layer-rim",
+        content: $("#add_link").html(),
+        success: function () {
+            layui.use(['form', 'jquery'], function () {
+                var form = layui.form,
+                    $ = layui.$;
+                form.val("add_link");
+                form.on('submit(add_link)', function (data) {
+                    $.ajax({
+                        url: "/api/v1/link/add_link/",
+                        type: 'POST',
+                        data: JSON.stringify({
+                            "logo": data.field.logo,
+                            "url": data.field.url,
+                            "websites": data.field.name,
+                        }),
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        success: function (data) {
+                            if (data.code === 1000) {
+                                layer.msg(data.msg, {
+                                    icon: 6, offset: "t"
+                                })
+                            } else {
+                                layer.msg(data.error, {
+                                    icon: 5, offset: "t"
+                                })
+                            }
+                            $(".layui-laypage-btn").click();
+                        },
+                        error: function () {
+                            layer.msg("回调失败", {
+                                icon: 5,
+                                offset: 't'
+                            });
+                        },
+                        complete: function () {
+                            layer.close(add_link)
+
+                        }
+                    });
+                    return false;//阻止表单跳转
+                });
+
+
+            });
+        }
+    });
+
+}

@@ -37,13 +37,17 @@ html, body {
 }
 
 body {
-    padding: 0px;
-    margin: 0px;
-    background: linear-gradient(rgba(1, 1, 1, 0.05), rgba(16, 16, 16, 0.05)), url(./../../static/images/souye.jpg);
+    /*padding: 0px;*/
+    /*margin: 0px;*/
+    /*background: linear-gradient(rgba(1, 1, 1, 0.05), rgba(16, 16, 16, 0.05)), url(./../../static/images/souye.jpg);*/
     background-position: center;
     background-size: cover;
     background-attachment: fixed;
     background-repeat: no-repeat;
+    background-image: url('./../../static/images/souye.jpg');
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
 }
 
 .search-wrapper {
