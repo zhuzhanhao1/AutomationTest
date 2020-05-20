@@ -189,7 +189,7 @@ def processapi_views(request):
                                "system": system, "role": tdr_role, "apinav": L})
         # 如果belong不存在，返回导航的总列表
         else:
-            for value in tdrapi.valuse():
+            for value in tdrapi.values():
                 L.append(value)
             return render(request, "processApi.html",
                       {"system": system, "role": tdr_role, "apinav": L})

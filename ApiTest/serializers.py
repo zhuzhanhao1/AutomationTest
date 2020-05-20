@@ -50,6 +50,7 @@ class LeftMenuSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = LeftMenu
+        depth = 1
         fields = ('title','icon','href','spread')
 
 
@@ -59,6 +60,7 @@ class ChildMenuSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = ChildMenu
+
         fields = ('title','icon','href','spread')
 
 

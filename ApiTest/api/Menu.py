@@ -1,3 +1,5 @@
+from django.db.models import Q
+
 from ApiTest.models import LeftMenu, ChildMenu
 from ApiTest.serializers import LeftMenuSerializers, ChildMenuSerializers
 from rest_framework.views import APIView
@@ -31,6 +33,7 @@ class MenuList(APIView):
         left["single"] = leftmenu_single_serializer.data
         left['process'] = leftmenu_process_serializer.data
         left["systemeSttings"] = leftmenu_systemeSttings_serializer.data
+        print(left)
         return left
 
     def get(self, request, *args, **kwargs):
@@ -43,7 +46,6 @@ class MenuList(APIView):
         if menu_list:
             print("从缓存拿数据")
             menu_list = json.loads(menu_list)
-            print(menu_list)
             return Response(menu_list)
         else:
             print("访问MySQL拿去数据放入缓存")
@@ -71,7 +73,6 @@ class MenuList(APIView):
                 menu_list = json.dumps(left)
                 #设置缓存时间一小时
                 conn.set("menu",menu_list,3600)
-                print(conn.get("menu"))
 
                 return Response(left)
             except Exception as e:
@@ -89,4 +90,59 @@ class MenuList(APIView):
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class MenuListManage(APIView):
+    '''
+    左侧二级菜单
+    '''
+    def get(self, request, *args, **kwargs):
+        '''
+        二级菜单参数，评级一级菜单
+        '''
+        dic = {}
+        area = request.GET.get("area")
+        if area == "single":
+            conn = get_redis_connection('default')
+            single_menu_list = conn.get("single_menu_list")
+            if single_menu_list:
+                print("从缓存拿数据")
+                single_menu_list = json.loads(single_menu_list)
+                return Response(single_menu_list)
+            else:
+                parent_menu = LeftMenu.objects.filter(area="single")
+                leftmenu_single_serializer = LeftMenuSerializers(parent_menu, many=True)
+                # print(leftmenu_single_serializer.data)
+                dic["single"] = leftmenu_single_serializer.data
+                title_list = [i.title for i in parent_menu]
+                # print(title_list)
+                for i in range(1,len(title_list)):
+                    ser = ChildMenuSerializers(ChildMenu.objects.filter(classification__title=title_list[i]), many=True).data
+                    dic["single"][i]["children"] = ser
+                print("访问MySQL拿去数据放入缓存")
+                single_menu_list = json.dumps(dic)
+                #设置缓存时间一小时
+                conn.set("single_menu_list",single_menu_list,3600)
+
+
+        elif area == "process":
+            parent_menu = LeftMenu.objects.filter(area="process")
+            leftmenu_single_serializer = LeftMenuSerializers(parent_menu, many=True)
+            # print(leftmenu_single_serializer.data)
+            dic["process"] = leftmenu_single_serializer.data
+            title_list = [i.title for i in parent_menu]
+            # print(title_list)
+            for i in range(0,len(title_list)):
+                ser = ChildMenuSerializers(ChildMenu.objects.filter(classification__title=title_list[i]), many=True).data
+                dic["process"][i]["children"] = ser
+
+        elif area == "systemeSttings":
+            parent_menu = LeftMenu.objects.filter(area="systemeSttings")
+            leftmenu_single_serializer = LeftMenuSerializers(parent_menu, many=True)
+            # print(leftmenu_single_serializer.data)
+            dic["systemeSttings"] = leftmenu_single_serializer.data
+        # print(dic)
+        return Response(dic)
+
 

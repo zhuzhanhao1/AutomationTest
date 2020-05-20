@@ -14,29 +14,69 @@ var $,tab,dataStr,layer;
                 //url : "./../static/json/navs.json" //获取菜单json地址
                 url : "/api/v1/menu/list/"
             });
+        // 通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
+        function getData(json){
+            data = {"area":json};
+            console.log(data);
+            $.ajax({
+                cache: false,
+                url: "/api/v1/menu/lists/",
+                type: 'GET',
+                data: data,
+                success: function (data) {
+                    //重新渲染左侧菜单
+                    if (json == "single") {
+                        dataStr = data.single;
+                        //重新渲染左侧菜单
+                        tab.render();
+                    } else if (json == "process") {
+                        dataStr = data.process;
+                        //重新渲染左侧菜单
+                        tab.render();
+                    } else if (json == "systemeSttings") {
+                        dataStr = data.systemeSttings;
+                        //重新渲染左侧菜单
+                        tab.render();
+                    } else if (json == "automation") {
+                        dataStr = data.automation;
+                        //重新渲染左侧菜单
+                        tab.render();
+                    }
+                },
+                error: function () {
+                    layer.msg("回调失败", {
+                        icon: 5,
+                        offset: 't'
+                    });
+                }
+
+            });
+
+
+            // $.getJSON(tab.tabConfig.url,function(data){
+            //     if(json == "single"){
+            //         dataStr = data.single;
+            //         //重新渲染左侧菜单
+            //         tab.render();
+            //     }else if(json == "process"){
+            //         dataStr = data.process;
+            //         //重新渲染左侧菜单
+            //         tab.render();
+            //     }else if(json == "systemeSttings"){
+            //         dataStr = data.systemeSttings;
+            //         //重新渲染左侧菜单
+            //         tab.render();
+            //     }else if(json == "automation"){
+            //         dataStr = data.automation;
+            //         //重新渲染左侧菜单
+            //         tab.render();
+            //     }
+            // })
+        }
 
         //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
-        function getData(json){
-            $.getJSON(tab.tabConfig.url,function(data){
-                if(json == "single"){
-                    dataStr = data.single;
-                    //重新渲染左侧菜单
-                    tab.render();
-                }else if(json == "process"){
-                    dataStr = data.process;
-                    //重新渲染左侧菜单
-                    tab.render();
-                }else if(json == "systemeSttings"){
-                    dataStr = data.systemeSttings;
-                    //重新渲染左侧菜单
-                    tab.render();
-                }else if(json == "automation"){
-                    dataStr = data.automation;
-                    //重新渲染左侧菜单
-                    tab.render();
-                }
-            })
-        }
+        getData("single");
+
         //页面加载时判断左侧菜单是否显示
         //通过顶部菜单获取左侧菜单
         $(".topLevelMenus li,.mobileTopLevelMenus dd").click(function(){
@@ -63,8 +103,7 @@ var $,tab,dataStr,layer;
             tab.tabMove();
         });
 
-        //通过顶部菜单获取左侧二三级菜单   注：此处只做演示之用，实际开发中通过接口传参的方式获取导航数据
-        getData("single");
+
 
         //手机设备的简单适配
         $('.site-tree-mobile').on('click', function(){

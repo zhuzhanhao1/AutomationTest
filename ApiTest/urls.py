@@ -42,7 +42,8 @@ urlpatterns = [
     url(r'systemrole/get_token_by_role/$', systemRole.GetTokenByRole.as_view()),
 
     # 菜单
-    url(r'menu/list/$', Menu.MenuList.as_view()),
+    # url(r'menu/list/$', Menu.MenuList.as_view()),
+    url(r'menu/lists/$', Menu.MenuListManage.as_view()),
 
     # 友情链接
     url(r'link/list/$', Link.LinkList.as_view()),
