@@ -85,7 +85,7 @@ def logout_views(request):
     auth.logout(request)
     # 删除Redis缓存的所有数据
     get_redis_connection("default").flushall()
-    # request.session.flush()
+    request.session.flush()
     # 将session的数据都删除,并且cookies也失效
     return redirect('/login/')
 

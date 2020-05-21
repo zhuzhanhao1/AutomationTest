@@ -20,7 +20,7 @@ var $,tab,dataStr,layer;
             console.log(data);
             $.ajax({
                 cache: false,
-                url: "/api/v1/menu/lists/",
+                url: tab.tabConfig.url,
                 type: 'GET',
                 data: data,
                 success: function (data) {
