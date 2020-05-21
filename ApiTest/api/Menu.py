@@ -2,7 +2,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 
 from ApiTest.models import LeftMenu, ChildMenu
-from ApiTest.serializers import LeftMenuSerializers, ChildMenuSerializers
+from ApiTest.serializers import LeftMenuSerializers, ChildMenuSerializers, ChildMenusSerializers
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -211,7 +211,7 @@ class MenuListManage(APIView):
 
 
 
-class MenuTable(APIView):
+class MenuTableList(APIView):
     '''
     菜单表格
     根据左侧菜单标题查询子菜单
@@ -220,7 +220,7 @@ class MenuTable(APIView):
         title = request.GET.get("title")
         #根据左侧菜单标题查询子菜单
         queryset = ChildMenu.objects.filter(classification__title=title)
-        serializer = ChildMenuSerializers(queryset, many=True).data
+        serializer = ChildMenusSerializers(queryset, many=True).data
         pageindex = request.GET.get('page', 1)  # 页数
         pagesize = request.GET.get("limit", 10)  # 每页显示数量
         pageInator = Paginator(serializer, pagesize)
@@ -231,20 +231,16 @@ class MenuTable(APIView):
             res.append(contact)
         return Response(data={"code": 0, "msg": "", "count": len(serializer), "data": res})
 
-
-class ChildMenuList(APIView):
-    '''
-    zhi
-    '''
     def post(self, request, *args, **kwargs):
         ret = {"code": 1000}
-        data = request.data
-        serializer = ChildMenuSerializers(data=data)
+        data = request.data.copy()
+        serializer = ChildMenusSerializers(data=data)
         if serializer.is_valid():
             serializer.save()
-            ret["msg"] = "添加友情链接成功"
+            ret["msg"] = "添加子菜单成功"
             return Response(ret)
         ret["code"] = 1001
         ret["error"] = str(serializer.errors)
         return Response(ret)
+
 

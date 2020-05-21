@@ -139,11 +139,14 @@ DATABASES = {
         'USER':'root',
         'PASSWORD':'123456',
         # 'HOST':'127.0.0.1',#mac-localhost
-        'HOST':'zhuzhanhao.cn',#aliyun
         # 'HOST':'192.168.10.78',#win-docker
+        'HOST':'zhuzhanhao.cn',#aliyun
         'PORT':'3307',
-        "CONN_MAX_AGE":9
-
+        "CONN_MAX_AGE":9,
+        #取消外键检查
+        'OPTIONS':{
+                "init_command":"SET foreign_key_checks = 0;",
+        }
     }
 }
 

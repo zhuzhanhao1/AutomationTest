@@ -68,9 +68,7 @@ class LeftMenu(models.Model):
     """
     id = models.AutoField(primary_key=True)
     area = models.CharField(max_length=150, verbose_name="区域")
-
     title = models.CharField(max_length=150, verbose_name="标题")
-
     icon =  models.CharField(max_length=150, verbose_name="图标",default="&#xe674")
     href = models.CharField(max_length=150, verbose_name="链接")
     spread = models.BooleanField(default=False, verbose_name="默认不展开")

@@ -63,7 +63,13 @@ class ChildMenuSerializers(serializers.ModelSerializer):
 
         fields = ('title','icon','href','spread')
 
-
+class ChildMenusSerializers(serializers.ModelSerializer):
+    '''
+        二级自由菜单
+    '''
+    class Meta:
+        model = ChildMenu
+        fields = ('title','icon','href','spread',"classification","area")
 
 class SystemRoleSerializers(serializers.ModelSerializer):
     '''

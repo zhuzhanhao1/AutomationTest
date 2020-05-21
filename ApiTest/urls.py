@@ -45,8 +45,9 @@ urlpatterns = [
     # url(r'menu/list/$', Menu.MenuList.as_view()),
     url(r'menu/list/$', Menu.MenuListManage.as_view()),
     url(r'menu/tree/$', Menu.MenuTree.as_view()),
-    url(r'menu/table/$', Menu.MenuTable.as_view()),
-    url(r'menu/add_childmenu/$', Menu.ChildMenuList.as_view()),
+    url(r'menu/table/$', Menu.MenuTableList.as_view()),
+    url(r'menu/add_childmenu/$', Menu.MenuTableList.as_view()),
+    url(r'menu/update_childmenu/$', Menu.MenuTableList.as_view()),
 
     # 友情链接
     url(r'link/list/$', Link.LinkList.as_view()),
