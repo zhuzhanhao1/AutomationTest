@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="./../static/css/layui.css">
     <link rel="stylesheet" href="./../static/css/btn.css">
+    <link rel="stylesheet" href="../static/font-awesome-4.7.0/css/font-awesome.min.css">
 
     <script src="./../static/jquery-3.4.1/jquery-3.4.1.min.js" type="text/javascript"></script>
     <script src="../static/js/layui2.5.5/layui.js"></script>
@@ -21,11 +22,13 @@
             position: fixed;
             right: 30px;
         }
+
         {#呃呃呃呃呃#}
         .treetable {
             height: 100%;
             display: inline-block;
         }
+
         .mytable {
             float: right;
             width: 88%;
@@ -35,7 +38,7 @@
 </head>
 
 <body class="childrenBody">
-<!--添加收藏-->
+<!--添加 编辑-->
 <div class="layui-row" id="add_childmenu" style="display: none;">
     <div class="layui-col-md11">
         <form class="layui-form" lay-filter="add_childmenu">
@@ -65,13 +68,13 @@
             <div class="layui-form-item">
                 <label class="layui-form-label">是否展开</label>
                 <div class="layui-input-block">
-                  <input type="checkbox" name="spread" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
+                    <input type="checkbox" name="spread" lay-skin="switch" lay-filter="switchTest" lay-text="ON|OFF">
                 </div>
-              </div>
+            </div>
 
             <div class="layui-form-item" style="margin-top: 30px;">
                 <div class="layui-input-block">
-                    <button class="btn btn-primary btn-finger layui-btn"  lay-submit lay-filter="add_childmenu"
+                    <button class="btn btn-primary btn-finger layui-btn" lay-submit lay-filter="add_childmenu"
                             style="float:right;">确定
                     </button>
                 </div>
@@ -112,7 +115,7 @@
                     , click: function (obj) {
                         var data = obj.data;  //获取当前点击的节点数据
                         console.log(data);
-                        layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data));
+                        layer.msg('状态：' + obj.state + '<br>节点数据：' + JSON.stringify(data.title));
                         var tableIns = table.render({
                             elem: '#treetable',
                             url: '/api/v1/menu/table/',
@@ -124,105 +127,144 @@
                             limits: [10, 15, 20, 25],
                             id: "linkListTab",
                             size: 'lg',
-                            where:{
-                              "title":  data.title
+                            where: {
+                                "title": data.title
                             },
                             cols: [[
                                 {type: 'checkbox'},
-                                {title: '操作', toolbar: '#barDemo', width: 120, align: "left"},
+                                {title: '操作', toolbar: '#barDemo', width: 100, align: "left"},
                                 {field: 'title', title: '标题'},
-                                {field: 'icon', title: '图标'},
+                                {field: 'icon', title: '图标', templet: function (d) {
+                                    console.log(d.icon);
+                                    return '<span>' + d.icon + '</span>';
+                                }},
                                 {field: 'href', title: '链接'},
                                 {field: 'spread', title: '是否展开'},
                             ]]
                         });
-                            table.on('tool(treetable)', function (obj) {
+                        table.on('tool(treetable)', function (obj) {
+                            //编辑整个用例
+                            if (obj.event === 'update_childmenu') {
                                 var data = obj.data;
                                 console.log(data);
-                                //编辑整个用例
-                                if (obj.event === 'update_link') {
-                                    var add_link = layer.open({
-                                        //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
-                                        type: 1,
-                                        title: "编辑字菜单",
-                                        area: ['40%', ''],
-                                        shade: 0.6,
-                                        skin: "layui-layer-rim",
-                                        content: $("#add_childmenu").html(),
-                                        success: function () {
-                                            layui.use(['form', 'jquery'], function () {
-                                                var form = layui.form,
-                                                    $ = layui.$;
-                                                form.val("add_childmenu",{
-                                                    "title": data.title,
-                                                    "icon": data.icon,
-                                                    "href": data.href,
-                                                    "spread": data.spread//开关状态
-                                                });
-                                                var onoff = "";
-                                                form.on('switch(switchTest)', function(data){
-                                                    console.log(data.othis);
-                                                    onoff = this.checked ? 'true' : 'false';
-                                                    layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
-                                                      offset: '6px'
-                                                    });
-                                                    console.log(onoff);
-                                                    layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-                                                  });
-
-                                                form.on('submit(add_childmenu)', function (data) {
-                                                    if(onoff == ""){onoff = "false"}
-                                                    $.ajax({
-                                                        url: "/api/v1/link/update_childmenu/",
-                                                        type: 'PUT',
-                                                        data: JSON.stringify({
-                                                            "title": data.field.title,
-                                                            "icon": data.field.icon,
-                                                            "href": data.field.href,
-                                                            "spread": onoff//开关状态
-                                                        }),
-                                                        headers: {
-                                                            "Content-Type": "application/json"
-                                                        },
-                                                        success: function (data) {
-                                                            if (data.code === 1000) {
-                                                                layer.msg(data.msg, {
-                                                                    icon: 6, offset: "t"
-                                                                })
-                                                            } else {
-                                                                layer.msg(data.error, {
-                                                                    icon: 5, offset: "t"
-                                                                })
-                                                            }
-                                                            $(".layui-laypage-btn").click();
-                                                        },
-                                                        error: function () {
-                                                            layer.msg("回调失败", {
-                                                                icon: 5,
-                                                                offset: 't'
-                                                            });
-                                                        },
-                                                        complete: function () {
-                                                            layer.close(add_link)
-
-                                                        }
-                                                    });
-                                                    return false;//阻止表单跳转
-                                                });
-
-
+                                var update_childmenu = layer.open({
+                                    //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+                                    type: 1,
+                                    title: "编辑字菜单",
+                                    area: ['40%', ''],
+                                    shade: 0.6,
+                                    skin: "layui-layer-rim",
+                                    content: $("#add_childmenu").html(),
+                                    success: function () {
+                                        layui.use(['form', 'jquery'], function () {
+                                            var form = layui.form,
+                                                $ = layui.$;
+                                            form.val("add_childmenu", {
+                                                "title": data.title,
+                                                "icon": data.icon,
+                                                "href": data.href,
+                                                "spread": data.spread//开关状态
                                             });
-                                        }
-                                    });
+                                            var onoff = "";
+                                            form.on('switch(switchTest)', function (data) {
+                                                console.log(data.othis);
+                                                onoff = this.checked ? 'true' : 'false';
+                                                layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                                                    offset: '6px'
+                                                });
+                                                console.log(onoff);
+                                                //layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+                                            });
+                                            let tabledata = data;
+                                            form.on('submit(add_childmenu)', function (data) {
+                                                if (onoff == "") {
+                                                    onoff = "false"
+                                                }
+                                                $.ajax({
+                                                    url: "/api/v1/menu/update_childmenu/" + tabledata.id + "/",
 
-                                                            }
+                                                    type: 'PUT',
+                                                    data: {
+                                                        "area": tabledata.area,
+                                                        "classification": tabledata.classification,
+                                                        "title": data.field.title,
+                                                        "icon": data.field.icon,
+                                                        "href": data.field.href,
+                                                        "spread": onoff//开关状态
+                                                    },
+                                                    success: function (data) {
+                                                        if (data.code === 1000) {
+                                                            layer.msg(data.msg, {
+                                                                icon: 6, offset: "t"
+                                                            })
+                                                        } else {
+                                                            layer.msg(data.error, {
+                                                                icon: 5, offset: "t"
+                                                            })
+                                                        }
+                                                        $(".layui-laypage-btn").click();
+                                                    },
+                                                    error: function () {
+                                                        layer.msg("回调失败", {
+                                                            icon: 5,
+                                                            offset: 't'
                                                         });
-                            table.on('toolbar(treetable)', function (obj) {
-                                var checkStatus = table.checkStatus(obj.config.id);
-                                switch (obj.event) {
-                                    case 'add_childmenu':
-                                        var res = checkStatus.data;
-                                        console.log(res);
+                                                    },
+                                                    complete: function () {
+                                                        layer.close(update_childmenu)
+
+                                                    }
+                                                });
+                                                return false;//阻止表单跳转
+                                            });
+
+
+                                        });
+                                    }
+                                });
+
+                            } else if (obj.event === 'del_childmenu') {
+                                layer.confirm('真的删除行么', {icon: 2, title: "删除提示"}, function (index) {
+                                    console.log(obj.data);
+                                    //layer.msg("确定删除",{icon:1});
+                                    obj.del();//删除对应行（tr）的DOM结构，并更新缓存
+                                    layer.close(index);
+                                    //向服务端发送删除指令
+                                    var id = obj.data["id"];
+                                    console.log(id);
+                                    $.ajax({
+                                        url: "/api/v1/menu/update_childmenu/" + id + "/",
+                                        type: 'DELETE',
+                                        success: function (data) {
+                                            if (data.code === 1000) {
+                                                layer.msg(data.msg, {
+                                                    icon: 6, offset: "t"
+                                                })
+                                            } else {
+                                                layer.msg(data.error, {
+                                                    icon: 5, offset: "t"
+                                                })
+                                            }
+                                            $(".layui-laypage-btn").click();
+                                        },
+                                        error: function () {
+                                            layer.msg("回调失败", {
+                                                icon: 5,
+                                                offset: 't'
+                                            });
+                                        },
+                                    });
+                                });
+                            }
+
+                        });
+                        table.on('toolbar(treetable)', function (obj) {
+                            var checkStatus = table.checkStatus(obj.config.id);
+                            switch (obj.event) {
+                                case 'add_childmenu':
+                                    var res = checkStatus.data;
+                                    console.log(res.length);
+                                    if (res.length != 0) {
                                         var add_childmenu = layer.open({
                                             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                                             type: 1,
@@ -237,23 +279,25 @@
                                                         $ = layui.$;
                                                     form.val("add_childmenu");
                                                     var onoff = "";
-                                                    form.on('switch(switchTest)', function(data){
+                                                    form.on('switch(switchTest)', function (data) {
                                                         console.log(data.othis);
                                                         onoff = this.checked ? 'true' : 'false';
-                                                        layer.msg('开关checked：'+ (this.checked ? 'true' : 'false'), {
-                                                          offset: '6px'
+                                                        layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
+                                                            offset: '6px'
                                                         });
                                                         console.log(onoff);
                                                         layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
-                                                      });
+                                                    });
                                                     form.on('submit(add_childmenu)', function (data) {
-                                                        if(onoff == ""){onoff = "false"}
+                                                        if (onoff == "") {
+                                                            onoff = "false"
+                                                        }
                                                         $.ajax({
                                                             url: "/api/v1/menu/add_childmenu/",
                                                             type: 'POST',
                                                             data: {
-                                                                "area":res[0]["area"],
-                                                                "classification":res[0]["classification"],
+                                                                "area": res[0]["area"],
+                                                                "classification": res[0]["classification"],
                                                                 "title": data.field.title,
                                                                 "icon": data.field.icon,
                                                                 "href": data.field.href,
@@ -289,8 +333,15 @@
                                                 });
                                             }
                                         });
-                                }
-                            });
+                                    } else {
+                                        layer.msg('请先勾选CheckBox哦，否则无法发送请求！', {
+                                            offset: '6px',
+                                            icon: 5,
+                                        });
+                                    }
+
+                            }
+                        });
                     }
                 });
             },
@@ -315,8 +366,8 @@
 <script type="text/html" id="barDemo">
     <a class="layui-icon layui-icon-tips"
        style="color:#797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"
-       lay-event="update_link"></a>
-    <a class="fa fa-trash-o" lay-event="del_case"
+       lay-event="update_childmenu"></a>
+    <a class="fa fa-trash-o" lay-event="del_childmenu"
        style="color: #797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"></a>
 </script>
 

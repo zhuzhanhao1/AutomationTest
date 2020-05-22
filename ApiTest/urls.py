@@ -47,7 +47,8 @@ urlpatterns = [
     url(r'menu/tree/$', Menu.MenuTree.as_view()),
     url(r'menu/table/$', Menu.MenuTableList.as_view()),
     url(r'menu/add_childmenu/$', Menu.MenuTableList.as_view()),
-    url(r'menu/update_childmenu/$', Menu.MenuTableList.as_view()),
+    url(r'menu/update_childmenu/(?P<pk>[0-9]+)/$', Menu.MenuTableList.as_view()),
+    url(r'menu/del_childmenu/(?P<pk>[0-9]+)/$', Menu.MenuTableList.as_view()),
 
     # 友情链接
     url(r'link/list/$', Link.LinkList.as_view()),

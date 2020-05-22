@@ -1,5 +1,6 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
+from django.http import Http404
 
 from ApiTest.models import LeftMenu, ChildMenu
 from ApiTest.serializers import LeftMenuSerializers, ChildMenuSerializers, ChildMenusSerializers
@@ -243,4 +244,43 @@ class MenuTableList(APIView):
         ret["error"] = str(serializer.errors)
         return Response(ret)
 
+    def get_object(self, pk):
+        try:
+            print(pk)
+            return ChildMenu.objects.get(id=pk)
+        except ChildMenu.DoesNotExist:
+            raise Http404
+
+    def put(self, request, pk, *args, **kwargs):
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            # 编辑用户
+            serializer = ChildMenusSerializers(snippet, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "编辑子菜单成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except:
+            ret["code"] = 1001
+            ret["error"] = "编辑子菜单失败"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+
+
+    def delete(self, request, pk, *args, **kwargs):
+        """
+        删除单一接口，批量删除单一接口
+        根据PK来区分
+        """
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            snippet.delete()
+            ret["msg"] = "删除成功"
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "删除失败"
+        return Response(ret)
 

@@ -69,7 +69,7 @@ class ChildMenusSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = ChildMenu
-        fields = ('title','icon','href','spread',"classification","area")
+        fields = ("id",'title','icon','href','spread',"classification","area")
 
 class SystemRoleSerializers(serializers.ModelSerializer):
     '''

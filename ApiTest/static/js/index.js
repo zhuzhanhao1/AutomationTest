@@ -19,7 +19,7 @@ var $,tab,dataStr,layer;
             data = {"area":json};
             console.log(data);
             $.ajax({
-                cache: false,
+                // cache: false,
                 url: tab.tabConfig.url,
                 type: 'GET',
                 data: data,
