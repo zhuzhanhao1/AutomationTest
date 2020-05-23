@@ -46,7 +46,7 @@ class SingleApiHeadSerializers(serializers.ModelSerializer):
 
 class LeftMenuSerializers(serializers.ModelSerializer):
     '''
-        左侧一级菜单
+        头部菜单左侧一级菜单
     '''
     class Meta:
         model = LeftMenu
@@ -56,7 +56,7 @@ class LeftMenuSerializers(serializers.ModelSerializer):
 
 class ChildMenuSerializers(serializers.ModelSerializer):
     '''
-        二级自由菜单
+        二级菜单
     '''
     class Meta:
         model = ChildMenu
@@ -65,11 +65,20 @@ class ChildMenuSerializers(serializers.ModelSerializer):
 
 class ChildMenusSerializers(serializers.ModelSerializer):
     '''
-        二级自由菜单
+        菜单管理列表
     '''
     class Meta:
         model = ChildMenu
-        fields = ("id",'title','icon','href','spread',"classification","area")
+        fields = ("id","nav",'title','icon','href','spread',"classification","area")
+
+class GetParamsSer(serializers.ModelSerializer):
+    '''
+        belong参数
+    '''
+    class Meta:
+        model = ChildMenu
+        fields = ('title',"nav")
+
 
 class SystemRoleSerializers(serializers.ModelSerializer):
     '''
@@ -86,6 +95,14 @@ class TokenSerializers(serializers.ModelSerializer):
     class Meta:
         model = SystemRole
         fields = ('token',"ip")
+
+class RoleSerializers(serializers.ModelSerializer):
+    '''
+        角色对应身份
+    '''
+    class Meta:
+        model = SystemRole
+        fields = ('role',"identity")
 
 
 class SystemRoleUpdateInfoSerializers(serializers.ModelSerializer):

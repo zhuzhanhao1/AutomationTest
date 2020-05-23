@@ -44,12 +44,21 @@
         <form class="layui-form" lay-filter="add_childmenu">
 
             <div class="layui-form-item" style="margin-top: 20px;">
-                <label class="layui-form-label">标题</label>
+                <label class="layui-form-label">标题键</label>
                 <div class="layui-input-block">
-                    <input type="text" name="title" required lay-verify="required"
-                           placeholder="请输入标题" autocomplete="off" class="layui-input">
+                    <input type="text" name="nav" required lay-verify="required"
+                           placeholder="请输入标题的键" autocomplete="off" class="layui-input">
                 </div>
             </div>
+
+            <div class="layui-form-item" style="margin-top: 20px;">
+                <label class="layui-form-label">标题值</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" required lay-verify="required"
+                           placeholder="请输入标题的值" autocomplete="off" class="layui-input">
+                </div>
+            </div>
+
             <div class="layui-form-item">
                 <label class="layui-form-label">图标</label>
                 <div class="layui-input-block">
@@ -133,7 +142,8 @@
                             cols: [[
                                 {type: 'checkbox'},
                                 {title: '操作', toolbar: '#barDemo', width: 100, align: "left"},
-                                {field: 'title', title: '标题'},
+                                {field: 'title', title: '标题值'},
+                                {field: 'nav', title: '标题键'},
                                 {field: 'icon', title: '图标', templet: function (d) {
                                     console.log(d.icon);
                                     return '<span>' + d.icon + '</span>';
@@ -163,6 +173,7 @@
                                                 "title": data.title,
                                                 "icon": data.icon,
                                                 "href": data.href,
+                                                "nav": data.nav,
                                                 "spread": data.spread//开关状态
                                             });
                                             var onoff = "";
@@ -182,7 +193,6 @@
                                                 }
                                                 $.ajax({
                                                     url: "/api/v1/menu/update_childmenu/" + tabledata.id + "/",
-
                                                     type: 'PUT',
                                                     data: {
                                                         "area": tabledata.area,
@@ -190,7 +200,8 @@
                                                         "title": data.field.title,
                                                         "icon": data.field.icon,
                                                         "href": data.field.href,
-                                                        "spread": onoff//开关状态
+                                                        "spread": onoff,//开关状态
+                                                        "nav":data.field.nav,
                                                     },
                                                     success: function (data) {
                                                         if (data.code === 1000) {
@@ -282,11 +293,9 @@
                                                     form.on('switch(switchTest)', function (data) {
                                                         console.log(data.othis);
                                                         onoff = this.checked ? 'true' : 'false';
-                                                        layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {
-                                                            offset: '6px'
-                                                        });
+                                                        //layer.msg('开关checked：' + (this.checked ? 'true' : 'false'), {offset: '6px'});
                                                         console.log(onoff);
-                                                        layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
+                                                        //layer.tips('温馨提示：请注意开关状态的文字可以随意定义，而不仅仅是ON|OFF', data.othis)
                                                     });
                                                     form.on('submit(add_childmenu)', function (data) {
                                                         if (onoff == "") {
@@ -301,7 +310,8 @@
                                                                 "title": data.field.title,
                                                                 "icon": data.field.icon,
                                                                 "href": data.field.href,
-                                                                "spread": onoff//开关状态
+                                                                "spread": onoff,//开关状态,
+                                                                "nav":data.field["nav"],
                                                             },
                                                             success: function (data) {
                                                                 if (data.code === 1000) {

@@ -1,7 +1,8 @@
 import json
 import requests
 from ApiTest.models import SystemRole
-from ApiTest.serializers import SystemRoleSerializers,TokenSerializers,SystemRoleUpdateInfoSerializers
+from ApiTest.serializers import SystemRoleSerializers,TokenSerializers,\
+    SystemRoleUpdateInfoSerializers,RoleSerializers
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -159,3 +160,17 @@ class AddSystemRole(APIView):
             ret["code"] = 1001
             ret["error"] = "添加被测系统角色失败"
         return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetRoleBySystem(APIView):
+    '''
+        通过系统获取角色信息
+    '''
+    def get(self, request, *args, **kwargs):
+        system = request.GET.get("system")
+        queryset = SystemRole.objects.filter(system=system)
+        OrderedDict = RoleSerializers(queryset,many=True).data
+        dic = {}
+        for i in OrderedDict:
+            dic[i["identity"]] = i["role"]
+        return Response(dic)

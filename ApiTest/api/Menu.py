@@ -1,9 +1,8 @@
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404
-
 from ApiTest.models import LeftMenu, ChildMenu
-from ApiTest.serializers import LeftMenuSerializers, ChildMenuSerializers, ChildMenusSerializers
+from ApiTest.serializers import LeftMenuSerializers, ChildMenuSerializers, ChildMenusSerializers, GetParamsSer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -15,7 +14,7 @@ ret = {"code":1000}
 
 class MenuList(APIView):
     '''
-    左侧二级菜单
+    左侧二级菜单,废弃
     '''
     def get_level_one_menu(self):
         '''
@@ -153,7 +152,7 @@ class MenuListManage(APIView):
         if area == "single":
             single_menu_list = conn.get("single_menu_list")
             if single_menu_list:
-                print("从缓存拿数据")
+                print("从缓存拿菜单数据")
                 single_menu_list = json.loads(single_menu_list)
                 return Response(single_menu_list)
             else:
@@ -174,7 +173,7 @@ class MenuListManage(APIView):
         elif area == "process":
             process_menu_list = conn.get("process_menu_list")
             if process_menu_list:
-                print("从缓存拿数据")
+                print("从缓存拿菜单数据")
                 process_menu_list = json.loads(process_menu_list)
                 return Response(process_menu_list)
             else:
@@ -211,13 +210,15 @@ class MenuListManage(APIView):
         return Response(dic)
 
 
-
 class MenuTableList(APIView):
     '''
     菜单表格
     根据左侧菜单标题查询子菜单
     '''
     def get(self, request, *args, **kwargs):
+        '''
+        菜单表格列表
+        '''
         title = request.GET.get("title")
         #根据左侧菜单标题查询子菜单
         queryset = ChildMenu.objects.filter(classification__title=title)
@@ -233,6 +234,10 @@ class MenuTableList(APIView):
         return Response(data={"code": 0, "msg": "", "count": len(serializer), "data": res})
 
     def post(self, request, *args, **kwargs):
+        '''
+        新建子菜单
+        '''
+
         ret = {"code": 1000}
         data = request.data.copy()
         serializer = ChildMenusSerializers(data=data)
@@ -252,6 +257,9 @@ class MenuTableList(APIView):
             raise Http404
 
     def put(self, request, pk, *args, **kwargs):
+        '''
+        编辑子菜单
+        '''
         ret = {"code": 1000}
         try:
             snippet = self.get_object(pk)
@@ -271,8 +279,7 @@ class MenuTableList(APIView):
 
     def delete(self, request, pk, *args, **kwargs):
         """
-        删除单一接口，批量删除单一接口
-        根据PK来区分
+        删除子菜单
         """
         ret = {"code": 1000}
         try:
@@ -283,4 +290,19 @@ class MenuTableList(APIView):
             ret["code"] = 1001
             ret["error"] = "删除失败"
         return Response(ret)
+
+
+class MenuBelongParams(APIView):
+    '''
+    获取belong的值
+    '''
+    def get(self, request, *args, **kwargs):
+        system = request.GET.get("system")
+        #查询菜单的href中包含所属系统的并且区域是single的
+        queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area="single"))
+        OrderedDict = GetParamsSer(queryset,many=True).data
+        dic = {}
+        for i in OrderedDict:
+            dic[i["nav"]] = i["title"]
+        return Response(dic)
 

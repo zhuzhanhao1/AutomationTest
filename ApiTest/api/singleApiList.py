@@ -50,11 +50,9 @@ class SingleApiList(APIView):
                 apilists = SingleApi.objects.filter(Q(belong__contains=belong) & Q(system=system)).order_by("sortid")
             else:
                 apilists = SingleApi.objects.filter(system=system).order_by("sortid")
-        print(apilists)
         serializer = SingleApiSerializers(apilists, many=True)
         pageindex = request.GET.get('page', 1)      # 页数
         pagesize = request.GET.get("limit", 30)     # 每页显示数量
-        print(pagesize)
         pageInator = Paginator(serializer.data, pagesize)
         # 分页
         contacts = pageInator.page(pageindex)

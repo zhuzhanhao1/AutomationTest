@@ -40,15 +40,16 @@ urlpatterns = [
     url(r'systemrole/add_role/$', systemRole.AddSystemRole.as_view()),
     url(r'systemrole/update_info/(?P<pk>[a-z]+)/$', systemRole.UpdateSystemRole.as_view()),
     url(r'systemrole/get_token_by_role/$', systemRole.GetTokenByRole.as_view()),
+    url(r'systemrole/get_role_by_system/$', systemRole.GetRoleBySystem.as_view()),
 
     # 菜单
-    # url(r'menu/list/$', Menu.MenuList.as_view()),
     url(r'menu/list/$', Menu.MenuListManage.as_view()),
     url(r'menu/tree/$', Menu.MenuTree.as_view()),
     url(r'menu/table/$', Menu.MenuTableList.as_view()),
     url(r'menu/add_childmenu/$', Menu.MenuTableList.as_view()),
     url(r'menu/update_childmenu/(?P<pk>[0-9]+)/$', Menu.MenuTableList.as_view()),
     url(r'menu/del_childmenu/(?P<pk>[0-9]+)/$', Menu.MenuTableList.as_view()),
+    url(r'menu/get_belong_by_system/$', Menu.MenuBelongParams.as_view()),
 
     # 友情链接
     url(r'link/list/$', Link.LinkList.as_view()),

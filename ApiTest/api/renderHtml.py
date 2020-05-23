@@ -1,14 +1,19 @@
+import json
+
+from django.db.models import Q
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
-from ApiTest.models import SingleApi, ProcessApi, UserProfile
+from ApiTest.models import SingleApi, ProcessApi, UserProfile, ChildMenu
 from django.contrib import auth
 import requests
-from ApiTest.config.TestdataConfig import *
 from django.contrib.auth.models import User
 import pypinyin
 import random
 from django.contrib.auth.hashers import make_password
 from django_redis import get_redis_connection
+
+
+from ApiTest.serializers import GetParamsSer
 
 
 def login_views(request):
@@ -108,91 +113,77 @@ def home_views(request):
     '''
     首页内嵌ifame
     '''
-    global role
-    return render(request, 'search.html', {"role": role})
+    return render(request, 'search.html')
 
 
 def singleapi_views(request):
     '''
     单一接口html
-    belong_key:所属模块的键、英文名(用在了面包屑)
+    crumbs:所属模块的键、英文名(用在了面包屑)
     belong:所属模块的值（中文名，用在了区分模块）
     system:所属系统
-    role:角色对象
-    apinav:新建、编辑所属模块的select值
     '''
-    global erms_role, tdrapi, tdr_role, ermsapi
     belong = request.GET.get("belong", "")
     system = request.GET.get("system", "")
-    L = []
-    if system == "erms":
-        # 如果belong存在,只返回belong的值
-        if belong in ermsapi.keys():
-            belong_value = ermsapi.get(belong, "")
-            L.append(belong_value)
-            return render(request, "singleApi.html",
-                          {"belong_key": belong, "belong": belong_value, "system": system, "role": erms_role,
-                           "apinav": L})
-        # 如果belong不存在，返回导航的总列表
+    #缓存Redis
+    conn = get_redis_connection('default')
+    dic = conn.get("params_dic")
+    if not dic:
+        queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area="single"))
+        OrderedDict = GetParamsSer(queryset, many=True).data
+        params_dic = {}
+        for i in OrderedDict:
+            params_dic[i["nav"]] = i["title"]
+        print("访问MySQL拿去数据放入缓存")
+        params_dic = json.dumps(params_dic)
+        # 设置缓存时间一小时
+        conn.set("params_dic", params_dic, 3600)
+        if belong:
+            belong_value = dic.get(belong, "")
+            return render(request, "singleApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
         else:
-            for value in ermsapi.values():
-                L.append(value)
-            return render(request, "singleApi.html", {"system": system, "role": erms_role, "apinav": L})
-
-    elif system == "tdr":
-        # 如果belong存在,只返回belong的值
-        if belong in tdrapi.keys():
-            belong_value = tdrapi.get(belong, "")
-            L.append(belong_value)
-            return render(request, "singleApi.html",
-                          {"belong_key": belong, "belong": belong_value, "system": system, "role": tdr_role,
-                           "apinav": L})
-        # 如果belong不存在，返回导航的总列表
+            return render(request, "singleApi.html", {"system": system})
+    else:
+        if belong:
+            belong_value = json.loads(dic).get(belong, "")
+            return render(request, "singleApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
         else:
-            for value in tdrapi.values():
-                L.append(value)
-            return render(request, "singleApi.html", {"system": system, "role": tdr_role, "apinav": L})
+            return render(request, "singleApi.html", {"system": system})
 
 
 def processapi_views(request):
     '''
-    流程接口html
-    belong_key:所属模块的键、英文名(用在了面包屑)
-    belong:所属模块的值（中文名，用在了区分模块）
-    system:所属系统
-    role:角色对象
-    apinav:新建、编辑所属模块的select值
+        流程接口html
+        crumbs:所属模块的键、英文名(用在了面包屑)
+        belong:所属模块的值（中文名，用在了区分模块）
+        system:所属系统
     '''
-    global erms_role, tdr_role, erms_process_api
     belong = request.GET.get("belong", "")
     system = request.GET.get("system", "")
-    # sortid = AddProcessApi().parameter_check(system)
-    L = []
-    if system == "erms":
-        # 如果belong存在,只返回belong的值
-        if belong in ermsapi.keys():
-            belong_value = ermsapi.get(belong, "")
-            L.append(belong_value)
-            return render(request, "processApi.html",{"belong_key": belong, "belong": belong_value,"system": system, "role": erms_role, "apinav": L})
+    #缓存Redis
+    conn = get_redis_connection('default')
+    dic = conn.get("params_dic_process")
+    if not dic:
+        queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area="process"))
+        OrderedDict = GetParamsSer(queryset, many=True).data
+        params_dic = {}
+        for i in OrderedDict:
+            params_dic[i["nav"]] = i["title"]
+        print("访问MySQL拿取belong数据放入缓存")
+        params_dic = json.dumps(params_dic)
+        # 设置缓存时间一小时
+        conn.set("params_dic_process", params_dic, 3600)
+        if belong:
+            belong_value = dic.get(belong, "")
+            return render(request, "processApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
         else:
-            for value in ermsapi.values():
-                L.append(value)
-        return render(request, "processApi.html",{"system": system, "role": erms_role, "apinav": L})
-
-    elif system == "tdr":
-        # 如果belong存在,只返回belong的值
-        if belong in tdrapi.keys():
-            belong_value = tdrapi.get(belong, "")
-            L.append(belong_value)
-            return render(request, "processApi.html",
-                              {"belong_key": belong, "belong": belong_value,
-                               "system": system, "role": tdr_role, "apinav": L})
-        # 如果belong不存在，返回导航的总列表
+            return render(request, "processApi.html", {"system": system})
+    else:
+        if belong:
+            belong_value = json.loads(dic).get(belong, "")
+            return render(request, "processApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
         else:
-            for value in tdrapi.values():
-                L.append(value)
-            return render(request, "processApi.html",
-                      {"system": system, "role": tdr_role, "apinav": L})
+            return render(request, "processApi.html", {"system": system})
 
 
 def quicktest_views(request):
@@ -278,3 +269,4 @@ def test(request):
             a += 1
         ProcessApi.objects.filter(caseid=i.caseid).update(url=w)
     return HttpResponse("完成咯")
+

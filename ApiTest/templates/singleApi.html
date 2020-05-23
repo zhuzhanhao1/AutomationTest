@@ -17,17 +17,19 @@
 <body class="layui-layout-body">
 <!--表单内容-->
 <div>
-    <!--创建用例-->
-    <div class="layui-row" id="add_case" style="display: none;">
+    <!--创建编辑用例-->
+    <div class="layui-row" id="add_update_case" style="display: none;">
         <div class="layui-col-md11">
-            <form class="layui-form" lay-filter="add_case">
+            <form class="layui-form" lay-filter="add_update_case">
+
                 <div class="layui-form-item" style="margin-top: 20px;">
                     <label class="layui-form-label">系统角色</label>
                     <div class="layui-input-block">
-                        <select name="identity" lay-verify="required">
-                            {% for item,value in role.items %}
-                                <option value="{{ item }}">{{ value }}</option>
-                            {% endfor %}
+                        <select name="identity" id="identity" lay-verify="required">
+{#                            {% for item,value in role.items %}#}
+{#                                <option value="{{ item }}">{{ value }}</option>#}
+{#                            {% endfor %}#}
+                            <option value=""></option>
                         </select>
                     </div>
                 </div>
@@ -35,10 +37,12 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">所属模块</label>
                     <div class="layui-input-block">
-                        <select name="belong" lay-verify="required">
-                            {% for i in apinav %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
+                        <select name="belong" id="belong" lay-verify="required">
+{#                            django render#}
+{#                            {% for i in apinav %}#}
+{#                                <option value="{{ i }}">{{ i }}</option>#}
+{#                            {% endfor %}#}
+                            <option value=""></option>
                         </select>
                     </div>
                 </div>
@@ -53,6 +57,7 @@
                         <input type="radio" name="method" value="file" title="FILE">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">用例名称</label>
                     <div class="layui-input-block">
@@ -60,6 +65,7 @@
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">请求地址</label>
                     <div class="layui-input-block">
@@ -67,7 +73,6 @@
                                autocomplete="off" class="layui-input">
                     </div>
                 </div>
-
 
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">Query Params</label>
@@ -96,7 +101,7 @@
                 </div>
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="add_case"
+                        <button class="layui-btn" lay-submit lay-filter="add_update_case"
                                 style="float: right;">立即提交
                         </button>
                         <button type="reset" class="layui-btn layui-btn-primary"
@@ -107,96 +112,6 @@
             </form>
         </div>
     </div>
-
-    <!--编辑用例-->
-    <div class="layui-row" id="update_case" style="display: none;">
-        <div class="layui-col-md11">
-            <form class="layui-form" lay-filter="update_case">
-
-                <div class="layui-form-item" style="margin-top: 20px;">
-                    <label class="layui-form-label">系统角色</label>
-                    <div class="layui-input-block">
-                        <select name="identity" lay-verify="required">
-                            {% for item,value in role.items %}
-                                <option value="{{ item }}">{{ value }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">所属模块</label>
-                    <div class="layui-input-block">
-                        <select name="belong" lay-verify="required">
-                            {% for i in apinav %}
-                                <option value="{{ i }}">{{ i }}</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">请求方式</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="method" value="get" title="GET" checked>
-                        <input type="radio" name="method" value="post" title="POST">
-                        <input type="radio" name="method" value="put" title="PUT">
-                        <input type="radio" name="method" value="delete" title="Delete">
-                        <input type="radio" name="method" value="file" title="FILE">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">用例名称</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="casename" required lay-verify="required" placeholder="请输入用例名称"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">请求地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="url" required lay-verify="required" placeholder="请输入用例名称"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">Query Params</label>
-                    <div class="layui-input-block">
-                        <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">Form Data</label>
-                    <div class="layui-input-block">
-                        <textarea name="body" placeholder="请输入内容" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">负责人</label>
-                    <div class="layui-input-block">
-                        <select name="head" lay-verify="required">
-                            <option value="老张">老张</option>
-                            <option value="老王">老王</option>
-                            <option value="老李">老李</option>
-                            <option value="老江">老江</option>
-                            <option value="老刘">老刘</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="update_case"
-                                style="float: right;">立即提交
-                        </button>
-                        <button type="reset" class="layui-btn layui-btn-primary"
-                                style="float: right;margin-right: 10px;">重置
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
 
     <!--更新用户信息-->
     <div class="layui-row" id="add_role" style="display: none;">
@@ -206,21 +121,18 @@
                 <div class="layui-form-item" style="margin-top: 20px;">
                     <label class="layui-form-label">所属系统</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="system" value="erms" title="数据档案室">
-                        <input type="radio" name="system" value="tdr" title="数字档案馆">
+                        <input type="radio" name="system" value="{{ system }}" title="{{ system }}">
                     </div>
+
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色</label>
-                    <div class="layui-input-block erms" style="display: none;">
-                        <input type="radio" name="identity" value="sysadmin" title="系统管理员">
-                        <input type="radio" name="identity" value="admin" title="单位管理员">
-                        <input type="radio" name="identity" value="ast" title="单位档案员">
-                    </div>
-                    <div class="layui-input-block tdr" style="display: none;">
-                        <input type="radio" name="identity" value="tdradmin" title="系统管理员">
+                    <div class="layui-input-block" id ="myradio1">
+                        <input type="radio" name="identity" value="" title="">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">账号</label>
                     <div class="layui-input-block">
@@ -228,6 +140,7 @@
                                placeholder="请输入账号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">密码</label>
                     <div class="layui-input-block">
@@ -263,30 +176,21 @@
                             style="float: right;">添加系统角色
                     </button>
                 </div>
+
                 <div class="layui-form-item" style="margin-top: 20px;">
                     <label class="layui-form-label">所属系统</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="system" value="erms" title="数据档案室">
-                        <input type="radio" name="system" value="transfer" title="移交接收系统">
-                        <input type="radio" name="system" value="tdr" title="数字档案馆">
+                        <input type="radio" name="system" value="{{ system }}" title="{{ system }}">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色</label>
-                    <div class="layui-input-block erms" style="display: none;">
-                        <input type="radio" name="identity" value="sysadmin" title="系统管理员">
-                        <input type="radio" name="identity" value="admin" title="单位管理员">
-                        <input type="radio" name="identity" value="ast" title="单位档案员">
-                    </div>
-                    <div class="layui-input-block transfer" style="display: none;">
-                        <input type="radio" name="identity" value="transferadmin" title="数据管理员">
-                        <input type="radio" name="identity" value="sjzjy" title="数据质检员">
-                        <input type="radio" name="identity" value="sjshy" title="数据审核员">
-                    </div>
-                    <div class="layui-input-block tdr" style="display: none;">
-                        <input type="radio" name="identity" value="tdradmin" title="系统管理员">
+                    <div class="layui-input-block" id="myradio2">
+                        <input type="radio" name="identity" value="" title="">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">账号</label>
                     <div class="layui-input-block">
@@ -294,6 +198,7 @@
                                placeholder="请输入账号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">密码</label>
                     <div class="layui-input-block">
@@ -301,6 +206,7 @@
                                placeholder="请输入密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
                         <button class="layui-btn layui-btn-warm" lay-submit lay-filter="update_role_info"
@@ -507,10 +413,10 @@
         </div>
     </div>
 
-    <!--添加子表参数-->
-    <div class="layui-row" id="add_parameter" style="display: none;">
+    <!--添加编辑子表case-->
+    <div class="layui-row" id="add_update_parameter" style="display: none;">
         <div class="layui-col-md11">
-            <form class="layui-form" lay-filter="add_parameter">
+            <form class="layui-form" lay-filter="add_update_parameter">
 
                 <div class="layui-form-item" style="margin-top: 20px;">
                     <label class="layui-form-label">请求参数</label>
@@ -552,7 +458,7 @@
 
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="add_parameter"
+                        <button class="layui-btn" lay-submit lay-filter="add_update_parameter"
                                 style="float: right;">立即提交
                         </button>
                         <button type="reset" class="layui-btn layui-btn-primary"
@@ -564,62 +470,7 @@
         </div>
     </div>
 
-    <!--编辑子表参数-->
-    <div class="layui-row" id="update_parameter" style="display: none;">
-        <div class="layui-col-md11">
-            <form class="layui-form" lay-filter="update_parameter">
 
-                <div class="layui-form-item" style="margin-top: 20px;">
-                    <label class="layui-form-label">请求参数</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="parameter_field" required lay-verify="required"
-                               autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">参数说明</label>
-                    <div class="layui-input-block">
-                        <textarea name="parameter_that" placeholder="请输入参数示例" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-                <div class="layui-form-item">
-                    <label class="layui-form-label">所在区域</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="area" value="1" title="Query" checked>
-                        <input type="radio" name="area" value="2" title="Body">
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">是否必填</label>
-                    <div class="layui-input-block">
-                        <input type="radio" name="isMust" value="1" title="必填" checked>
-                        <input type="radio" name="isMust" value="2" title="非必填">
-                    </div>
-                </div>
-
-
-                <div class="layui-form-item layui-form-text">
-                    <label class="layui-form-label">参数示例</label>
-                    <div class="layui-input-block">
-                        <textarea name="sample" placeholder="请输入参数示例" class="layui-textarea"></textarea>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="update_parameter"
-                                style="float: right;">立即提交
-                        </button>
-                        <button type="reset" class="layui-btn layui-btn-primary"
-                                style="float: right;margin-right: 10px;">重置
-                        </button>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
 </div>
 <!--主题内容-->
 <div id="layuibody" class="layui-body mybg" style="margin-bottom: -70px;">
@@ -629,7 +480,7 @@
             <div class="layui-breadcrumb">
 					<span class="layui-icon layui-icon-link" style="font-size: 22px;color: #fff;">
 						<a href="" class="index" style="color: #fff;">http://amberdata.cn/{{ system }}api</a>
-						<a class="kit-side-fold casetitle" style="font-size: 22px;color: #fff;">{{ belong_key }}</a>
+						<a class="kit-side-fold casetitle" style="font-size: 22px;color: #fff;">{{ crumbs }}</a>
 					</span>
             </div>
             <div id="sousuo">
@@ -855,13 +706,13 @@
                                         area: ['30%', ""],
                                         skin: "layui-layer-molv",
                                         shada: 0.6,
-                                        content: $("#update_parameter").html(),
+                                        content: $("#add_update_parameter").html(),
                                         success: function () {
                                             layui.use(['form', 'jquery'], function () {
                                                 var form = layui.form;
                                                 $ = layui.$;
                                                 var caseid = obj.data.id;
-                                                form.val("update_parameter", {
+                                                form.val("add_update_parameter", {
                                                     "parameter_field": obj.data.parameter_field,
                                                     "parameter_that": obj.data.parameter_that,
                                                     "area": obj.data.area,
@@ -869,7 +720,7 @@
                                                     "sample": obj.data.sample
                                                 });
                                                 //监听编辑用户信息，
-                                                form.on('submit(update_parameter)', function (data) {
+                                                form.on('submit(add_update_parameter)', function (data) {
                                                     console.log(data.field);
                                                     $.ajax({
                                                         cache: false,
@@ -947,6 +798,7 @@
 
                             }
                             , toolbarEvent: function (obj, pobj) {
+                                var childId = this.id;
                                 // obj 子表当前行对象
                                 // pobj 父表当前行对象
                                 if (obj.event === 'reload') {
@@ -971,13 +823,13 @@
                                         skin: "layui-layer-molv",
                                         shade: 0.6,
                                         area: ['30%', ''],
-                                        content: $("#add_parameter").html(),
+                                        content: $("#add_update_parameter").html(),
                                         success: function () {
                                             layui.use(['form', 'jquery'], function () {
                                                 var form = layui.form,
                                                     $ = layui.$;
                                                 //监听编辑用户信息，
-                                                form.on('submit(add_parameter)', function (data) {
+                                                form.on('submit(add_update_parameter)', function (data) {
                                                     $.ajax({
                                                         cache: false,
                                                         url: "/api/v1/singleapi/add_parameter/",
@@ -997,14 +849,14 @@
                                                             if (data.code === 1000) {
                                                                 layer.msg(data.msg, {
                                                                     icon: 6, offset: "t"
-                                                                })
-                                                                table.reload(this.id);
+                                                                });
+                                                                //table.reload(this.id);
                                                             } else {
                                                                 layer.msg(data.error, {
                                                                     icon: 5, offset: "t"
                                                                 })
                                                             }
-                                                            //table.reload(this.id);
+                                                            table.reload(childId);
                                                         },
                                                         error: function () {
                                                             layer.msg("回调失败", {
@@ -1896,19 +1748,23 @@
             }
             //编辑整个用例
             else if (obj.event === 'update_case') {
+                //获取系统模块参数
+                get_belong_by_system();
+                //获取系统角色
+                get_role_by_system("option","identity");
                 var a = layer.open({
                     type: 1,
                     title: "编辑用例",
                     area: ['35%', ""],
                     skin: "layui-layer-molv",
                     shada: 0.6,
-                    content: $("#update_case").html(),
+                    content: $("#add_update_case").html(),
                     success: function () {
                         layui.use(['form', 'jquery'], function () {
                             var form = layui.form;
                             $ = layui.$;
                             var caseid = data.caseid;
-                            form.val("update_case", {
+                            form.val("add_update_case", {
                                 "casename": data.casename,
                                 "identity": data.identity,
                                 "url": data.url,
@@ -1919,7 +1775,7 @@
                                 "head": data.head
                             });
                             //监听编辑用户信息，
-                            form.on('submit(update_case)', function (data) {
+                            form.on('submit(add_update_case)', function (data) {
                                 console.log(data.field);
                                 $.ajax({
                                     cache: false,
@@ -2100,8 +1956,89 @@
 
     }
 
+    //获取模块参数
+    function get_belong_by_system() {
+        //var res = {};
+        $.ajax({
+            //cache: false,
+            url: "/api/v1/menu/get_belong_by_system/",
+            type: 'GET',
+            async: false,
+            data: {
+                "system": '{{ system }}'
+            },
+            success: function (data) {
+                //res = data;
+                var str = '';
+                //data是数组时，index是当前元素的位置，value是值
+                $.each(data,function(index,value){
+                    str += "<option value='"+value+"'>"+value+"</option>";
+                });
+                console.log(str);
+                $('#belong').empty();
+                $('#belong').append(str);
+
+            },
+            error: function () {
+                layer.msg("回调失败", {
+                    icon: 5,
+                    offset: 't'
+                });
+            },
+        });
+        //console.log(res);
+        //return res
+    }
+
+    //获取系统角色
+    function get_role_by_system(attrtype,id) {
+        //attrtype：什么标签
+        //id:父标签的id属性值
+        $.ajax({
+            //cache: false,
+            url: "/api/v1/systemrole/get_role_by_system/",
+            type: 'GET',
+            async: false,
+            data: {
+                "system": '{{ system }}'
+            },
+            success: function (data) {
+                console.log(data);
+                console.log(typeof (data));
+                var str = '';
+                //data是obj时，index是key，value是值
+                $.each(data,function(index,value){
+                    console.log(index);
+                    console.log(value);
+                    if(attrtype=="option"){
+                        console.log("我渲染的"+id);
+                        str += "<option value='"+index+"'>"+value+"</option>";
+                        $('#'+id).empty();
+                        $('#'+id).append(str);
+                    }else if(attrtype=="input"){
+                        console.log("我渲染的"+id);
+                        str += "<input type=\"radio\" name=\"identity\" value='"+index+"' title='"+value+"'>";
+                        $('#'+id).empty();
+                        $('#'+id).append(str);
+                    }
+
+                });
+                console.log(str);
+
+            },
+            error: function () {
+                layer.msg("回调失败", {
+                    icon: 5,
+                    offset: 't'
+                });
+            },
+        });
+    }
+
     //新建用例
     function add_case() {
+        get_role_by_system("option","identity");
+        get_belong_by_system();
         var Create_apicase = layer.open({
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 1,
@@ -2109,20 +2046,20 @@
             skin: "layui-layer-molv",
             shade: 0.6,
             area: ['35%', ''],
-            content: $("#add_case").html(),
+            content: $("#add_update_case").html(),
             success: function () {
                 layui.use(['form', 'jquery'], function () {
                     var form = layui.form,
                         $ = layui.$;
                     //监听编辑用户信息，
-                    form.val("add_case");
-                    form.on('submit(add_case)', function (data) {
+                    form.val("add_update_case");
+                    form.on('submit(add_update_case)', function (data) {
                         $.ajax({
                             cache: false,
                             url: "/api/v1/singleapi/add_case/",
                             type: 'POST',
                             data: {
-                                "belong": '{{ belong }}',
+                                "belong": data.field.belong,
                                 "body": data.field.body,
                                 "casename": data.field.casename,
                                 "identity": data.field.identity,
@@ -2168,6 +2105,7 @@
 
     //添加用户角色
     function add_role() {
+        get_role_by_system("input","myradio1");
         var add_role = layer.open({
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 1,
@@ -2186,18 +2124,17 @@
                         "password": "Y+zilsR88g9SZI8WOeHJlA=="
                     });
                     //监听编辑用户信息，
-                    form.on('radio', function (data) {
-                        console.log(data.elem); //得到radio原始DOM对象
-                        console.log(data.value); //被点击的radio的value
-                        if (data.value == "erms") {
-                            $(".erms").show();
-                            $(".tdr").hide();
-                        } else if (data.value == "tdr") {
-                            $(".tdr").show();
-                            $(".erms").hide();
-                        }
-
-                    });
+                    {#form.on('radio', function (data) {#}
+                    {#    console.log(data.elem); //得到radio原始DOM对象#}
+                    {#    console.log(data.value); //被点击的radio的value#}
+                    {#    if (data.value == "erms") {#}
+                    {#        $(".erms").show();#}
+                    {#        $(".tdr").hide();#}
+                    {#    } else if (data.value == "tdr") {#}
+                    {#        $(".tdr").show();#}
+                    {#        $(".erms").hide();#}
+                    {#    }#}
+                    //});
                     form.on('submit(add_role)', function (data) {
                         $.ajax({
                             cache: false,
@@ -2244,8 +2181,8 @@
 
     //编辑用户信息
     function update_role_info() {
+        get_role_by_system("input","myradio2");
         var update_role_info = layer.open({
-            //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 1,
             title: "编辑用户信息",
             area: ['40%', ''],
@@ -2265,21 +2202,11 @@
                     form.on('radio', function (data) {
                         console.log(data.elem); //得到radio原始DOM对象
                         console.log(data.value); //被点击的radio的value
-                        if (data.value == "erms") {
-                            $(".erms").show();
-                            $(".transfer").hide();
-                            $(".tdr").hide();
-                        } else if (data.value == "transfer") {
-                            $(".transfer").show();
-                            $(".erms").hide();
-                            $(".tdr").hide();
-                        } else if (data.value == "tdr") {
-                            $(".tdr").show();
-                            $(".erms").hide();
-                            $(".transfer").hide();
+                        if (data.value) {
+                            //$("." + data.value).show();
                         }
-
                     });
+                    form.render(null,"update_role_info");
                     form.on('submit(update_role_info)', function (data) {
                         $.ajax({
                             cache: false,
