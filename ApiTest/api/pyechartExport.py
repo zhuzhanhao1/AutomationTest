@@ -1,9 +1,13 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import json
+
+from pyecharts.globals import CurrentConfig
+#设置src="../static/js/echarts.min.js"加载在本地路径
+CurrentConfig.ONLINE_HOST  = "../static/js/"
+
 from pyecharts import options as opts
 from pyecharts.charts import Bar
-
 
 class EchartExport(APIView):
 
@@ -11,6 +15,7 @@ class EchartExport(APIView):
         '''
         导出Echart报表
         '''
+
         ret = {"code": 1000}
         datas = request.data
         content = json.loads(datas.get("request", ""))
@@ -34,11 +39,13 @@ class EchartExport(APIView):
                     toolbox_opts=opts.ToolboxOpts(),
                     legend_opts=opts.LegendOpts(is_show=False),
                     datazoom_opts=opts.DataZoomOpts(),
+
                 )
                 .render("./ApiTest/templates/pyechartReport.html")
             )
             ret["msg"] = "生成报表成功"
-        except:
+        except Exception as e:
+            print(e)
             ret["code"] = 1001
             ret["error"] = "生成报表异常"
         return Response(ret)

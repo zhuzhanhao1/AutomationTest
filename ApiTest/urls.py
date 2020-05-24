@@ -16,11 +16,13 @@ urlpatterns = [
     url(r'singleapi/close_locust/$', singleApiTest.LocustSingApi.as_view()),
     url(r'singleapi/quickrun/$', singleApiTest.RunQuickTest.as_view()),
     url(r'singleapi/export_report/$', pyechartExport.EchartExport.as_view()),
+
     #单一接口参数详情
     url(r'singleapi/parameter_details/$', singleApiList.SingleApiChildList.as_view()),
     url(r'singleapi/add_parameter/$', singleApiList.AddChildParameter.as_view()),
     url(r'singleapi/update_parameter/(?P<pk>[0-9]+)/$', singleApiList.UpdateChildParameter.as_view()),
     url(r'singleapi/del_parameter/(?P<pk>[0-9]+)/$', singleApiList.DelChildParameter.as_view()),
+    url(r'singleapi/test/$', singleApiList.UpdateIdentity.as_view()),
 
     # 流程接口测试
     url(r'processapi/list/$', processApiList.ProcessApiList.as_view()),
@@ -37,10 +39,11 @@ urlpatterns = [
 
     # 测试系统角色
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),
-    url(r'systemrole/add_role/$', systemRole.AddSystemRole.as_view()),
-    url(r'systemrole/update_info/(?P<pk>[a-z]+)/$', systemRole.UpdateSystemRole.as_view()),
-    url(r'systemrole/get_token_by_role/$', systemRole.GetTokenByRole.as_view()),
-    url(r'systemrole/get_role_by_system/$', systemRole.GetRoleBySystem.as_view()),
+    url(r'systemrole/add_role/$', systemRole.SystemRoleList.as_view()),
+    url(r'systemrole/update_role/(?P<pk>[0-9]+)/$', systemRole.SystemRoleList.as_view()),
+    url(r'systemrole/del_role/(?P<pk>[0-9]+)/$', systemRole.SystemRoleList.as_view()),
+    url(r'systemrole/get_token_by_id/(?P<pk>[0-9]+)/$', systemRole.SystemRoleToken.as_view()),
+    url(r'systemrole/get_role_by_system/$', systemRole.SystemRoleToken.as_view()),
 
     # 菜单
     url(r'menu/list/$', Menu.MenuListManage.as_view()),

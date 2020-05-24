@@ -1,7 +1,5 @@
 import json
-
 from django.db.models import Q
-from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
 from ApiTest.models import SingleApi, ProcessApi, UserProfile, ChildMenu
 from django.contrib import auth
@@ -11,8 +9,6 @@ import pypinyin
 import random
 from django.contrib.auth.hashers import make_password
 from django_redis import get_redis_connection
-
-
 from ApiTest.serializers import GetParamsSer
 
 
@@ -102,7 +98,6 @@ def index_views(request):
     user_id = UserProfile.objects.filter().order_by("-user_id")[:1].first().user_id
     # 获取当前登录名
     name = User.objects.filter(id=user_id).first().first_name
-    print("当前登录用户：" + name)
     login_name = {
         "name": name
     }
@@ -188,14 +183,14 @@ def processapi_views(request):
 
 def quicktest_views(request):
     '''
-    内嵌ifame-快速测试页面
+        内嵌ifame-快速测试页面
     '''
     return render(request, 'quickTest.html')
 
 
 def apiDetail_views(request):
     '''
-    接口详情页面
+        接口详情页面
     '''
     singleid = request.GET.get("singleid", "")
     processid = request.GET.get("processid", "")
@@ -222,51 +217,35 @@ def apiDetail_views(request):
 
 def link_views(request):
     '''
-    内嵌ifame-友情链接
+        内嵌ifame-友情链接
     '''
     return render(request, 'link.html')
 
 
 def testurl_views(request):
     '''
-    内嵌ifame-测试网址
+        内嵌ifame-测试网址
     '''
     return render(request, 'testUrl.html')
 
 
 def systemlog_views(request):
     '''
-    :内容ifame-系统日志
+        内容ifame-系统日志
     '''
     return render(request, 'systemlog.html')
 
 
 def menu_management_views(request):
     '''
-    :内容ifame-菜单管理
+        内容ifame-菜单管理
     '''
     return render(request, 'menu.html')
 
 
 def echart_report_views(request):
     '''
-    :内容ifame-报表
+        内容ifame-报表
     '''
     return render(request, 'pyechartReport.html')
-
-
-def test(request):
-    all = ProcessApi.objects.filter()
-    for i in all:
-        url = i.url.split("/")
-        a = 0
-        w = ""
-        e = ""
-        for ii in url:
-            if a >= 3:
-                e = "/" + ii
-            w += e
-            a += 1
-        ProcessApi.objects.filter(caseid=i.caseid).update(url=w)
-    return HttpResponse("完成咯")
 

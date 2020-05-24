@@ -1,94 +1,57 @@
 import json
 import requests
+from django.core.paginator import Paginator
 from ApiTest.models import SystemRole
-from ApiTest.serializers import SystemRoleSerializers,TokenSerializers,\
-    SystemRoleUpdateInfoSerializers,RoleSerializers
+from ApiTest.serializers import SystemRoleSerializers,TokenSerializers,RoleSerializers
 from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
 
-
 class SystemRoleList(APIView):
-
+    '''
+        系统角色
+    '''
     def get(self, request, *args, **kwargs):
         '''
-        获取被测系统用户角色列表
+            获取被测系统用户角色列表
         '''
-        system_role_info = SystemRole.objects.all()
-        serializer = SystemRoleSerializers(system_role_info, many=True)
-        return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": serializer.data})
+        system = request.GET.get("system")
+        if system:
+            system_role_info = SystemRole.objects.filter(system=system)
+            if system_role_info:
+                serializer = SystemRoleSerializers(system_role_info, many=True)
+                pageindex = request.GET.get('page', 1)  # 页数
+                pagesize = request.GET.get("limit", 10)  # 每页显示数量
+                pageInator = Paginator(serializer.data, pagesize)
+                # 分页
+                contacts = pageInator.page(pageindex)
+                res = []
+                for contact in contacts:
+                    res.append(contact)
+                return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
+            else:
+                return Response(data={"code": 0, "msg": "", "count": 0, "data": []})
+        else:
+            return Response(data={"code": 0, "msg": "", "count": 0, "data": []})
 
-class GetTokenByRole(APIView):
-
-    def get_token(self,role,ip):
-        '''
-        获取被测系统用户登录的令牌、用户的id
-        '''
-        try:
-            id = SystemRole.objects.get(identity=role)
-            username = SystemRole.objects.get(identity=role).username
-            password = SystemRole.objects.get(identity=role).password
-            headers = {
-                "Content-Type": "application/json"
-            }
-            params = {
-                "loginName": username,
-                "password": password
-            }
-            response = requests.post(url="{0}/adminapi/user/login".format(ip), headers=headers, data=json.dumps(params))
-            res = response.json()['accessToken']
-            print("token：" + str(res))
-            return res,id
-        except:
-            return None,None
-
-    def put(self, request, *args, **kwargs):
-        '''
-        更新被测系统角色的token
-        '''
-        ret = {"code": 1000}
-        try:
-            datas = request.data
-            role = json.loads(datas.get("role",""))
-            ip = datas.get("ip","")
-            for i in role:
-                token,id = self.get_token(i,ip)
-                data = {"token":token,"ip":ip}
-                serializer = TokenSerializers(id,data=data)
-                # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
-                if serializer.is_valid():
-                    serializer.save()
-                else:
-                    ret["code"] = 1001
-                    ret['error'] = str(serializer.errors)
-                    return Response(ret, status=status.HTTP_400_BAD_REQUEST)
-            ret["msg"] = "被测系统Token更新成功"
-            return Response(ret, status=status.HTTP_201_CREATED)
-        except Exception as e:
-            ret["code"] = 1001
-            ret["error"] = "被测系统Token更新失败"
-            return Response(ret)
-
-
-class UpdateSystemRole(APIView):
-    """
-    更新被测系统角色信息
-    """
     def get_object(self, pk):
         try:
             print(pk)
-            return SystemRole.objects.get(identity=pk)
+            return SystemRole.objects.get(id=pk)
         except SystemRole.DoesNotExist:
             raise Http404
 
     def put(self, request, pk, *args, **kwargs):
+        """
+            更新被测系统角色信息
+        """
         ret = {"code": 1000}
         try:
             snippet = self.get_object(pk)
             # 编辑用户
-            serializer = SystemRoleUpdateInfoSerializers(snippet, data=request.data)
+            serializer = SystemRoleSerializers(snippet, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 ret["msg"] = "编辑被测系统角色信息成功"
@@ -101,76 +64,117 @@ class UpdateSystemRole(APIView):
         return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AddSystemRole(APIView):
-
-    def get_role_by_identity(self,identity):
+    def check_identity_is_exist(self, role):
         '''
-        更具被测系统角色身份获取角色名
+            检查被测系统中用户身份是否存在
         '''
-        role = ""
-        if identity == "admin":
-            role = "单位管理员"
-        elif identity == "sysadmin":
-            role = "单位管理员"
-        elif identity == "ast":
-            role = "单位档案员"
-        elif identity == "tdradmin":
-            role = "数据管理员"
-        return role
-
-    def check_identity_is_exist(self,identity):
-        '''
-        检查被测系统中用户身份是否存在
-        '''
-        id = SystemRole.objects.filter(identity=identity)
+        id = SystemRole.objects.filter(role=role)
         if id.count() > 0:
             return
         else:
             return True
 
+
     def post(self, request, *args, **kwargs):
         '''
-        添加被测系统角色
+            添加被测系统角色
         '''
         ret = {"code": 1000}
         try:
+            # QueryDict
             data = request.data
-            identity = data["identity"]
-            res = self.check_identity_is_exist(identity)
+            role = data["role"]
+            res = self.check_identity_is_exist(role)
             if res == True:
-                role = self.get_role_by_identity(identity)
-                dic = {}
-                dic["identity"] = identity
-                dic["system"] = data["system"]
-                dic["role"] = role
-                dic["username"] = data["username"]
-                dic["password"] = data["password"]
-                serializer = SystemRoleSerializers(data=dic)
+                serializer = SystemRoleSerializers(data=data)
                 if serializer.is_valid():
                     serializer.save()
-                    ret["msg"] = "添加被测系统角色成功"
+                    ret["msg"] = "添加角色成功"
                     return Response(ret)
                 ret["code"] = 1001
                 ret["error"] = str(serializer.errors)
             else:
                 ret["code"] = 1001
-                ret["error"] = "该身份下已存在用户，请您创建其他身份的用户"
-                return Response(ret)
-        except:
+                ret["error"] = "该角色已存在"
+            return Response(ret)
+        except Exception as e:
+            print(e)
             ret["code"] = 1001
-            ret["error"] = "添加被测系统角色失败"
+            ret["error"] = "添加角色失败"
         return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
+    def delete(self, request, pk, *args, **kwargs):
+        """
+            删除子角色
+        """
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            snippet.delete()
+            ret["msg"] = "删除角色成功"
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "删除角色失败"
+        return Response(ret)
 
-class GetRoleBySystem(APIView):
-    '''
-        通过系统获取角色信息
-    '''
+
+class SystemRoleToken(APIView):
+
+    def get_token(self,pk):
+        '''
+            获取被测系统用户登录的令牌、用户的id
+        '''
+        try:
+            obj = SystemRole.objects.get(id=pk)
+            headers = {
+                "Content-Type": "application/json"
+            }
+            params = {
+                "loginName": obj.username,
+                "password": obj.password
+            }
+            response = requests.post(url="{0}/adminapi/user/login".format(obj.ip), headers=headers, data=json.dumps(params))
+            token = response.json()['accessToken']
+            print("成功返回token：" + str(token))
+            return token,obj
+        except:
+            return None,None
+
+    def put(self, request, pk, *args, **kwargs):
+        '''
+            更新被测系统角色的token
+        '''
+        ret = {"code": 1000}
+        try:
+            token,obj = self.get_token(pk)
+            if not token:
+                ret["code"] = 1001
+                ret["error"] = "被测系统Token更新失败"
+                return Response(ret)
+            data = {"token":token}
+            serializer = TokenSerializers(obj,data=data)
+            # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "被测系统Token更新成功"
+                return Response(ret, status=status.HTTP_201_CREATED)
+            else:
+                ret["code"] = 1001
+                ret['error'] = str(serializer.errors)
+                return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            print(e)
+            ret["code"] = 1001
+            ret["error"] = "被测系统Token更新失败"
+            return Response(ret)
+
     def get(self, request, *args, **kwargs):
+        '''
+            获取角色列表
+        '''
         system = request.GET.get("system")
         queryset = SystemRole.objects.filter(system=system)
         OrderedDict = RoleSerializers(queryset,many=True).data
-        dic = {}
-        for i in OrderedDict:
-            dic[i["identity"]] = i["role"]
-        return Response(dic)
+        L = [i["role"] for i in OrderedDict]
+        return Response(L)
+

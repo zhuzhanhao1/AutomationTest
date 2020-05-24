@@ -20,9 +20,13 @@ class SingleApiTest(APIView):
         '''
         获取角色请求令牌和ip
         '''
-        token = SystemRole.objects.get(identity=identity).token
-        ip = SystemRole.objects.get(identity=identity).ip
-        return token, ip
+        try:
+            obj = SystemRole.objects.get(role=identity)
+            token = obj.token
+            ip = obj.ip
+            return token, ip
+        except Exception as e:
+            return None,None
 
     def check_greater_less_is_exist_body(self, body):
         '''
@@ -114,23 +118,28 @@ class SingleApiTest(APIView):
             body = i.get("body", "")  # body数据
             params = "" if params == None else params
             body = "" if body == None else body
+            #校验请求参数是否都存在
             result = self.parameter_check(identity, url, method)
             if result["code"] == 1001:
                 return Response(result)
-            token, ip = self.get_token_ip_by_identity(identity)  # 根据用户身份获取请求头Token数据
-            print(ip)
+            # 根据用户身份获取请求头Token数据
+            token, ip = self.get_token_ip_by_identity(identity)
+            print(token)
+            if not token:
+                return Response({"code":"1001","error":"请先获取测试用户的token"})
+            #校验请求体重是否存在中文大于小于，转为英文大于小于
             body = self.check_greater_less_is_exist_body(body)
             try:
                 starttime = time.time()
                 response = RequestMethod(token).run_main(method, ip + url, params, body)
                 L.append(response)
                 endtime = time.time()
-                runtime = round(endtime - starttime, 3)  # 接口执行的消耗时间
+                # 接口执行的消耗时间
+                runtime = round(endtime - starttime, 3)
+                #校验响应结果中是否存在英文小于大于，将之转换为中文的大于小于
                 djson = self.check_greater_less_is_exist_response(response)
-                print(djson)
                 id = SingleApi.objects.get(caseid=caseid)
                 data = {"result": djson, "duration": runtime}
-
                 serializer = SingleApiResponseSerializers(id, data=data)
                 # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
                 if serializer.is_valid():

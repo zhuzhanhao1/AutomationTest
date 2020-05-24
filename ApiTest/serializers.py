@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import SingleApi, LeftMenu, ChildMenu, SystemRole, Link, Testurl, ProcessApi, LocustApi, SingleApiChild
 
+###########################SingleApi####################################
 
 class SingleApiSerializers(serializers.ModelSerializer):
     '''
@@ -43,6 +44,15 @@ class SingleApiHeadSerializers(serializers.ModelSerializer):
         model = SingleApi
         fields = ('head',)  # 需要序列化的属性
 
+class SingleApiIdentitySerializers(serializers.ModelSerializer):
+    '''
+        单一接口，更新负责人参数
+    '''
+    class Meta:
+        model = SingleApi
+        fields = ('identity',)  # 需要序列化的属性
+
+###########################LeftMenu#########################################
 
 class LeftMenuSerializers(serializers.ModelSerializer):
     '''
@@ -53,6 +63,8 @@ class LeftMenuSerializers(serializers.ModelSerializer):
         depth = 1
         fields = ('title','icon','href','spread')
 
+
+###########################ChildMenu#########################################
 
 class ChildMenuSerializers(serializers.ModelSerializer):
     '''
@@ -79,6 +91,7 @@ class GetParamsSer(serializers.ModelSerializer):
         model = ChildMenu
         fields = ('title',"nav")
 
+###########################SystemRole####################################
 
 class SystemRoleSerializers(serializers.ModelSerializer):
     '''
@@ -86,7 +99,7 @@ class SystemRoleSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = SystemRole
-        fields = ('id','identity','role','username','password','token','system','ip')
+        fields = ('id','role','username','password','token','system','ip')
 
 class TokenSerializers(serializers.ModelSerializer):
     '''
@@ -94,7 +107,7 @@ class TokenSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = SystemRole
-        fields = ('token',"ip")
+        fields = ('token',)
 
 class RoleSerializers(serializers.ModelSerializer):
     '''
@@ -102,17 +115,9 @@ class RoleSerializers(serializers.ModelSerializer):
     '''
     class Meta:
         model = SystemRole
-        fields = ('role',"identity")
+        fields = ('role',)
 
-
-class SystemRoleUpdateInfoSerializers(serializers.ModelSerializer):
-    '''
-        更新系统角色信息
-    '''
-    class Meta:
-        model = SystemRole
-        fields = ('username','password',)
-
+###########################Link####################################
 
 class LinkSerializers(serializers.ModelSerializer):
     '''
@@ -122,6 +127,8 @@ class LinkSerializers(serializers.ModelSerializer):
         model = Link
         fields = ('id', 'logo','websites','url')
 
+###########################Testurl####################################
+
 class TesturlSerializers(serializers.ModelSerializer):
     '''
         测试网址
@@ -130,6 +137,7 @@ class TesturlSerializers(serializers.ModelSerializer):
         model = Testurl
         fields = ('id', 'logo','websites','url','apidocument')
 
+###########################ProcessApi####################################
 
 class ProcessApiListSerializers(serializers.ModelSerializer):
     '''
@@ -141,7 +149,6 @@ class ProcessApiListSerializers(serializers.ModelSerializer):
                   'body','exceptres','result','belong','system','sortid','duration','head',
                   'isprocess','depend_id','depend_key','replace_key','replace_position')  # 需要序列化的属性
 
-
 class AddProcessApiSerializers(serializers.ModelSerializer):
     '''
         新增流程接口
@@ -151,7 +158,6 @@ class AddProcessApiSerializers(serializers.ModelSerializer):
         fields = ('caseid', 'casename', 'identity', 'url','method','params','body','belong','system',
                   'head','depend_id','depend_key','replace_key','replace_position')  # 需要序列化的属性
 
-
 class ProcessApiParamsSerializers(serializers.ModelSerializer):
     '''
         流程接口-修改params的值
@@ -159,7 +165,6 @@ class ProcessApiParamsSerializers(serializers.ModelSerializer):
     class Meta:
         model = ProcessApi
         fields = ('params',)  # 需要序列化的属性
-
 
 class ProcessApiBodySerializers(serializers.ModelSerializer):
     '''
@@ -169,7 +174,6 @@ class ProcessApiBodySerializers(serializers.ModelSerializer):
         model = ProcessApi
         fields = ('body',)  # 需要序列化的属性
 
-
 class ProcessApiHeadSerializers(serializers.ModelSerializer):
     '''
         流程接口-修改负责人的值
@@ -177,7 +181,6 @@ class ProcessApiHeadSerializers(serializers.ModelSerializer):
     class Meta:
         model = ProcessApi
         fields = ('head',)  # 需要序列化的属性
-
 
 class ProcessApiDependKeySerializers(serializers.ModelSerializer):
     '''
@@ -187,7 +190,6 @@ class ProcessApiDependKeySerializers(serializers.ModelSerializer):
         model = ProcessApi
         fields = ('depend_key',)  # 需要序列化的属性
 
-
 class ProcessApiDependIdSerializers(serializers.ModelSerializer):
     '''
         流程接口-修改依赖id的值
@@ -195,7 +197,6 @@ class ProcessApiDependIdSerializers(serializers.ModelSerializer):
     class Meta:
         model = ProcessApi
         fields = ('depend_id',)  # 需要序列化的属性
-
 
 class ProcessApiReplaceKeySerializers(serializers.ModelSerializer):
     '''
@@ -221,6 +222,8 @@ class ProcessApiResponseSerializers(serializers.ModelSerializer):
         model = ProcessApi
         fields = ('result','duration')  # 需要序列化的属性
 
+###########################LocustApi####################################
+
 class LocustApiSerializers(serializers.ModelSerializer):
     '''
         流程接口，更新响应内容和响应延迟
@@ -228,6 +231,8 @@ class LocustApiSerializers(serializers.ModelSerializer):
     class Meta:
         model = LocustApi
         fields = ('caseid', 'identity', 'url','method','params','body',"header","ip")  # 需要序列化的属性
+
+###########################SingleApiChild####################################
 
 class ParameterListSer(serializers.ModelSerializer):
     '''

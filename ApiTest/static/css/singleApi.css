@@ -45,10 +45,10 @@
 .layui-laypage a, .layui-laypage span{
     color: #fff;
 }
-.layui-table-page .layui-laypage{
-    position: fixed;
-    right: 30px;
-}
+/*.layui-table-page .layui-laypage{*/
+/*    position: fixed;*/
+/*    right: 30px;*/
+/*}*/
 .layui-breadcrumb a{
     color:#fff!important;
 }

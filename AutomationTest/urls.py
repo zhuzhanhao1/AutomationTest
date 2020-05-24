@@ -3,7 +3,7 @@ from django.contrib import admin
 from ApiTest.api import renderHtml
 
 urlpatterns = [
-    #后台返回JSON数据
+    #django-restframework
     url(r'^api/(?P<version>\w+)/', include('ApiTest.urls')),
     # 后台页面
     url(r'^admin/', admin.site.urls),
@@ -22,5 +22,4 @@ urlpatterns = [
     url(r'^systemlog/$', renderHtml.systemlog_views),
     url(r'^menu_management/$', renderHtml.menu_management_views),
     url(r'^echart_report/$', renderHtml.echart_report_views),
-    url(r'test/$', renderHtml.test),
 ]

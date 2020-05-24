@@ -3,7 +3,7 @@ from django.db.models import Q
 from ApiTest.models import SingleApi,SingleApiChild
 from ApiTest.serializers import SingleApiSerializers,SingleApiParamsSerializers,\
                                 SingleApiBodySerializers,SingleApiHeadSerializers,\
-                                ParameterListSer,AddParameterSer,UpdateParameterSer
+                                ParameterListSer,AddParameterSer,UpdateParameterSer,SingleApiIdentitySerializers
 from django.core.paginator import Paginator
 from django.http import Http404
 from rest_framework.views import APIView
@@ -319,3 +319,13 @@ class DelChildParameter(APIView):
         return Response(ret)
 
 
+class UpdateIdentity(APIView):
+
+    def get(self, request, *args, **kwargs):
+
+        obj = SingleApi.objects.filter(Q(system="tdr") & Q(belong="用户管理接口"))
+        for i in obj:
+            serializer = SingleApiIdentitySerializers(i, data={"identity":"【TDR】单位管理员"})
+            if serializer.is_valid():
+                serializer.save()
+        return Response({"test":"ok"})

@@ -110,7 +110,6 @@ class SystemRole(models.Model):
     系统角色
     """
     id = models.AutoField(primary_key=True)
-    identity = models.CharField(max_length=100,verbose_name="角色英文名")
     role = models.CharField(max_length=150, verbose_name="角色")
     username = models.CharField(max_length=250, verbose_name="用户名")
     password = models.CharField(max_length=250, verbose_name="密码")
