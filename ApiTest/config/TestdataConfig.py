@@ -1,17 +1,3 @@
-role = {
-    "ast": "单位档案员",
-    "sysadmin": "系统管理员",
-    "admin": "单位管理员",
-    "tdradmin": "数据管理员"
-}
-erms_role = {
-    "ast": "单位档案员",
-    "sysadmin": "系统管理员",
-    "admin": "单位管理员"
-}
-tdr_role = {
-    "tdradmin": "数据管理员"
-}
 
 ermsapi = {
     "unit": "单位接口",

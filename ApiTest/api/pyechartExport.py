@@ -15,7 +15,6 @@ class EchartExport(APIView):
         '''
         导出Echart报表
         '''
-
         ret = {"code": 1000}
         datas = request.data
         content = json.loads(datas.get("request", ""))
