@@ -122,28 +122,30 @@ def singleapi_views(request):
     system = request.GET.get("system", "")
     #缓存Redis
     conn = get_redis_connection('default')
-    dic = conn.get("params_dic")
-    if not dic:
-        queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area="single"))
-        OrderedDict = GetParamsSer(queryset, many=True).data
-        params_dic = {}
-        for i in OrderedDict:
-            params_dic[i["nav"]] = i["title"]
-        print("访问MySQL拿去数据放入缓存")
-        params_dic = json.dumps(params_dic)
-        # 设置缓存时间一小时
-        conn.set("params_dic", params_dic, 3600)
-        if belong:
-            belong_value = dic.get(belong, "")
-            return render(request, "singleApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
-        else:
-            return render(request, "singleApi.html", {"system": system})
-    else:
+    dic = conn.get("single_params_dic")
+    if dic:
         if belong:
             belong_value = json.loads(dic).get(belong, "")
             return render(request, "singleApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
         else:
             return render(request, "singleApi.html", {"system": system})
+    else:
+        queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area="single"))
+        OrderedDict = GetParamsSer(queryset, many=True).data
+        params_dic = {}
+        for i in OrderedDict:
+            params_dic[i["nav"]] = i["title"]
+        print("访问MySQL拿取belong数据放入缓存")
+        params_dic = json.dumps(params_dic)
+        # 设置缓存时间一小时
+        conn.set("single_params_dic", params_dic)
+        if belong:
+            belong_value = dic.get(belong, "")
+            return render(request, "singleApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
+        else:
+            return render(request, "singleApi.html", {"system": system})
+
+
 
 
 def processapi_views(request):
@@ -157,7 +159,7 @@ def processapi_views(request):
     system = request.GET.get("system", "")
     #缓存Redis
     conn = get_redis_connection('default')
-    dic = conn.get("params_dic_process")
+    dic = conn.get("process_params_dic")
     if not dic:
         queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area="process"))
         OrderedDict = GetParamsSer(queryset, many=True).data
@@ -167,7 +169,7 @@ def processapi_views(request):
         print("访问MySQL拿取belong数据放入缓存")
         params_dic = json.dumps(params_dic)
         # 设置缓存时间一小时
-        conn.set("params_dic_process", params_dic, 3600)
+        conn.set("process_params_dic", params_dic, 3600)
         if belong:
             belong_value = dic.get(belong, "")
             return render(request, "processApi.html", {"crumbs": belong, "belong": belong_value, "system": system})

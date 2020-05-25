@@ -10,15 +10,22 @@ from django_redis import get_redis_connection
 import json
 
 
+# 主表查询子表内容
+# obj = LeftMenu.objects.filter(title=title).first()
+# new =  obj.childmenu_set.all().first().classification
+
+
 class MenuTree(APIView):
     '''
     树形菜单
     '''
     def get(self, request, *args, **kwargs):
         queryset = LeftMenu.objects.filter()
+        #获取所有area，通过集合去重
         area_list = list(set([x.area for x in queryset]))
+        #经过排序，方便之后的字典赋值
         area_list.sort()
-        print(area_list)
+
         l = []
         for i in range(len(area_list)):
             dic = {}
@@ -45,7 +52,6 @@ class MenuTree(APIView):
             dic["children"] = []
             l[0]["children"].append(dic)
 
-
         queryset = LeftMenu.objects.filter(area="systemeSttings")
         area_list = list(set([x.title for x in queryset]))
         for i in range(len(area_list)):
@@ -66,8 +72,9 @@ class MenuListManage(APIView):
         dic = {}
         area = request.GET.get("area")
         conn = get_redis_connection('default')
+        a = conn.keys("single*")
         if area == "single":
-            single_menu_list = conn.get("single_menu_list")
+            single_menu_list = conn.get("single")
             if single_menu_list:
                 single_menu_list = json.loads(single_menu_list)
                 return Response(single_menu_list)
@@ -81,13 +88,13 @@ class MenuListManage(APIView):
                 for i in range(1,len(title_list)):
                     ser = ChildMenuSerializers(ChildMenu.objects.filter(classification__title=title_list[i]), many=True).data
                     dic["single"][i]["children"] = ser
-                print("访问MySQL拿去数据放入缓存")
+                print("访问MySQL拿取single数据放入缓存")
                 single_menu_list = json.dumps(dic)
-                #设置缓存时间一小时
-                conn.set("single_menu_list",single_menu_list,3600)
+                #设置缓存时间一小时3600
+                conn.set("single",single_menu_list)
 
         elif area == "process":
-            process_menu_list = conn.get("process_menu_list")
+            process_menu_list = conn.get("process")
             if process_menu_list:
                 process_menu_list = json.loads(process_menu_list)
                 return Response(process_menu_list)
@@ -101,13 +108,13 @@ class MenuListManage(APIView):
                 for i in range(0,len(title_list)):
                     ser = ChildMenuSerializers(ChildMenu.objects.filter(classification__title=title_list[i]), many=True).data
                     dic["process"][i]["children"] = ser
-                print("访问MySQL拿去数据放入缓存")
+                print("访问MySQL拿取process数据放入缓存")
                 process_menu_list = json.dumps(dic)
                 #设置缓存时间一小时
-                conn.set("process_menu_list",process_menu_list,3600)
+                conn.set("process",process_menu_list)
 
         elif area == "systemeSttings":
-            systemeSttings_menu_list = conn.get("systemeSttings_menu_list")
+            systemeSttings_menu_list = conn.get("systemeSttings")
             if systemeSttings_menu_list:
                 systemeSttings_menu_list = json.loads(systemeSttings_menu_list)
                 return Response(systemeSttings_menu_list)
@@ -115,10 +122,10 @@ class MenuListManage(APIView):
             leftmenu_single_serializer = LeftMenuSerializers(parent_menu, many=True)
             # print(leftmenu_single_serializer.data)
             dic["systemeSttings"] = leftmenu_single_serializer.data
-            print("访问MySQL拿去数据放入缓存")
+            print("访问MySQL拿取systemeSttings数据放入缓存")
             systemeSttings_menu_list = json.dumps(dic)
             # 设置缓存时间一小时
-            conn.set("systemeSttings_menu_list", systemeSttings_menu_list, 3600)
+            conn.set("systemeSttings", systemeSttings_menu_list)
         # print(dic)
         return Response(dic)
 
@@ -153,10 +160,21 @@ class MenuTableList(APIView):
 
         ret = {"code": 1000}
         data = request.data.copy()
+        title = data["classification"]
+        obj = LeftMenu.objects.get(title=title)
+        #外键关联的classification_id == 主表的id
+        classification_id = obj.id
+        data["classification"] = classification_id
+        data["area"] = obj.area
         serializer = ChildMenusSerializers(data=data)
         if serializer.is_valid():
             serializer.save()
             ret["msg"] = "添加子菜单成功"
+            #链接Redis后删除缓存数据
+            conn = get_redis_connection('default')
+            for i in conn.keys(obj.area+"*"):
+                conn.delete(i)
+            print("删除"+ obj.area +"缓存成功")
             return Response(ret)
         ret["code"] = 1001
         ret["error"] = str(serializer.errors)
@@ -177,10 +195,15 @@ class MenuTableList(APIView):
         try:
             snippet = self.get_object(pk)
             # 编辑用户
+            area = request.data["area"]
             serializer = ChildMenusSerializers(snippet, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 ret["msg"] = "编辑子菜单成功"
+                conn = get_redis_connection('default')
+                for i in conn.keys(area+"*"):
+                    conn.delete(i)
+                print("删除" + area + "缓存成功")
                 return Response(ret)
             ret["code"] = 1001
             ret["error"] = str(serializer.errors)
@@ -199,6 +222,10 @@ class MenuTableList(APIView):
             snippet = self.get_object(pk)
             snippet.delete()
             ret["msg"] = "删除子菜单成功"
+            conn = get_redis_connection('default')
+            for i in conn.keys(snippet.area+"*"):
+                conn.delete(i)
+            print("删除" + snippet.area + "缓存成功")
         except Exception as e:
             ret["code"] = 1001
             ret["error"] = "删除子菜单失败"
@@ -218,4 +245,8 @@ class MenuBelongParams(APIView):
         for i in OrderedDict:
             dic[i["nav"]] = i["title"]
         return Response(dic)
+
+
+
+
 

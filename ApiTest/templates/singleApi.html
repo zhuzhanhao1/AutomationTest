@@ -18,7 +18,6 @@
 
 <body class="layui-layout-body">
 <!--表单内容-->
-{% block content %}
 <div>
     <!--创建编辑用例-->
     <div class="layui-row" id="add_update_case" style="display: none;">
@@ -434,7 +433,7 @@
 
 
 </div>
-{% endblock content %}
+
 
 <!--主题内容-->
 <div id="layuibody" class="layui-body mybg" style="margin-bottom: -70px;">
@@ -2119,7 +2118,7 @@
                         ]]
                     });
                     table.on('tool(roletable)', function (obj) {
-                        //编辑整个用例
+                        //编辑角色
                         if (obj.event === 'update_role') {
                             var data = obj.data;
                             console.log(data);
@@ -2225,10 +2224,12 @@
                     table.on('toolbar(roletable)', function (obj) {
                         var checkStatus = table.checkStatus(obj.config.id);
                         switch (obj.event) {
+                            //添加角色
                             case 'add_role':
                                 add_role();
                                 break;
                             case "get_token":
+                                //获取token
                                 var res = checkStatus.data;
                                 console.log(res);
                                 $.ajax({

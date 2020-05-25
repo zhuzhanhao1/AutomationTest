@@ -7,6 +7,7 @@ sys.path.append(cur_path_parent)
 
 
 class QuickMothod():
+
     def get(self,url,headers,params):
         params = json.loads(params)
         headers = json.loads(headers)
