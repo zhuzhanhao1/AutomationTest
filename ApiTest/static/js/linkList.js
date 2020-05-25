@@ -6,7 +6,6 @@ layui.use(['form', 'layer', 'table'], function () {
         elem: '#linkList',
         url: '/api/v1/link/list/',
         toolbar: '#toolbarDemo',
-
         page: {groups: 5}, //开启分页
         // cellMinWidth : 95,
         height: "full-104",
@@ -15,7 +14,8 @@ layui.use(['form', 'layer', 'table'], function () {
         id: "linkListTab",
         size: 'lg',
         cols: [[
-            {title: '操作', toolbar: '#barDemo', width: 60, align: "left"},
+            {type: "checkbox"},
+            {title: '操作', toolbar: '#barDemo', width: 100, align: "left"},
             {
                 field: 'logo', title: 'LOGO', align: "center", templet: function (d) {
                     return '<a href="' + d.url + '" target="_blank"><img src="' + d.logo + '" height="26" /></a>';
@@ -42,19 +42,19 @@ layui.use(['form', 'layer', 'table'], function () {
                 area: ['35%', ""],
                 skin: "layui-layer-molv",
                 shada: 0.6,
-                content: $("#update_link").html(),
+                content: $("#add_update_link").html(),
                 success: function () {
                     layui.use(['form', 'jquery'], function () {
                         var form = layui.form;
                         $ = layui.$;
                         var id = data.id;
-                        form.val("update_link", {
+                        form.val("add_update_link", {
                             "logo": data.logo,
                             "name": data.websites,
                             "url": data.url,
                         });
                         //监听编辑用户信息，
-                        form.on('submit(update_link)', function (data) {
+                        form.on('submit(add_update_link)', function (data) {
                             console.log(data.field);
                             $.ajax({
                                 url: "/api/v1/link/update_link/" + String(id) + "/",
@@ -99,6 +99,39 @@ layui.use(['form', 'layer', 'table'], function () {
             });
 
         }
+        else if (obj.event === 'del_link') {
+            layer.confirm('真的删除行么', {icon: 2, title: "删除提示"}, function (index) {
+                console.log(obj.data);
+                //layer.msg("确定删除",{icon:1});
+                obj.del();//删除对应行（tr）的DOM结构，并更新缓存
+                layer.close(index);
+                //向服务端发送删除指令
+                var id = obj.data["id"];
+                console.log(id);
+                $.ajax({
+                    url: "/api/v1/link/del_link/" + id + "/",
+                    type: 'DELETE',
+                    success: function (data) {
+                        if (data.code === 1000) {
+                            layer.msg(data.msg, {
+                                icon: 6, offset: "t"
+                            })
+                        } else {
+                            layer.msg(data.error, {
+                                icon: 5, offset: "t"
+                            })
+                        }
+                        $(".layui-laypage-btn").click();
+                    },
+                    error: function () {
+                        layer.msg("回调失败", {
+                            icon: 5,
+                            offset: 't'
+                        });
+                    },
+                });
+            });
+        }
     });
 
 })
@@ -113,13 +146,13 @@ function add_link() {
         area: ['40%', ''],
         shade: 0.6,
         skin: "layui-layer-rim",
-        content: $("#add_link").html(),
+        content: $("#add_update_link").html(),
         success: function () {
             layui.use(['form', 'jquery'], function () {
                 var form = layui.form,
                     $ = layui.$;
-                form.val("add_link");
-                form.on('submit(add_link)', function (data) {
+                form.val("add_update_link");
+                form.on('submit(add_update_link)', function (data) {
                     $.ajax({
                         url: "/api/v1/link/add_link/",
                         type: 'POST',

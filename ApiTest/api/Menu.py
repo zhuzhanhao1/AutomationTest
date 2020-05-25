@@ -72,7 +72,6 @@ class MenuListManage(APIView):
         dic = {}
         area = request.GET.get("area")
         conn = get_redis_connection('default')
-        a = conn.keys("single*")
         if area == "single":
             single_menu_list = conn.get("single")
             if single_menu_list:

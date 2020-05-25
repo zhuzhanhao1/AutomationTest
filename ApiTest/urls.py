@@ -58,7 +58,11 @@ urlpatterns = [
     url(r'link/list/$', Link.LinkList.as_view()),
     url(r'link/add_link/$', Link.LinkList.as_view()),
     url(r'link/update_link/(?P<pk>[0-9]+)/$', Link.LinkList.as_view()),
+    url(r'link/del_link/(?P<pk>[0-9]+)/$', Link.LinkList.as_view()),
 
     # 测试网址
     url(r'testurl/list/$', Link.TesturlList.as_view()),
+    url(r'testurl/add_test_url/$', Link.TesturlList.as_view()),
+    url(r'testurl/update_test_url/(?P<pk>[0-9]+)/$', Link.TesturlList.as_view()),
+    url(r'testurl/del_test_url/(?P<pk>[0-9]+)/$', Link.TesturlList.as_view()),
 ]

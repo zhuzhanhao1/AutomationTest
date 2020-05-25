@@ -137,7 +137,7 @@ def singleapi_views(request):
             params_dic[i["nav"]] = i["title"]
         print("访问MySQL拿取belong数据放入缓存")
         params_dic = json.dumps(params_dic)
-        # 设置缓存时间一小时
+        # 设置缓存时间一小时=3600
         conn.set("single_params_dic", params_dic)
         if belong:
             belong_value = dic.get(belong, "")
