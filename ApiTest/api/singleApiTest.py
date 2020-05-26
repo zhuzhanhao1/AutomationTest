@@ -298,8 +298,9 @@ class LocustSingApi(APIView):
         '''
         角色请求令牌、ip
         '''
-        token = SystemRole.objects.get(identity=identity).token
-        ip = SystemRole.objects.get(identity=identity).ip
+        obj = SystemRole.objects.get(role=identity)
+        token = obj.token
+        ip = obj.ip
         return token, ip
 
     def get_object(self, pk):

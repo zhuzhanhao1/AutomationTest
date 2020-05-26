@@ -5320,3 +5320,15 @@ Traceback (most recent call last):
     belong_value = dic.get(belong, "")
 AttributeError: 'NoneType' object has no attribute 'get'
 2020-05-25 23:38:10,951,6396,django.server,ERROR,basehttp.py:157,"GET /processapi/?system=erms&belong=login HTTP/1.1" 500 73969
+2020-05-26 11:15:31,934,11837,django.request,ERROR,log.py:228,Internal Server Error: /processapi/
+Traceback (most recent call last):
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/exception.py", line 34, in inner
+    response = get_response(request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "/Users/zhuzhanhao/opt/anaconda3/envs/py37/lib/python3.7/site-packages/django/core/handlers/base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "/Users/zhuzhanhao/AutomationTest/ApiTest/api/renderHtml.py", line 174, in processapi_views
+    belong_value = dic.get(belong, "")
+AttributeError: 'NoneType' object has no attribute 'get'
+2020-05-26 11:15:31,937,11837,django.server,ERROR,basehttp.py:157,"GET /processapi/?system=erms&belong=login HTTP/1.1" 500 72042

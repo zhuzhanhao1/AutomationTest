@@ -124,6 +124,7 @@ def singleapi_views(request):
     conn = get_redis_connection('default')
     dic = conn.get("single_params_dic")
     if dic:
+        print("single_params_dic缓存存在")
         if belong:
             belong_value = json.loads(dic).get(belong, "")
             return render(request, "singleApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
