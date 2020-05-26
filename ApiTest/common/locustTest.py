@@ -1,18 +1,25 @@
 from locust import HttpLocust, TaskSet, task, between
 import json,os
 import pymysql
+from ApiTest.config.dbConfig import *
+from ApiTest.models import LocustApi
+
 
 class LocustTest(TaskSet):
 
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
-        self.ip = "http://amberdata.cn"
-        self.url, self.method, self.headers, self.params, self.data= self.conn_db()
+        # self.ip = "http://amberdata.cn"
+        # self.url, self.method, self.headers, self.params, self.data= self.conn_db()
+        self.obj = obj = LocustApi.objects.filter().first()
+        self.url, self.method, self.headers, self.params, self.data = \
+            self.obj.url,self.obj.method,self.obj.header,self.obj.params,self.obj.data
+
 
     def conn_db(self):
         # 打开数据库连接
-        db = pymysql.connect(host="localhost", user="root", password="123456",
-                             port=3306, database="AutomationTest", charset='utf8')
+        db = pymysql.connect(host=host, user=user, password=password,
+                             port=port, database=database, charset=charset)
         cursor = db.cursor()
         cursor.execute("select * from ApiTest_locustapi where caseid ='1'")
         db.commit()
@@ -20,6 +27,7 @@ class LocustTest(TaskSet):
         #关闭数据库链接
         db.close()
         return data[2],data[3],data[4],data[5],data[6]
+
 
     @task(1)
     def profile(self):
@@ -108,4 +116,4 @@ class WebsiteUser(HttpLocust):
     wait_time = between(1, 3)
 
 if __name__ == "__main__":
-    os.system("locust -f locustTest.py --host=http://amberdata.cn")
+    os.system("locust -f locustTest.py --host=http://app.amberdata.cn")

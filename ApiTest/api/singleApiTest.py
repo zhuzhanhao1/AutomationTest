@@ -345,7 +345,7 @@ class LocustSingApi(APIView):
         serializer = LocustApiSerializers(snippet, data=content)
         if serializer.is_valid():
             serializer.save()
-            # 天坑，不后台运行，应该就是阻塞了，Response返回的消息不能返回，暂时使用后台运行解决
+            # 天坑，不后台运行，应该就是阻塞了，Response返回的消息不能返回，暂时使用后台运行解决--web-host=127.0.0.1
             os.system("nohup locust -f ApiTest/common/locustTest.py --host={} &".format(ip))
             ret["msg"] = "Successful opening locust"
             return Response(ret)

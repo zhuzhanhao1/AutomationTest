@@ -5332,3 +5332,428 @@ Traceback (most recent call last):
     belong_value = dic.get(belong, "")
 AttributeError: 'NoneType' object has no attribute 'get'
 2020-05-26 11:15:31,937,11837,django.server,ERROR,basehttp.py:157,"GET /processapi/?system=erms&belong=login HTTP/1.1" 500 72042
+2020-05-26 18:48:27,543,2808,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-26 19:04:05,621,2808,django.request,ERROR,log.py:228,Internal Server Error: /singleapi/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 144, in singleapi_views
+    belong_value = dic.get(belong, "")
+AttributeError: 'NoneType' object has no attribute 'get'
+2020-05-26 19:04:05,622,2808,django.server,ERROR,basehttp.py:157,"GET /singleapi/?system=erms&belong=unit HTTP/1.1" 500 80159
+2020-05-26 19:22:26,027,2808,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有的连接。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None)
+2020-05-26 19:22:26,029,2808,django.server,ERROR,basehttp.py:157,"GET /api/v1/menu/list/?area=single HTTP/1.1" 500 20109
+2020-05-26 19:22:35,055,2808,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 116, in get
+    systemeSttings_menu_list = conn.get("systemeSttings")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-26 22:05:06,100,2808,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-26 22:05:08,177,2808,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-26 22:07:45,907,2808,django.request,ERROR,log.py:228,Internal Server Error: /processapi/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 175, in processapi_views
+    belong_value = dic.get(belong, "")
+AttributeError: 'NoneType' object has no attribute 'get'
+2020-05-26 22:07:45,908,2808,django.server,ERROR,basehttp.py:157,"GET /processapi/?system=erms&belong=login HTTP/1.1" 500 76395
+2020-05-26 22:55:09,374,9048,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/close_locust/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiTest.py", line 317, in get
+    locust_process = os.popen('lsof -i:8089').readlines()[-1]
+IndexError: list index out of range
+2020-05-26 22:55:09,376,9048,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/close_locust/?_=1590504302798 HTTP/1.1" 500 18691
+2020-05-26 22:59:21,848,9048,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/close_locust/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiTest.py", line 317, in get
+    locust_process = os.popen('lsof -i:8089').readlines()[-1]
+IndexError: list index out of range
+2020-05-26 22:59:21,849,9048,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/close_locust/?_=1590504977109 HTTP/1.1" 500 18691
+2020-05-26 23:12:23,124,9392,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/close_locust/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiTest.py", line 317, in get
+    locust_process = os.popen('lsof -i:8089').readlines()[-1]
+IndexError: list index out of range
+2020-05-26 23:12:23,125,9392,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/close_locust/?_=1590505817958 HTTP/1.1" 500 18691
+2020-05-26 23:17:20,702,7064,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/locust/1/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiTest.py", line 347, in put
+    serializer.save()
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\serializers.py", line 196, in save
+    "You cannot call `.save()` after accessing `serializer.data`."
+AssertionError: You cannot call `.save()` after accessing `serializer.data`.If you need to access data before committing to the database then inspect 'serializer.validated_data' instead. 
+2020-05-26 23:17:20,709,7064,django.server,ERROR,basehttp.py:157,"PUT /api/v1/singleapi/locust/1/ HTTP/1.1" 500 19343
+2020-05-26 23:18:39,259,708,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/close_locust/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiTest.py", line 317, in get
+    locust_process = os.popen('lsof -i:8089').readlines()[-1]
+IndexError: list index out of range
+2020-05-26 23:18:39,267,708,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/close_locust/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiTest.py", line 317, in get
+    locust_process = os.popen('lsof -i:8089').readlines()[-1]
+IndexError: list index out of range
+2020-05-26 23:18:39,268,708,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/close_locust/?_=1590505817960 HTTP/1.1" 500 18691
+2020-05-26 23:18:39,270,708,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/close_locust/?_=1590505817959 HTTP/1.1" 500 18691
+2020-05-26 23:19:35,237,8780,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/close_locust/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiTest.py", line 317, in get
+    locust_process = os.popen('lsof -i:8089').readlines()[-1]
+IndexError: list index out of range
+2020-05-26 23:19:35,240,8780,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/close_locust/?_=1590505817961 HTTP/1.1" 500 18691
