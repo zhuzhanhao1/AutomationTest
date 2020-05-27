@@ -2,7 +2,7 @@ from locust import HttpLocust, TaskSet, task, between
 import json,os
 import pymysql
 from ApiTest.config.dbConfig import *
-from ApiTest.models import LocustApi
+# from ApiTest.models import LocustApi
 
 
 class LocustTest(TaskSet):
@@ -10,10 +10,10 @@ class LocustTest(TaskSet):
     def on_start(self):
         """ on_start is called when a Locust start before any task is scheduled """
         # self.ip = "http://amberdata.cn"
-        # self.url, self.method, self.headers, self.params, self.data= self.conn_db()
-        self.obj = obj = LocustApi.objects.filter().first()
-        self.url, self.method, self.headers, self.params, self.data = \
-            self.obj.url,self.obj.method,self.obj.header,self.obj.params,self.obj.data
+        self.url, self.method, self.headers, self.params, self.data= self.conn_db()
+        # self.obj = LocustApi.objects.filter().first()
+        # self.url, self.method, self.headers, self.params, self.data = \
+        #     self.obj.url,self.obj.method,self.obj.header,self.obj.params,self.obj.data
 
 
     def conn_db(self):
@@ -21,7 +21,7 @@ class LocustTest(TaskSet):
         db = pymysql.connect(host=host, user=user, password=password,
                              port=port, database=database, charset=charset)
         cursor = db.cursor()
-        cursor.execute("select * from ApiTest_locustapi where caseid ='1'")
+        cursor.execute("select * from ApiTest_locustapi")
         db.commit()
         data = cursor.fetchone()
         #关闭数据库链接
@@ -115,5 +115,5 @@ class WebsiteUser(HttpLocust):
     task_set = LocustTest   #定义此 HttpLocust 的执行行为的 TaskSet 类
     wait_time = between(1, 3)
 
-if __name__ == "__main__":
-    os.system("locust -f locustTest.py --host=http://app.amberdata.cn")
+# if __name__ == "__main__":
+#     os.system("locust -f locustTest.py --host=http://app.amberdata.cn")

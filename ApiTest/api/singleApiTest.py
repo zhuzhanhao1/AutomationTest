@@ -340,7 +340,6 @@ class LocustSingApi(APIView):
         headers = json.dumps({"accessToken": token})
         content["header"] = headers
         content["ip"] = ip
-        print(content)
         snippet = self.get_object(pk)
         serializer = LocustApiSerializers(snippet, data=content)
         if serializer.is_valid():
