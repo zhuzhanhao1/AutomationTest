@@ -137,11 +137,11 @@ def singleapi_views(request):
         for i in OrderedDict:
             params_dic[i["nav"]] = i["title"]
         print("访问MySQL拿取belong数据放入缓存")
-        params_dic = json.dumps(params_dic)
+        params_str = json.dumps(params_dic)
         # 设置缓存时间一小时=3600
-        conn.set("single_params_dic", params_dic)
+        conn.set("single_params_dic", params_str)
         if belong:
-            belong_value = dic.get(belong, "")
+            belong_value = params_dic.get(belong, "")
             return render(request, "singleApi.html", {"crumbs": belong, "belong": belong_value, "system": system})
         else:
             return render(request, "singleApi.html", {"system": system})

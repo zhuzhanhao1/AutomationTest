@@ -115,5 +115,5 @@ class WebsiteUser(HttpLocust):
     task_set = LocustTest   #定义此 HttpLocust 的执行行为的 TaskSet 类
     wait_time = between(1, 3)
 
-# if __name__ == "__main__":
-#     os.system("locust -f locustTest.py --host=http://app.amberdata.cn")
+if __name__ == "__main__":
+    os.system("locust -f locustTest.py --host=http://app.amberdata.cn")
