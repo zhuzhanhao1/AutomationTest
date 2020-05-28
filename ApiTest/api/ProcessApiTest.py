@@ -146,7 +146,6 @@ class ProcessApiTest(APIView):
         dic = {}
         num = 0
         for i in content:
-
             print("当前执行第" + str(num) + "号接口:" + i.get("casename", ""))
             caseid = i.get("caseid", "")
             identity = i.get("identity", "")  # 用户身份

@@ -5,13 +5,19 @@ from ApiTest.models import SingleApi, ProcessApi
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import json, xlrd
-
+from pyecharts.globals import CurrentConfig
+#设置src="../static/js/echarts.min.js"加载在本地路径
+CurrentConfig.ONLINE_HOST  = "../static/js/"
+from pyecharts import options as opts
+from pyecharts.charts import Bar
 
 class PublicApiSort(APIView):
-
+    '''
+        排序
+    '''
     def post(self, request, *args, **kwargs):
         '''
-        :param request: 【排序后id的顺序】、属于什么模块、属于什么系统、是单一接口的还是流出接口的
+        :param request: 【排序后id的顺序】、属于什么模块、属于什么系统、是单一接口的还是流程接口的
         :return: 将排序号按照id的顺序重新生成
         '''
         ret = {"code": 1000}
@@ -34,7 +40,7 @@ class PublicApiSort(APIView):
                 for d in caseids:
                     SingleApi.objects.filter(caseid=d).update(sortid=l[flag])
                     flag += 1
-            else:
+            elif type == "process":
                 if belong:
                     all = ProcessApi.objects.filter(Q(belong=belong) & Q(system=system))
                 else:
@@ -46,15 +52,17 @@ class PublicApiSort(APIView):
                 for d in caseids:
                     ProcessApi.objects.filter(caseid=d).update(sortid=l[flag])
                     flag += 1
+
             ret["msg"] = "排序成功"
         except Exception as e:
             ret["code"] = 1001
             ret["error"] = "排序失败"
         return Response(ret)
 
-
 class PublicApiDingDingNotice(APIView):
-
+    '''
+        钉钉通知
+    '''
     def update_date(self):
         pass
 
@@ -80,9 +88,10 @@ class PublicApiDingDingNotice(APIView):
             ret["error"] = "发送钉钉信息失败"
         return Response(ret)
 
-
 class PublicApiImport(APIView):
-
+    '''
+        导入数据
+    '''
     def post(self, request, *args, **kwargs):
         '''
         :param request:
@@ -115,3 +124,45 @@ class PublicApiImport(APIView):
             ret["code"] = 1001
             ret["error"] = "所选文件必须是xlsx、xls格式"
             return Response(ret)
+
+class EchartExport(APIView):
+    '''
+        echar图表
+    '''
+    def post(self, request, *args, **kwargs):
+        '''
+        导出Echart报表
+        '''
+        ret = {"code": 1000}
+        datas = request.data
+        content = json.loads(datas.get("request", ""))
+        url_list = []
+        duration_list = []
+        for i in content:
+            url_list.append(i["url"].split("/")[-1])
+            duration_list.append(i["duration"])
+        print(url_list)
+        duration_list = [0 if i==None else i for i in duration_list]
+        print(duration_list)
+        try:
+            # 纵向柱状图
+            c = (
+                Bar()
+                    .add_xaxis(url_list)
+                    .add_yaxis("Duration", duration_list)
+                    .set_global_opts(
+                    xaxis_opts=opts.AxisOpts(axislabel_opts=opts.LabelOpts(rotate=-15)),
+                    title_opts=opts.TitleOpts(title="接口响应时长分布图", subtitle="右上角图标可切换折线图哦！"),
+                    toolbox_opts=opts.ToolboxOpts(),
+                    legend_opts=opts.LegendOpts(is_show=False),
+                    datazoom_opts=opts.DataZoomOpts(),
+
+                )
+                .render("./ApiTest/templates/pyechartReport.html")
+            )
+            ret["msg"] = "生成报表成功"
+        except Exception as e:
+            print(e)
+            ret["code"] = 1001
+            ret["error"] = "生成报表异常"
+        return Response(ret)

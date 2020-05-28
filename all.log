@@ -6084,3 +6084,342 @@ Traceback (most recent call last):
     if int(replace_position) == 0:
 ValueError: invalid literal for int() with base 10: 'params'
 2020-05-28 19:40:15,753,5743,django.server,ERROR,basehttp.py:157,"POST /api/v1/processapi/run/ HTTP/1.1" 500 19756
+2020-05-28 22:41:52,693,8656,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/processapi/run/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 691, in _read_bytes
+    data = self._rfile.read(num_bytes)
+  File "D:\Anaconda3\envs\test\lib\socket.py", line 589, in readinto
+    return self._sock.recv_into(b)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\utils.py", line 86, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\mysql\base.py", line 74, in execute
+    return self.cursor.execute(query, args)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 657, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 699, in _read_bytes
+    "Lost connection to MySQL server during query (%s)" % (e,))
+pymysql.err.OperationalError: (2013, 'Lost connection to MySQL server during query ([WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。)')
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\ProcessApiTest.py", line 300, in post
+    id = ProcessApi.objects.get(caseid=caseid)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 411, in get
+    num = len(clone)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 258, in __len__
+    self._fetch_all()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 1261, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 57, in __iter__
+    results = compiler.execute_sql(chunked_fetch=self.chunked_fetch, chunk_size=self.chunk_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\compiler.py", line 1151, in execute_sql
+    cursor.execute(sql, params)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\utils.py", line 100, in execute
+    return super().execute(sql, params)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\utils.py", line 68, in execute
+    return self._execute_with_wrappers(sql, params, many=False, executor=self._execute)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\utils.py", line 77, in _execute_with_wrappers
+    return executor(sql, params, many, context)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\utils.py", line 86, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\utils.py", line 90, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\utils.py", line 86, in _execute
+    return self.cursor.execute(sql, params)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\backends\mysql\base.py", line 74, in execute
+    return self.cursor.execute(query, args)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\cursors.py", line 170, in execute
+    result = self._query(query)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\cursors.py", line 328, in _query
+    conn.query(q)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 517, in query
+    self._affected_rows = self._read_query_result(unbuffered=unbuffered)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 732, in _read_query_result
+    result.read()
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 1075, in read
+    first_packet = self.connection._read_packet()
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 657, in _read_packet
+    packet_header = self._read_bytes(4)
+  File "D:\Anaconda3\envs\test\lib\site-packages\pymysql\connections.py", line 699, in _read_bytes
+    "Lost connection to MySQL server during query (%s)" % (e,))
+django.db.utils.OperationalError: (2013, 'Lost connection to MySQL server during query ([WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。)')
+2020-05-28 22:41:52,705,8656,django.server,ERROR,basehttp.py:157,"POST /api/v1/processapi/run/ HTTP/1.1" 500 24699
+2020-05-28 22:56:06,589,8252,django.request,ERROR,log.py:228,Internal Server Error: /processapi/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\renderHtml.py", line 163, in processapi_views
+    dic = conn.get("process_params_dic")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-28 23:09:20,859,8252,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-28 23:09:23,765,8252,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-28 23:09:35,128,8252,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/processapi/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\processApiList.py", line 38, in get
+    serializer = ProcessApiListSerializers(apilists, many=True)
+UnboundLocalError: local variable 'apilists' referenced before assignment
+2020-05-28 23:09:35,130,8252,django.server,ERROR,basehttp.py:157,"GET /api/v1/processapi/list/?page=1&limit=30&belong=&system= HTTP/1.1" 500 18885
+2020-05-28 23:18:43,502,6256,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+TimeoutError: [WinError 10060] 由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10060, '由于连接方在一段时间后没有正确答复或连接的主机没有反应，连接尝试失败。', None, 10060, None)
+2020-05-28 23:25:26,386,6256,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/menu/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 198, in _read_from_socket
+    data = recv(self._sock, socket_read_size)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\_compat.py", line 72, in recv
+    return sock.recv(*args, **kwargs)
+ConnectionResetError: [WinError 10054] 远程主机强迫关闭了一个现有的连接。
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\Menu.py", line 76, in get
+    single_menu_list = conn.get("single")
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 1606, in get
+    return self.execute_command('GET', name)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 901, in execute_command
+    return self.parse_response(conn, command_name, **options)
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\client.py", line 915, in parse_response
+    response = connection.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 730, in read_response
+    response = self._parser.read_response()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 321, in read_response
+    raw = self._buffer.readline()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 256, in readline
+    self._read_from_socket()
+  File "D:\Anaconda3\envs\test\lib\site-packages\redis\connection.py", line 223, in _read_from_socket
+    (ex.args,))
+redis.exceptions.ConnectionError: Error while reading from socket: (10054, '远程主机强迫关闭了一个现有的连接。', None, 10054, None)
+2020-05-28 23:25:26,388,6256,django.server,ERROR,basehttp.py:157,"GET /api/v1/menu/list/?area=single HTTP/1.1" 500 20161

@@ -93,8 +93,8 @@
                     <div class="layui-form-item">
                         <label class="layui-form-label">替换区域</label>
                         <div class="layui-input-block">
-                            <input type="checkbox" name="replaceposition" value="params" title="params">
-                            <input type="checkbox" name="replaceposition" value="body" title="body">
+                            <input type="checkbox" name="params" value="params" title="params">
+                            <input type="checkbox" name="body" value="body" title="body">
                         </div>
                     </div>
 
@@ -458,7 +458,7 @@
             }//排序
             , size: 'lg'	//lg大尺寸 /sm小尺寸
             , skin: 'line' //行边框风格 /row列表框风格 /nob无边框风格
-            , limit: 30
+            , limit: 10
             , limits: [10, 20, 30, 50, 100, 200, 500]
             , where: {//额外参数
                 belong: '{{ belong }}',
@@ -1248,6 +1248,77 @@
                 {#        }#}
                 {#    });#}
                 break;
+                //导出报表
+                case 'export_report':
+                    var data = checkStatus.data;
+                    console.log(data);
+                    if (data.length == 0) {
+                        layer.msg("请先选中需要执行的用例", {
+                            icon: 2,
+                            offset: "t"
+                        });
+                    } else {
+                        var l = [];
+                        for (i = 0; i < data.length; i++) {
+                            var dic = {};
+                            console.log(data[i]);
+                            dic["url"] = data[i]["url"];
+                            dic['duration'] = data[i]['duration'];
+                            l.push(dic);
+                        }
+                        console.log(l);
+                    }
+                    $.ajax({
+                            cache: false,
+                            url: "/api/v1/publicapi/export_report/",
+                            type: 'POST',
+                            data: {
+                                "request": JSON.stringify(l)
+                            },
+                            //请求前的处理,加载loading
+                            beforeSend: function () {
+                                l_index = layer.msg('执行接口中，小伙伴请稍候~~', {
+                                    icon: 16,
+                                    time: false,
+                                    shade: 0.5
+                                });
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                if (data.code === 1000) {
+                                    layer.msg(data.msg, {
+                                        icon: 6, offset: "t"
+                                    });
+                                    layer.open({
+                                        type: 2,
+                                        title: "pycharts图表",
+                                        shadeClose: true,
+                                        shade: false,
+                                        zIndex: layer.zIndex,
+                                        maxmin: true, //开启最大化最小化按钮
+                                        area: ['950px', '600px'],
+                                        content: '/echart_report/',
+                                        success: function () {
+                                            layer.setTop(layero);
+                                        }
+                                    });
+                                } else {
+                                    layer.msg(data.error, {
+                                        icon: 5, offset: "t"
+                                    })
+                                }
+
+                            },
+                            error: function () {
+                                layer.msg("回调失败", {
+                                    icon: 5,
+                                    offset: 't'
+                                });
+                            },
+                            complete: function () {
+                                layer.close(l_index);
+                            }
+                        });
             }
 
         });
@@ -1600,18 +1671,26 @@
                                 let position_arr = ["params", "body"];
                                 let par = [];
                                 position_arr.map(function (data) {
-                                    console.log($("input[name^=" + data + "]").next("div").hasClass("layui-form-checked"));
+                                    //console.log($("input[name^=" + data + "]").next("div").hasClass("layui-form-checked"));
                                     if ($("input[name^=" + data + "]").next("div").hasClass("layui-form-checked")) {
                                         par.push(data);
                                     }
                                 });
                                 console.log(par);
+                                let num = "";
+                                if (par.length == 2){
+                                    num = 2
+                                }else if(par.length == 1 && par.indexOf("params") == 0){
+                                    num = 0
+                                }else if(par.length == 1 && par.indexOf("body") == 0){
+                                    num = 1
+                                }
+                                console.log("请求的replace_position为："+String(num));
                                 $.ajax({
-                                    cache: false,
                                     url: "/api/v1/processapi/update_case/" + obj.data['caseid'] + '/',
                                     type: 'GET',
                                     data: {
-                                        "replace_position": JSON.stringify(par)
+                                        "replace_position": num
                                     },
                                     success: function (data) {
                                         if (data.code === 1000) {
@@ -1673,11 +1752,29 @@
                                 "dependid": data.depend_id,
                                 "dependkey": data.depend_key,
                                 "replacekey": data.replace_key,
-                                "replaceposition": data.replace_position,
+                                //"replaceposition": data.replace_position,
                             });
                             //监听编辑用户信息，
                             form.on('submit(add_update_case)', function (data) {
                                 console.log(data.field);
+                                let position_arr = ["params", "body"];
+                                let par = [];
+                                position_arr.map(function (data) {
+                                    //console.log($("input[name^=" + data + "]").next("div").hasClass("layui-form-checked"));
+                                    if ($("input[name^=" + data + "]").next("div").hasClass("layui-form-checked")) {
+                                        par.push(data);
+                                    }
+                                });
+                                console.log(par);
+                                let num = "";
+                                if (par.length == 2){
+                                    num = 2
+                                }else if(par.length == 1 && par.indexOf("params") == 0){
+                                    num = 0
+                                }else if(par.length == 1 && par.indexOf("body") == 0){
+                                    num = 1
+                                }
+                                console.log("请求的replace_position为："+String(num));
                                 $.ajax({
                                     cache: false,
                                     url: "/api/v1/processapi/update_case/" + id + "/",
@@ -1695,7 +1792,7 @@
                                         "depend_id": data.field.dependid,
                                         "depend_key": data.field.dependkey,
                                         "replace_key": data.field.replacekey,
-                                        "replace_position": data.field.replaceposition,
+                                        "replace_position": num,
                                         "system": "{{ system }}",
                                         "head": data.field.head
 
@@ -1817,6 +1914,24 @@
                     form.val("add_update_case");
                     form.on('submit(add_update_case)', function (data) {
                         console.log(data.field);
+                        let position_arr = ["params", "body"];
+                        let par = [];
+                        position_arr.map(function (data) {
+                            //console.log($("input[name^=" + data + "]").next("div").hasClass("layui-form-checked"));
+                            if ($("input[name^=" + data + "]").next("div").hasClass("layui-form-checked")) {
+                                par.push(data);
+                            }
+                        });
+                        console.log(par);
+                        let num = "";
+                        if (par.length == 2){
+                            num = 2
+                        }else if(par.length == 1 && par.indexOf("params") == 0){
+                            num = 0
+                        }else if(par.length == 1 && par.indexOf("body") == 0){
+                            num = 1
+                        }
+                        console.log("请求的replace_position为："+String(num));
                         $.ajax({
                             cache: false,
                             url: "/api/v1/processapi/add_case/",
@@ -1832,7 +1947,7 @@
                                 "depend_id": data.field.dependid,
                                 "depend_key": data.field.dependkey,
                                 "replace_key": data.field.replacekey,
-                                "replace_position": data.field.replaceposition,
+                                "replace_position": num,
                                 "system": "{{ system }}",
                                 "head": data.field.head
                             },
@@ -2247,8 +2362,9 @@
         <button type="button" onclick="add_case()" class="layui-btn layui-btn-sm">添加接口</button>
         <button class="layui-btn layui-btn-sm" lay-event="batch_delete">批量删除</button>
         <button id="Dingding" class="layui-btn layui-btn-sm" lay-event="ding_ding">钉钉通知</button>
-        <button id="Runcase" class="layui-btn layui-btn-sm" lay-event="run_case">执行接口
-        </button>
+        <button id="Runcase" class="layui-btn layui-btn-sm" lay-event="run_case">执行接口</button>
+        <button class="layui-btn layui-btn-sm" lay-event="export_report">生成报表</button>
+
     </div>
 </script>
 <!--行内按钮-->

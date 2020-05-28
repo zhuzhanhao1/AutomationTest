@@ -15,7 +15,6 @@ urlpatterns = [
     url(r'singleapi/locust/(?P<pk>[0-9]+)/$', singleApiTest.LocustSingApi.as_view()),
     url(r'singleapi/close_locust/$', singleApiTest.LocustSingApi.as_view()),
     url(r'singleapi/quickrun/$', singleApiTest.RunQuickTest.as_view()),
-    url(r'singleapi/export_report/$', pyechartExport.EchartExport.as_view()),
 
     #单一接口参数详情
     url(r'singleapi/parameter_details/$', singleApiList.SingleApiChildList.as_view()),
@@ -36,6 +35,7 @@ urlpatterns = [
     url(r'publicapi/sort/$', publicApi.PublicApiSort.as_view()),
     url(r'publicapi/dingding/$', publicApi.PublicApiDingDingNotice.as_view()),
     url(r'publicapi/import_case/$', publicApi.PublicApiImport.as_view()),
+    url(r'publicapi/export_report/$', publicApi.EchartExport.as_view()),
 
     # 测试系统角色
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),

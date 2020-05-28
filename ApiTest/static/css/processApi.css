@@ -53,10 +53,10 @@
 }
 
 
-#layui-table-page1 > .layui-laypage {
-    position: fixed;
-    right: 30px;
-}
+/*#layui-table-page1 > .layui-laypage {*/
+/*    position: fixed;*/
+/*    right: 30px;*/
+/*}*/
 
 .layui-breadcrumb a {
     color: #fff !important;

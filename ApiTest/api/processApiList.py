@@ -37,7 +37,7 @@ class ProcessApiList(APIView):
 
         serializer = ProcessApiListSerializers(apilists, many=True)
         pageindex = request.GET.get('page', 1)  # 页数
-        pagesize = request.GET.get("limit", 30)  # 每页显示数量
+        pagesize = request.GET.get("limit", 10)  # 每页显示数量
         pageInator = Paginator(serializer.data, pagesize)
         # 分页
         contacts = pageInator.page(pageindex)
@@ -51,12 +51,12 @@ class AddProcessApi(APIView):
     '''
     创建流程接口
     '''
-    def parameter_check(self,system):
+    def parameter_check(self):
         """
         验证参数
         """
         L = []
-        sortid_queryset = ProcessApi.objects.filter(system=system).values("sortid") #[{"sortid":0},{}]
+        sortid_queryset = ProcessApi.objects.filter().values("sortid") #[{"sortid":0},{}]
         for i in sortid_queryset:
             L.append(i.get("sortid"))
         print(L)
@@ -68,8 +68,8 @@ class AddProcessApi(APIView):
         ret = {"code": 1000}
         try:
             data = request.data
-            system = data.get("system", "")
-            sortid = self.parameter_check(system)
+            # system = data.get("system", "")
+            sortid = self.parameter_check()
             print(sortid)
             serializer = AddProcessApiSerializers(data=request.data)
             if serializer.is_valid():
@@ -145,12 +145,6 @@ class UpdateProcessApi(APIView):
                 serializer = ProcessApiReplaceKeySerializers(snippet, data=data)
                 ret["msg"] = "编辑替换体成功"
             elif replace_position:
-                if replace_position == '["params"]':
-                    replace_position = 0
-                elif replace_position == '["body"]':
-                    replace_position = 1
-                elif replace_position == '["params","body"]':
-                    replace_position = 2
                 data = {"replace_position": replace_position}
                 serializer = ProcessApiReplacePositionSerializers(snippet, data=data)
             if serializer.is_valid():
