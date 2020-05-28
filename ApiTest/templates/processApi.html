@@ -24,496 +24,149 @@
 <body class="layui-layout-body">
 <div>
     <!--创建用例-->
-    <div class="layui-row" id="add_case" style="display:none;">
+    <div class="layui-row" id="add_update_case" style="display:none;">
         <div class="layui-col-md11">
-            <div class="layui-tab">
-                <ul class="layui-tab-title">
-                    <li class="layui-this">无依赖</li>
-                    <li>存在依赖</li>
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        <form class="layui-form" lay-filter="add_case">
+            <form class="layui-form" lay-filter="add_update_case">
 
-                            <div class="layui-form-item" style="margin-top: 20px;">
-                                <label class="layui-form-label">系统角色</label>
-                                <div class="layui-input-block">
-                                    <select name="identity" lay-verify="required">
-                                        {% for item,value in role.items %}
-                                            <option value="{{ item }}">{{ value }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">所属模块</label>
-                                <div class="layui-input-block">
-                                    <select name="belong" lay-verify="required">
-                                        {% for i in apinav %}
-                                            <option value="{{ i }}">{{ i }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">用例名称</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="casename" required lay-verify="required"
-                                           placeholder="请输入用例名称"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求地址</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="url" required lay-verify="required" placeholder="请输入请求地址"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求方式</label>
-                                <div class="layui-input-block">
-                                    <input type="radio" name="method" value="get" title="GET" checked>
-                                    <input type="radio" name="method" value="post" title="POST">
-                                    <input type="radio" name="method" value="put" title="PUT">
-                                    <input type="radio" name="method" value="delete" title="Delete">
-                                    <input type="radio" name="method" value="file" title="File">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Query Params</label>
-                                <div class="layui-input-block">
-                                    <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Form Data</label>
-                                <div class="layui-input-block">
-                                    <textarea name="body" id="body" placeholder="请输入内容"
-                                              class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">负责人</label>
-                                <div class="layui-input-block">
-                                    <select name="head" lay-verify="required">
-                                        <option value="老张">老张</option>
-                                        <option value="老王">老王</option>
-                                        <option value="老李">老李</option>
-                                        <option value="老江">老江</option>
-                                        <option value="老刘">老刘</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-input-block">
-                                    <button class="layui-btn" lay-submit lay-filter="add_case"
-                                            style="float: right;">立即提交
-                                    </button>
-                                    <button type="reset" class="layui-btn layui-btn-primary"
-                                            style="float: right;margin-right: 10px;">
-                                        重置
-                                    </button>
-                                </div>
-                            </div>
-
-                        </form>
+                    <div class="layui-form-item" style="margin-top: 20px;">
+                        <label class="layui-form-label">系统角色</label>
+                        <div class="layui-input-block">
+                            <select name="identity" id="identity" lay-verify="required">
+                                <option value=""></option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="layui-tab-item">
-                        <form class="layui-form" lay-filter="add_case">
-
-                            <div class="layui-form-item" style="margin-top: 20px;">
-                                <label class="layui-form-label">系统角色</label>
-                                <div class="layui-input-block">
-                                    <select name="identity" lay-verify="required">
-                                        {% for item,value in role.items %}
-                                            <option value="{{ item }}">{{ value }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">所属模块</label>
-                                <div class="layui-input-block">
-                                    <select name="belong" lay-verify="required">
-                                        {% for i in apinav %}
-                                            <option value="{{ i }}">{{ i }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">用例名称</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="casename" required lay-verify="required"
-                                           placeholder="请输入用例名称"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求地址</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="url" required lay-verify="required" placeholder="请输入请求地址"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求方式</label>
-                                <div class="layui-input-block">
-                                    <input type="radio" name="method" value="get" title="GET" checked>
-                                    <input type="radio" name="method" value="post" title="POST">
-                                    <input type="radio" name="method" value="put" title="PUT">
-                                    <input type="radio" name="method" value="delete" title="Delete">
-                                    <input type="radio" name="method" value="file" title="File">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Query Params</label>
-                                <div class="layui-input-block">
-                                    <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Form Data</label>
-                                <div class="layui-input-block">
-                                    <textarea name="body" id="body" placeholder="请输入内容"
-                                              class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">替换区域</label>
-                                <div class="layui-input-block">
-                                    <input type="checkbox" name="replaceposition" value="params" title="params">
-                                    <input type="checkbox" name="replaceposition" value="body" title="body">
-                                </div>
-                            </div>
-
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">依赖的ID</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="dependid" placeholder="无依赖不必填" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">依赖的key</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="dependkey" placeholder="无依赖不必填" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">替换的key</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="replacekey" placeholder="无依赖不必填" class="layui-input">
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">负责人</label>
-                                <div class="layui-input-block">
-                                    <select name="head" lay-verify="required">
-                                        <option value="老张">老张</option>
-                                        <option value="老王">老王</option>
-                                        <option value="老李">老李</option>
-                                        <option value="老江">老江</option>
-                                        <option value="老刘">老刘</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="layui-form-item">
-                                <div class="layui-input-block">
-                                    <button class="layui-btn" lay-submit lay-filter="add_case"
-                                            style="float: right;">立即提交
-                                    </button>
-                                    <button type="reset" class="layui-btn layui-btn-primary"
-                                            style="float: right;margin-right: 10px;">
-                                        重置
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">所属模块</label>
+                        <div class="layui-input-block">
+                            <select name="belong" id="belong" lay-verify="required">
+                                <option value=""></option>
+                            </select>
+                        </div>
                     </div>
-                </div>
-            </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">用例名称</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="casename" required lay-verify="required"
+                                   placeholder="请输入用例名称"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求地址</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="url" required lay-verify="required" placeholder="请输入请求地址"
+                                   autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">请求方式</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="method" value="get" title="GET" checked>
+                            <input type="radio" name="method" value="post" title="POST">
+                            <input type="radio" name="method" value="put" title="PUT">
+                            <input type="radio" name="method" value="delete" title="Delete">
+                            <input type="radio" name="method" value="file" title="File">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">Query Params</label>
+                        <div class="layui-input-block">
+                            <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item layui-form-text">
+                        <label class="layui-form-label">Form Data</label>
+                        <div class="layui-input-block">
+                                <textarea name="body" id="body" placeholder="请输入内容"
+                                          class="layui-textarea"></textarea>
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">替换区域</label>
+                        <div class="layui-input-block">
+                            <input type="checkbox" name="replaceposition" value="params" title="params">
+                            <input type="checkbox" name="replaceposition" value="body" title="body">
+                        </div>
+                    </div>
+
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">依赖的ID</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="dependid" placeholder="无依赖不必填" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">依赖的key</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="dependkey" placeholder="无依赖不必填" class="layui-input">
+                        </div>
+                    </div>
+
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">替换的key</label>
+                        <div class="layui-input-block">
+                            <input type="text" name="replacekey" placeholder="无依赖不必填" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">负责人</label>
+                        <div class="layui-input-block">
+                            <select name="head" lay-verify="required">
+                                <option value="老张">老张</option>
+                                <option value="老王">老王</option>
+                                <option value="老李">老李</option>
+                                <option value="老江">老江</option>
+                                <option value="老刘">老刘</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit lay-filter="add_update_case"
+                                    style="float: right;">立即提交
+                            </button>
+                            <button type="reset" class="layui-btn layui-btn-primary"
+                                    style="float: right;margin-right: 10px;">
+                                重置
+                            </button>
+                        </div>
+                    </div>
+                </form>
         </div>
     </div>
 
-    <!--编辑用例-->
-    <div class="layui-row" id="update_case" style="display:none;">
+    <!--添加编辑用户信息-->
+    <div class="layui-row" id="add_update_role" style="display: none;">
         <div class="layui-col-md11">
-            <div class="layui-tab">
-                <ul class="layui-tab-title">
-                    <li class="layui-this">无依赖</li>
-                    <li>存在依赖</li>
-                </ul>
-                <div class="layui-tab-content">
-                    <div class="layui-tab-item layui-show">
-                        <form class="layui-form" lay-filter="update_case">
-
-                            <div class="layui-form-item" style="margin-top: 20px;">
-                                <label class="layui-form-label">系统角色</label>
-                                <div class="layui-input-block">
-                                    <select name="identity" lay-verify="required">
-                                        {% for item,value in role.items %}
-                                            <option value="{{ item }}">{{ value }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">所属模块</label>
-                                <div class="layui-input-block">
-                                    <select name="belong" lay-verify="required">
-                                        {% for i in apinav %}
-                                            <option value="{{ i }}">{{ i }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">用例名称</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="casename" required lay-verify="required"
-                                           placeholder="请输入用例名称"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求地址</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="url" required lay-verify="required" placeholder="请输入请求地址"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求方式</label>
-                                <div class="layui-input-block">
-                                    <input type="radio" name="method" value="get" title="GET" checked>
-                                    <input type="radio" name="method" value="post" title="POST">
-                                    <input type="radio" name="method" value="put" title="PUT">
-                                    <input type="radio" name="method" value="delete" title="Delete">
-                                    <input type="radio" name="method" value="file" title="File">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Query Params</label>
-                                <div class="layui-input-block">
-                                    <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Form Data</label>
-                                <div class="layui-input-block">
-                                    <textarea name="body" id="body" placeholder="请输入内容"
-                                              class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">负责人</label>
-                                <div class="layui-input-block">
-                                    <select name="head" lay-verify="required">
-                                        <option value="老张">老张</option>
-                                        <option value="老王">老王</option>
-                                        <option value="老李">老李</option>
-                                        <option value="老江">老江</option>
-                                        <option value="老刘">老刘</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <div class="layui-input-block">
-                                    <button class="layui-btn" lay-submit lay-filter="update_case"
-                                            style="float: right;">立即提交
-                                    </button>
-                                    <button type="reset" class="layui-btn layui-btn-primary"
-                                            style="float: right;margin-right: 10px;">
-                                        重置
-                                    </button>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
-
-                    <div class="layui-tab-item">
-                        <form class="layui-form" lay-filter="update_case">
-
-                            <div class="layui-form-item" style="margin-top: 20px;">
-                                <label class="layui-form-label">系统角色</label>
-                                <div class="layui-input-block">
-                                    <select name="identity" lay-verify="required">
-                                        {% for item,value in role.items %}
-                                            <option value="{{ item }}">{{ value }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">所属模块</label>
-                                <div class="layui-input-block">
-                                    <select name="belong" lay-verify="required">
-                                        {% for i in apinav %}
-                                            <option value="{{ i }}">{{ i }}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">用例名称</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="casename" required lay-verify="required"
-                                           placeholder="请输入用例名称"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求地址</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="url" required lay-verify="required" placeholder="请输入请求地址"
-                                           autocomplete="off" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <label class="layui-form-label">请求方式</label>
-                                <div class="layui-input-block">
-                                    <input type="radio" name="method" value="get" title="GET" checked>
-                                    <input type="radio" name="method" value="post" title="POST">
-                                    <input type="radio" name="method" value="put" title="PUT">
-                                    <input type="radio" name="method" value="delete" title="Delete">
-                                    <input type="radio" name="method" value="file" title="File">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Query Params</label>
-                                <div class="layui-input-block">
-                                    <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">Form Data</label>
-                                <div class="layui-input-block">
-                                    <textarea name="body" id="body" placeholder="请输入内容"
-                                              class="layui-textarea"></textarea>
-                                </div>
-                            </div>
-
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">替换区域</label>
-                                <div class="layui-input-block">
-                                    <input type="checkbox" name="replaceposition" value="params" title="params">
-                                    <input type="checkbox" name="replaceposition" value="body" title="body">
-                                </div>
-                            </div>
-
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">依赖的ID</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="dependid" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">依赖的key</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="dependkey" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item layui-form-text">
-                                <label class="layui-form-label">替换的key</label>
-                                <div class="layui-input-block">
-                                    <input type="text" name="replacekey" class="layui-input">
-                                </div>
-                            </div>
-
-                            <div class="layui-form-item">
-                                <div class="layui-input-block">
-                                    <button class="layui-btn" lay-submit lay-filter="update_case"
-                                            style="float: right;">立即提交
-                                    </button>
-                                    <button type="reset" class="layui-btn layui-btn-primary"
-                                            style="float: right;margin-right: 10px;">
-                                        重置
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--更新用户信息-->
-    <div class="layui-row" id="update_role_info" style="display: none;">
-        <div class="layui-col-md11">
-            <form class="layui-form" lay-filter="update_role_info">
+            <form class="layui-form" lay-filter="add_update_role">
 
                 <div class="layui-form-item" style="margin-top: 20px;">
-                    <button type="button" class="layui-btn layui-btn-warm" onclick="get_token()"
-                            style="float: right;margin-left: 10px;">获取Token
-                    </button>
-                    <button type="button" class="layui-btn layui-btn-warm" onclick="get_user_info()"
-                            style="float: right;">用户信息
-                    </button>
-                </div>
-                <div class="layui-form-item" style="margin-top: 20px;">
-                    <label class="layui-form-label">所属系统</label>
+                    <label class="layui-form-label">系统</label>
                     <div class="layui-input-block">
-                        <input type="radio" name="system" value="erms" title="数据档案室">
-                        <input type="radio" name="system" value="transfer" title="移交接收系统">
-                        <input type="radio" name="system" value="tdr" title="数字档案馆">
+                        <input type="text" id="system" name="system" required lay-verify="required"
+                                autocomplete="off" class="layui-input" value="{{ system }}">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">角色</label>
-                    <div class="layui-input-block erms" style="display: none;">
-                        <input type="radio" name="identity" value="sysadmin" title="系统管理员">
-                        <input type="radio" name="identity" value="admin" title="单位管理员">
-                        <input type="radio" name="identity" value="ast" title="单位档案员">
-                    </div>
-                    <div class="layui-input-block transfer" style="display: none;">
-                        <input type="radio" name="identity" value="transferadmin" title="数据管理员">
-                        <input type="radio" name="identity" value="sjzjy" title="数据质检员">
-                        <input type="radio" name="identity" value="sjshy" title="数据审核员">
-                    </div>
-                    <div class="layui-input-block tdr" style="display: none;">
-                        <input type="radio" name="identity" value="tdradmin" title="系统管理员">
+                    <div class="layui-input-block">
+                        <input type="text" id="role" name="role" required lay-verify="required"
+                               placeholder="请输入角色名" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+
                 <div class="layui-form-item">
                     <label class="layui-form-label">账号</label>
                     <div class="layui-input-block">
@@ -521,6 +174,7 @@
                                placeholder="请输入账号" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+
                 <div class="layui-form-item layui-form-text">
                     <label class="layui-form-label">密码</label>
                     <div class="layui-input-block">
@@ -528,51 +182,32 @@
                                placeholder="请输入密码" autocomplete="off" class="layui-input">
                     </div>
                 </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">令牌</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="token" name="token"
+                               placeholder="请输入令牌,可以不填" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">IP</label>
+                    <div class="layui-input-block">
+                        <input type="text" id="url" name="url" required lay-verify="required"
+                               placeholder="请输入IP地址" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
                 <div class="layui-form-item">
                     <div class="layui-input-block">
-                        <button class="layui-btn layui-btn-warm" lay-submit lay-filter="update_role_info"
+                        <button class="layui-btn layui-btn-warm" lay-submit lay-filter="add_update_role"
                                 style="float: right;margin-left:5px;">立即提交
                         </button>
                         <button type="reset" style="float: right;" class="layui-btn layui-btn-primary">重置</button>
                     </div>
                 </div>
             </form>
-        </div>
-    </div>
-
-    <!--获取令牌-->
-    <div class="layui-row" id="get_token" style="display: none;">
-        <div class="layui-col-md11">
-            <form class="layui-form" lay-filter="get_token">
-
-                <div class="layui-form-item" style="margin-top: 20px;">
-                    <label class="layui-form-label">系统角色</label>
-                    <div class="layui-input-block">
-                        {% for item,value in role.items %}
-                            <input type="checkbox" class="token" name="{{ item }}" value="{{ item }}"
-                                   title="{{ value }}"
-                                   checked>
-                        {% endfor %}
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">IP地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="ip" required lay-verify="required" value="http://amberdata.cn"
-                               placeholder="请输入ip地址" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-
-                <div class="layui-form-item" style="margin-top: 30px;">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="get_token"
-                                style="float:right;background-color: yellowgreen;">立即提交
-                        </button>
-                    </div>
-                </div>
-            </form>
-            +
         </div>
     </div>
 
@@ -715,6 +350,7 @@
             +
         </div>
     </div>
+
 </div>
 <!--主题内容-table-->
 <div id="layuibody" class="layui-body mybg" style="margin-bottom: -70px;">
@@ -724,7 +360,7 @@
             <div class="layui-breadcrumb">
 					<span class="layui-icon layui-icon-link" style="font-size: 22px;color: #fff;">
 						<a href="" class="index" style="color: #fff;">http://amberdata.cn/{{ system }}api</a>
-						<a class="kit-side-fold casetitle" style="font-size: 22px;color: #fff;">{{ belong_key }}</a>
+						<a class="kit-side-fold casetitle" style="font-size: 22px;color: #fff;">{{ crumbs }}</a>
 					</span>
             </div>
             <div id="sousuo">
@@ -844,7 +480,7 @@
                 {type: 'checkbox'}
                 , {title: '操作', toolbar: '#barDemo', width: 80, align: "left"}
                 , {field: 'caseid', title: '序号', width: 60, align: "left"}
-                , {field: 'identity', title: '角色', width: 100, align: "left", templet: "#identityTpl"}
+                , {field: 'identity', title: '角色', width: 170, align: "left"}
                 , {
                     field: 'casename',
                     title: '接口名称',
@@ -2009,19 +1645,21 @@
             }
             //编辑接口整体
             else if (obj.event === 'update_case') {
+                get_role_by_system("option","identity");
+                get_belong_by_system("belong");
                 var a = layer.open({
                     type: 1,
                     title: "编辑用例",
                     area: ['35%', "80%"],
                     skin: "layui-layer-molv",
                     shada: 0.6,
-                    content: $("#update_case").html(),
+                    content: $("#add_update_case").html(),
                     success: function () {
                         layui.use(['form', "jquery"], function () {
                             var form = layui.form;
                             var caseid = data.caseid;
                             console.log(data);
-                            form.val("update_case", {
+                            form.val("add_update_case", {
                                 "caseID": data.caseid,
                                 "casename": data.casename,
                                 "identity": data.identity,
@@ -2038,7 +1676,7 @@
                                 "replaceposition": data.replace_position,
                             });
                             //监听编辑用户信息，
-                            form.on('submit(update_case)', function (data) {
+                            form.on('submit(add_update_case)', function (data) {
                                 console.log(data.field);
                                 $.ajax({
                                     cache: false,
@@ -2159,74 +1797,10 @@
 
 </script>
 <script>
-    //获取令牌
-    function get_token() {
-        var update_token_api = layer.open({
-            //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
-            type: 1,
-            title: "获取AccessToken",
-            area: ['30%', ''],
-            skin: "layui-layer-rim",
-            shade: 0.6,
-            anim: 1,
-            content: $("#get_token").html(),
-            success: function () {
-                layui.use(['form', "jquery"], function () {
-                    var form = layui.form,
-                        $ = layui.$;
-                    //监听token信息，
-                    form.val("get_token");
-                    form.on('submit(get_token)', function (data) {
-                        let l = [];
-                        //jquery-hasClass判断标签是否拥有某个class
-                        //next下一个兄弟元素
-                        //匹配input中的name元素
-                        {% for item in role %}
-                            if ($("input[name^=" + data.field.{{ item }} + "]").next("div").hasClass("layui-form-checked")) {
-                                l.push('{{ item }}');
-                            }
-                        {% endfor %}
-                        $.ajax({
-                            cache: false,
-                            url: "/api/v1/systemrole/get_token_by_role/",
-                            type: 'PUT',
-                            data: {
-                                "role": JSON.stringify(l),
-                                "ip": data.field.ip
-                            },
-                            success: function (data) {
-                                if (data.code === 1000) {
-                                    layer.msg(data.msg, {
-                                        icon: 6, offset: "t"
-                                    })
-                                } else {
-                                    layer.msg(data.error, {
-                                        icon: 5, offset: "t"
-                                    })
-                                }
-                            },
-                            error: function () {
-                                layer.msg("回调失败", {
-                                    icon: 5,
-                                    offset: 't'
-                                });
-                            },
-                            complete: function () {
-                                layer.close(update_token_api);
-                            }
-
-                        });
-                        return false;//阻止表单跳转
-                    });
-                })
-            }
-        });
-
-
-    }
-
     //新建用例
     function add_case() {
+        get_role_by_system("option","identity");
+        get_belong_by_system("belong");
         var Create_apicase = layer.open({
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 1,
@@ -2235,13 +1809,13 @@
             shade: 0.6,
             area: ['35%', '80%'],
             //offset: 't',
-            content: $("#add_case").html(),
+            content: $("#add_update_case").html(),
             success: function () {
                 layui.use(['form', "jquery"], function () {
                     var form = layui.form,
                         $ = layui.$;
-                    form.val("add_case");
-                    form.on('submit(add_case)', function (data) {
+                    form.val("add_update_case");
+                    form.on('submit(add_update_case)', function (data) {
                         console.log(data.field);
                         $.ajax({
                             cache: false,
@@ -2296,52 +1870,127 @@
         });
     }
 
-    //编辑用户信息
-    function update_role_info() {
-        var update_roleinfo = layer.open({
-            //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
+    //获取模块参数
+    function get_belong_by_system(id) {
+        //var res = {};
+        $.ajax({
+            //cache: false,
+            url: "/api/v1/menu/get_belong_by_system/",
+            type: 'GET',
+            async: false,
+            data: {
+                "system": '{{ system }}',
+                "area":"process"
+            },
+            success: function (data) {
+                //res = data;
+                var str = '';
+                //data是数组时，index是当前元素的位置，value是值
+                $.each(data,function(index,value){
+                    str += "<option value='"+value+"'>"+value+"</option>";
+                });
+                console.log(str);
+                $('#'+id).empty();
+                $('#'+id).append(str);
+
+            },
+            error: function () {
+                layer.msg("回调失败", {
+                    icon: 5,
+                    offset: 't'
+                });
+            },
+        });
+        //console.log(res);
+        //return res
+    }
+
+    //获取系统角色
+    function get_role_by_system(attrtype,id) {
+        //attrtype：什么标签
+        //id:父标签的id属性值
+        $.ajax({
+            //cache: false,
+            url: "/api/v1/systemrole/get_role_by_system/",
+            type: 'GET',
+            async: false,
+            data: {
+                "system": '{{ system }}'
+            },
+            success: function (data) {
+                console.log(data);
+                console.log(typeof (data));
+                var str = '';
+                //data是obj时，index是key，value是值
+                $.each(data,function(index,value){
+                    console.log(index);
+                    console.log(value);
+                    if(attrtype=="option"){
+                        console.log("我渲染的"+id);
+                        str += "<option value='"+value+"'>"+value+"</option>";
+                        $('#'+id).empty();
+                        $('#'+id).append(str);
+                    }else if(attrtype=="input"){
+                        console.log("我渲染的"+id);
+                        str += "<input type=\"radio\" name=\"identity\" value='"+value+"' title='"+value+"'>";
+                        $('#'+id).empty();
+                        $('#'+id).append(str);
+                    }
+
+                });
+                console.log(str);
+
+            },
+            error: function () {
+                layer.msg("回调失败", {
+                    icon: 5,
+                    offset: 't'
+                });
+            },
+        });
+    }
+
+    //添加用户角色
+    function add_role() {
+        var add_role = layer.open({
             type: 1,
-            title: "编辑用户信息",
+            title: "添加用户角色",
             area: ['40%', ''],
             shade: 0.6,
             skin: "layui-layer-rim",
-            content: $("#update_role_info").html(),
+            content: $("#add_update_role").html(),
             success: function () {
                 layui.use(['form', "jquery"], function () {
                     var form = layui.form;
                     $ = layui.$;
-                    form.val("update_role_info", {
-                        "system": "{{ system }}",
-                        "username": "@amberdata.cn",
+                    form.val("add_update_role", {
+                        "role":"【】",
                         "password": "Y+zilsR88g9SZI8WOeHJlA=="
                     });
                     //监听编辑用户信息，
-                    form.on('radio', function (data) {
-                        console.log(data.elem); //得到radio原始DOM对象
-                        console.log(data.value); //被点击的radio的value
-                        if (data.value == "erms") {
-                            $(".erms").show();
-                            $(".transfer").hide();
-                            $(".tdr").hide();
-                        } else if (data.value == "transfer") {
-                            $(".transfer").show();
-                            $(".erms").hide();
-                            $(".tdr").hide();
-                        } else if (data.value == "tdr") {
-                            $(".tdr").show();
-                            $(".erms").hide();
-                            $(".transfer").hide();
-                        }
-
-                    });
-                    form.on('submit(update_role_info)', function (data) {
+                    {#form.on('radio', function (data) {#}
+                    {#    console.log(data.elem); //得到radio原始DOM对象#}
+                    {#    console.log(data.value); //被点击的radio的value#}
+                    {#    if (data.value == "erms") {#}
+                    {#        $(".erms").show();#}
+                    {#        $(".tdr").hide();#}
+                    {#    } else if (data.value == "tdr") {#}
+                    {#        $(".tdr").show();#}
+                    {#        $(".erms").hide();#}
+                    {#    }#}
+                    //});
+                    form.on('submit(add_update_role)', function (data) {
                         $.ajax({
                             cache: false,
-                            url: "/api/v1/systemrole/update_info/" + data.field.identity + "/",
-                            type: 'PUT',
+                            url: "/api/v1/systemrole/add_role/",
+                            type: 'POST',
                             data: {
+                                "system": "{{ system }}",
+                                "role": data.field.role,
                                 "username": data.field.username,
-                                "password": data.field.password
+                                "password": data.field.password,
+                                "ip":data.field.url,
+                                "token":data.field.token
                             },
                             success: function (data) {
                                 if (data.code === 1000) {
@@ -2353,6 +2002,8 @@
                                         icon: 5, offset: "t"
                                     })
                                 }
+                                $(".layui-laypage-btn").click();
+
                             },
                             error: function () {
                                 layer.msg("回调失败", {
@@ -2361,7 +2012,7 @@
                                 });
                             },
                             complete: function () {
-                                layer.close(update_roleinfo)
+                                layer.close(add_role)
 
                             }
                         });
@@ -2383,27 +2034,180 @@
             area: ['70%', "70%"],
             skin: 'layui-layer-molv',
             shade: 0.6,
-            content: '<div style="padding:15px;"><table id="templateTable"></table></div>',
+            content: '<div style="padding:15px;"><table id="roletable" lay-filter="roletable"></table></div>',
             success: function () {
-                var table = layui.table;
-                table.render({
-                    elem: '#templateTable'
-                    , url: "/api/v1/systemrole/list/"
-                    //, limit: 11
-                    //, height: 'full-200'
-                    //,page:true
-                    , initSort: {
-                        field: "system",
-                        type: "desc"
-                    }
-                    , size: 'lg'
-                    , cols: [[
-                        {field: 'role', title: '角色名', align: "left"}
-                        , {field: 'username', title: '用户名', align: "left"}
-                        , {field: 'password', title: '用户密码', align: "left"}
-                        , {field: 'token', title: '请求令牌', align: "left"}
-                        , {field: 'system', title: '所属系统', align: "left"}
-                    ]]
+                layui.use(["table"], function () {
+                    var table = layui.table
+                        , layer = layui.layer;
+                    table.render({
+                        elem: '#roletable'
+                        , url: "/api/v1/systemrole/list/"
+                        , limit: 10
+                        , toolbar: '#roletoolbarDemo'
+                        , height: 'full-420'
+                        , page:true
+                        , initSort: {
+                            field: "system",
+                            type: "desc"
+                        },
+                        where:{
+                            "system":"{{ system }}"
+                        },
+                        id: "roletable"
+                        , size: 'lg'
+                        , cols: [[
+                            {type: 'checkbox'},
+                            {title: '操作', toolbar: '#rolebarDemo', width: 100, align: "left"}
+                            , {field: 'role', title: '角色名', align: "left"}
+                            , {field: 'username', title: '用户名', align: "left"}
+                            , {field: 'password', title: '用户密码', align: "left"}
+                            , {field: 'token', title: '请求令牌', align: "left"}
+                            , {field: 'system', title: '所属系统', align: "left"}
+                            , {field: 'ip', title: 'ip地址', align: "left"}
+                        ]]
+                    });
+                    table.on('tool(roletable)', function (obj) {
+                        //编辑角色
+                        if (obj.event === 'update_role') {
+                            var data = obj.data;
+                            console.log(data);
+                            var update_role = layer.open({
+                                type: 1,
+                                title: "编辑用户信息",
+                                area: ['40%', ''],
+                                shade: 0.6,
+                                skin: "layui-layer-rim",
+                                content: $("#add_update_role").html(),
+                                success: function () {
+                                    layui.use(['form', "jquery"], function () {
+                                        var form = layui.form;
+                                        $ = layui.$;
+                                        form.val("add_update_role", {
+                                            "role":data.role,
+                                            "system":data.system,
+                                            "url":data.ip,
+                                            "token":data.token,
+                                            "username": data.username,
+                                            "password": data.password
+                                        });
+                                        let id = data.id;
+                                        form.on('submit(add_update_role)', function (data) {
+                                            $.ajax({
+                                                cache: false,
+                                                url: "/api/v1/systemrole/update_role/" + id + "/",
+                                                type: 'PUT',
+                                                data: {
+                                                    "role":data.field.role,
+                                                    "system":data.field.system,
+                                                    "ip":data.field.url,
+                                                    "token":data.field.token,
+                                                    "username": data.field.username,
+                                                    "password": data.field.password
+                                                },
+                                                success: function (data) {
+                                                    if (data.code === 1000) {
+                                                        layer.msg(data.msg, {
+                                                            icon: 6, offset: "t"
+                                                        })
+                                                    } else {
+                                                        layer.msg(data.error, {
+                                                            icon: 5, offset: "t"
+                                                        })
+                                                    }
+                                                    $(".layui-laypage-btn").click();
+                                                },
+                                                error: function () {
+                                                    layer.msg("回调失败", {
+                                                        icon: 5,
+                                                        offset: 't'
+                                                    });
+                                                },
+                                                complete: function () {
+                                                    layer.close(update_role)
+
+                                                }
+                                            });
+                                            return false;//阻止表单跳转
+                                        });
+
+
+                                    });
+                                }
+                            });
+
+                        } else if (obj.event === 'del_role') {
+                            layer.confirm('真的删除行么', {icon: 2, title: "删除提示"}, function (index) {
+                                console.log(obj.data);
+                                //layer.msg("确定删除",{icon:1});
+                                obj.del();//删除对应行（tr）的DOM结构，并更新缓存
+                                layer.close(index);
+                                //向服务端发送删除指令
+                                var id = obj.data["id"];
+                                console.log(id);
+                                $.ajax({
+                                    url: "/api/v1/systemrole/del_role/" + id + "/",
+                                    type: 'DELETE',
+                                    success: function (data) {
+                                        if (data.code === 1000) {
+                                            layer.msg(data.msg, {
+                                                icon: 6, offset: "t"
+                                            })
+                                        } else {
+                                            layer.msg(data.error, {
+                                                icon: 5, offset: "t"
+                                            })
+                                        }
+                                        $(".layui-laypage-btn").click();
+                                    },
+                                    error: function () {
+                                        layer.msg("回调失败", {
+                                            icon: 5,
+                                            offset: 't'
+                                        });
+                                    },
+                                });
+                            });
+                        }
+
+                    });
+                    table.on('toolbar(roletable)', function (obj) {
+                        var checkStatus = table.checkStatus(obj.config.id);
+                        switch (obj.event) {
+                            //添加角色
+                            case 'add_role':
+                                add_role();
+                                break;
+                            case "get_token":
+                                //获取token
+                                var res = checkStatus.data;
+                                console.log(res);
+                                $.ajax({
+                                    cache: false,
+                                    url: "/api/v1/systemrole/get_token_by_id/" + res[0]["id"] + "/",
+                                    type: 'PUT',
+                                    success: function (data) {
+                                        //layer.closeAll();
+                                        if (data.code === 1000) {
+                                            layer.msg(data.msg, {
+                                                icon: 6, offset: "t"
+                                            })
+                                        } else {
+                                            layer.msg(data.error, {
+                                                icon: 5, offset: "t"
+                                            })
+                                        }
+                                        $(".layui-laypage-btn").click();
+                                    },
+                                    error: function () {
+                                        layer.msg("回调失败", {
+                                            icon: 5,
+                                            offset: 't'
+                                        });
+                                    }
+
+                                });
+                        }
+                    });
                 });
             },
             btn: ['关闭'],
@@ -2413,7 +2217,22 @@
 
         });
     }
+</script>
 
+<!--role表头按钮-->
+<script type="text/html" id="roletoolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add_role">添加角色</button>
+        <button class="layui-btn layui-btn-sm" lay-event="get_token">获取令牌</button>
+    </div>
+</script>
+<!--role表行内按钮-->
+<script type="text/html" id="rolebarDemo">
+    <a class="layui-icon layui-icon-tips"
+       style="color:#797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"
+       lay-event="update_role"></a>
+    <a class="fa fa-trash-o" lay-event="del_role"
+       style="color: #797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"></a>
 </script>
 
 <script type="text/html" id="resultDemo">
@@ -2424,7 +2243,7 @@
 <!--表头按钮-->
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
-        <button type="button" onclick="update_role_info()" class="layui-btn layui-btn-sm">用户信息</button>
+        <button type="button" onclick="get_user_info()" class="layui-btn layui-btn-sm">用户信息</button>
         <button type="button" onclick="add_case()" class="layui-btn layui-btn-sm">添加接口</button>
         <button class="layui-btn layui-btn-sm" lay-event="batch_delete">批量删除</button>
         <button id="Dingding" class="layui-btn layui-btn-sm" lay-event="ding_ding">钉钉通知</button>
@@ -2470,29 +2289,6 @@
     {% verbatim %}{{# } else if(d.isMust.indexOf("true") != -1) { }} {% endverbatim %}
     <span style="color: deeppink;">{% verbatim %}{{ d.isMust }}{% endverbatim %}</span>
 
-    {% verbatim %}{{#  } }}{% endverbatim %}
-</script>
-<!--用户身份模板-->
-<script type="text/html" id="identityTpl">
-    {% verbatim %}{{#  if(d.identity === 'sysadmin'){ }}{% endverbatim %}
-    <span>{% verbatim %}系统管理员{% endverbatim %}</span>
-{#    <img src="../static/images/640-1.jpeg" class="layui-nav-img">#}
-
-    {% verbatim %}{{# } else if(d.identity=== 'admin') { }} {% endverbatim %}
-    <span>{% verbatim %}单位管理员{% endverbatim %}</span>
-{#    <img src="../static/images/640-4.jpeg" class="layui-nav-img">#}
-
-    {% verbatim %}{{# } else if(d.identity=== 'ast') { }} {% endverbatim %}
-    <span>{% verbatim %}单位档案员{% endverbatim %}</span>
-{#    <img src="../static/images/640-5.jpeg" class="layui-nav-img">#}
-
-    {% verbatim %}{{# } else if(d.identity=== 'transferadmin') { }} {% endverbatim %}
-    <span>{% verbatim %}暂放{% endverbatim %}</span>
-{#    <img src="../static/images/640-2.jpeg" class="layui-nav-img">#}
-
-    {% verbatim %}{{# } else if(d.identity=== 'tdradmin') { }} {% endverbatim %}
-    <span>{% verbatim %}数据管理员{% endverbatim %}</span>
-{#    <img src="../static/images/640-6.jpeg" class="layui-nav-img">#}
     {% verbatim %}{{#  } }}{% endverbatim %}
 </script>
 

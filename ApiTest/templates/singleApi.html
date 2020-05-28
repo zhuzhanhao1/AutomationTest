@@ -180,40 +180,6 @@
         </div>
     </div>
 
-    <!--获取令牌-->
-    <div class="layui-row" id="get_token" style="display: none;">
-        <div class="layui-col-md11">
-            <form class="layui-form" lay-filter="get_token">
-
-                <div class="layui-form-item" style="margin-top: 20px;">
-                    <label class="layui-form-label">系统角色</label>
-                    <div class="layui-input-block">
-                        <select name="identity" id="token_identity" lay-verify="required">
-                            <option value=""></option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="layui-form-item">
-                    <label class="layui-form-label">IP地址</label>
-                    <div class="layui-input-block">
-                        <input type="text" name="ip" required lay-verify="required" value="http://app.amberdata.cn"
-                               placeholder="请输入ip地址" autocomplete="off" class="layui-input">
-                    </div>
-                </div>
-
-                <div class="layui-form-item" style="margin-top: 30px;">
-                    <div class="layui-input-block">
-                        <button class="layui-btn" lay-submit lay-filter="get_token"
-                                style="float:right;background-color: yellowgreen;">立即提交
-                        </button>
-                    </div>
-                </div>
-            </form>
-            +
-        </div>
-    </div>
-
     <!--负责人-->
     <div class="layui-row" id="head" style="display: none;">
         <div class="layui-col-md11">
@@ -1864,7 +1830,8 @@
             type: 'GET',
             async: false,
             data: {
-                "system": '{{ system }}'
+                "system": '{{ system }}',
+                "area":"single"
             },
             success: function (data) {
                 //res = data;
@@ -2238,7 +2205,7 @@
                                     url: "/api/v1/systemrole/get_token_by_id/" + res[0]["id"] + "/",
                                     type: 'PUT',
                                     success: function (data) {
-                                        layer.closeAll();
+                                        //layer.closeAll();
                                         if (data.code === 1000) {
                                             layer.msg(data.msg, {
                                                 icon: 6, offset: "t"
@@ -2248,6 +2215,7 @@
                                                 icon: 5, offset: "t"
                                             })
                                         }
+                                        $(".layui-laypage-btn").click();
                                     },
                                     error: function () {
                                         layer.msg("回调失败", {

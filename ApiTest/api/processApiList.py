@@ -155,6 +155,7 @@ class UpdateProcessApi(APIView):
                 serializer = ProcessApiReplacePositionSerializers(snippet, data=data)
             if serializer.is_valid():
                 serializer.save()
+                ret["msg"] = "编辑成功"
                 return Response(ret)
             ret["code"] = 1001
             ret["error"] = str(serializer.errors)

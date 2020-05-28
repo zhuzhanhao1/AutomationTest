@@ -237,8 +237,8 @@ class MenuBelongParams(APIView):
     '''
     def get(self, request, *args, **kwargs):
         system = request.GET.get("system")
-        #查询菜单的href中包含所属系统的并且区域是single的
-        queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area="single"))
+        area = request.GET.get("area")
+        queryset = ChildMenu.objects.filter(Q(href__contains=system) & Q(area=area))
         OrderedDict = GetParamsSer(queryset,many=True).data
         dic = {}
         for i in OrderedDict:

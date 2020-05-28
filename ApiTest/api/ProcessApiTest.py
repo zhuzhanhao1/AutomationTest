@@ -26,7 +26,7 @@ class ProcessApiTest(APIView):
         流程进度
         '''
         try:
-            print('show_api----------' + str(self.num_progress))
+            print('show_api----------' + str(ProcessApiTest.num_progress))
             # 当进度百分百的时候，需要吧全局变量初始化，以便下次请求的时候进度条是重0开始，否则默认都是百分之百了
             if ProcessApiTest.num_progress == 100:
                 ProcessApiTest.num_progress = 0
@@ -41,8 +41,9 @@ class ProcessApiTest(APIView):
         '''
         获取角色请求令牌和IP地址
         '''
-        token = SystemRole.objects.get(identity=identity).token
-        ip = SystemRole.objects.get(identity=identity).ip
+        obj = SystemRole.objects.get(role=identity)
+        token = obj.token
+        ip = obj.ip
         return token, ip
 
     def check_english_greater_less_is_exist(self, response):

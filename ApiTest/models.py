@@ -244,3 +244,44 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.phone
+
+
+
+
+
+
+
+
+class FunctionCase(models.Model):
+    """
+        功能测试主表
+    """
+    area = models.CharField(max_length=100, verbose_name="所属区域")
+    function_model = models.CharField(max_length=100, verbose_name="功能模块")
+    function_point = models.CharField(max_length=50, verbose_name="功能点")
+    casename = models.CharField(max_length=100,verbose_name="用例名称")
+    premise_condition = models.CharField(max_length=250,verbose_name="前提条件")
+    method = models.CharField(max_length = 20,verbose_name="请求方式")
+    execution_result = models.CharField(max_length=200,verbose_name="执行结果",null=True,blank=True)
+    note = models.TextField(verbose_name="备注",null=True,blank=True)
+    executor = models.TextField(verbose_name="执行人",null=True,blank=True)
+
+    def __str__(self):
+        return self.casename
+
+    class Meta:
+        verbose_name = '用例管理'
+        verbose_name_plural = '功能用例管理'
+
+
+class FunctionCaseChild(models.Model):
+    '''
+        功能测试子表
+    '''
+    # on_delete=models.CASCADE删除关联数据,与之关联也删除
+    parent_id = models.ForeignKey(FunctionCase, verbose_name='父id', on_delete=models.CASCADE)
+    steps = models.CharField(max_length=999, verbose_name="操作步骤")
+    expected_results = models.CharField(max_length=100, verbose_name="预期结果")
+
+    def __str__(self):
+        return '功能用例：' + self.FunctionCase.casename
