@@ -61,7 +61,6 @@ class SingleApiList(APIView):
             res.append(contact)
         return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": res})
 
-class AddSingleApi(APIView):
 
     def parameter_check(self,system):
         """
@@ -96,6 +95,32 @@ class AddSingleApi(APIView):
         except:
             ret["code"] = 1001
             ret["error"] = "新建单一接口失败"
+        return Response(ret)
+
+    def get_object(self, pk):
+        try:
+            return SingleApi.objects.get(caseid=pk)
+        except SingleApi.DoesNotExist:
+            raise Http404
+
+    def delete(self, request, pk, *args, **kwargs):
+        """
+        删除单一接口，批量删除单一接口
+        根据PK来区分
+        """
+        ret = {"code": 1000}
+        try:
+            if pk == '0':
+                for i in json.loads(request.data['ids']):
+                    self.get_object(i).delete()
+                ret["msg"] = "批量删除成功"
+            else:
+                snippet = self.get_object(pk)
+                snippet.delete()
+                ret["msg"] = "单个删除成功"
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "删除失败"
         return Response(ret)
 
 class UpdateSingleApi(APIView):
@@ -176,33 +201,6 @@ class UpdateSingleApi(APIView):
             ret["error"] = "编辑params/body失败"
         return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
-class DelSingleApi(APIView):
-
-    def get_object(self, pk):
-        try:
-            return SingleApi.objects.get(caseid=pk)
-        except SingleApi.DoesNotExist:
-            raise Http404
-
-    def delete(self, request, pk, *args, **kwargs):
-        """
-        删除单一接口，批量删除单一接口
-        根据PK来区分
-        """
-        ret = {"code": 1000}
-        try:
-            if pk == '0':
-                for i in json.loads(request.data['ids']):
-                    self.get_object(i).delete()
-                ret["msg"] = "批量删除成功"
-            else:
-                snippet = self.get_object(pk)
-                snippet.delete()
-                ret["msg"] = "单个删除成功"
-        except Exception as e:
-            ret["code"] = 1001
-            ret["error"] = "删除失败"
-        return Response(ret)
 
 class SearchSingleApi(APIView):
 
@@ -242,9 +240,6 @@ class SingleApiChildList(APIView):
         serializer = ParameterListSer(queryset, many=True)
         return Response(data={"code": 0, "msg": "", "count": len(serializer.data), "data": serializer.data})
 
-
-class AddChildParameter(APIView):
-
     def post(self, request, *args, **kwargs):
         '''
         创建单一接口
@@ -265,10 +260,6 @@ class AddChildParameter(APIView):
         return Response(ret)
 
 
-class UpdateChildParameter(APIView):
-    """
-    更新单一接口
-    """
     def get_object(self, pk):
         try:
             return SingleApiChild.objects.get(id=pk)
@@ -294,14 +285,6 @@ class UpdateChildParameter(APIView):
             ret["error"] = "编辑请求参数失败"
         return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
-
-class DelChildParameter(APIView):
-
-    def get_object(self, pk):
-        try:
-            return SingleApiChild.objects.get(id=pk)
-        except SingleApiChild.DoesNotExist:
-            raise Http404
 
     def delete(self, request, pk, *args, **kwargs):
         """

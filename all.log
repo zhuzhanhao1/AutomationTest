@@ -6645,3 +6645,185 @@ Traceback (most recent call last):
     "name": name.first_name
 AttributeError: 'dict' object has no attribute 'first_name'
 2020-05-29 18:10:36,536,10883,django.server,ERROR,basehttp.py:157,"GET /index/ HTTP/1.1" 500 67373
+2020-05-29 23:11:35,706,8136,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiList.py", line 53, in get
+    serializer = SingleApiSerializers(apilists, many=True)
+UnboundLocalError: local variable 'apilists' referenced before assignment
+2020-05-29 23:11:35,707,8136,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/list/?page=1&limit=10&belong=&system= HTTP/1.1" 500 17670
+2020-05-29 23:13:25,155,8136,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/list/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiList.py", line 53, in get
+    serializer = SingleApiSerializers(apilists, many=True)
+UnboundLocalError: local variable 'apilists' referenced before assignment
+2020-05-29 23:13:25,156,8136,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/list/?page=1&limit=10&belong=&system= HTTP/1.1" 500 17670
+2020-05-29 23:35:19,487,10236,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/parameter_details/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\fields\__init__.py", line 1772, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: ''
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiList.py", line 239, in get
+    queryset = SingleApiChild.objects.filter(parent_id_id=caseid)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 904, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 923, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1350, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1381, in _add_q
+    check_filterable=check_filterable,
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1311, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1165, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 22, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\fields\related_lookups.py", line 115, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\fields\__init__.py", line 1776, in get_prep_value
+    ) from e
+ValueError: Field 'caseid' expected a number but got ''.
+2020-05-29 23:35:19,490,10236,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/parameter_details/?page=1&limit=10 HTTP/1.1" 500 19418
+2020-05-29 23:35:21,231,10236,django.request,ERROR,log.py:228,Internal Server Error: /api/v1/singleapi/parameter_details/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\fields\__init__.py", line 1772, in get_prep_value
+    return int(value)
+ValueError: invalid literal for int() with base 10: ''
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\csrf.py", line 54, in wrapped_view
+    return view_func(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\generic\base.py", line 71, in view
+    return self.dispatch(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 505, in dispatch
+    response = self.handle_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 465, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 476, in raise_uncaught_exception
+    raise exc
+  File "D:\Anaconda3\envs\test\lib\site-packages\rest_framework\views.py", line 502, in dispatch
+    response = handler(request, *args, **kwargs)
+  File "D:\python\project\AutomationTest\ApiTest\api\singleApiList.py", line 239, in get
+    queryset = SingleApiChild.objects.filter(parent_id_id=caseid)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\manager.py", line 82, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 904, in filter
+    return self._filter_or_exclude(False, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\query.py", line 923, in _filter_or_exclude
+    clone.query.add_q(Q(*args, **kwargs))
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1350, in add_q
+    clause, _ = self._add_q(q_object, self.used_aliases)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1381, in _add_q
+    check_filterable=check_filterable,
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1311, in build_filter
+    condition = self.build_lookup(lookups, col, value)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\sql\query.py", line 1165, in build_lookup
+    lookup = lookup_class(lhs, rhs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\lookups.py", line 22, in __init__
+    self.rhs = self.get_prep_lookup()
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\fields\related_lookups.py", line 115, in get_prep_lookup
+    self.rhs = target_field.get_prep_value(self.rhs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\db\models\fields\__init__.py", line 1776, in get_prep_value
+    ) from e
+ValueError: Field 'caseid' expected a number but got ''.
+2020-05-29 23:35:21,233,10236,django.server,ERROR,basehttp.py:157,"GET /api/v1/singleapi/parameter_details/?page=1&limit=10 HTTP/1.1" 500 19418
+2020-05-29 23:57:22,984,5752,django.request,ERROR,log.py:228,Internal Server Error: /admin/ApiTest/functioncasechild/add/
+Traceback (most recent call last):
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\exception.py", line 34, in inner
+    response = get_response(request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 115, in _get_response
+    response = self.process_exception_by_middleware(e, request)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\core\handlers\base.py", line 113, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\contrib\admin\options.py", line 607, in wrapper
+    return self.admin_site.admin_view(view)(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\utils\decorators.py", line 130, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\views\decorators\cache.py", line 44, in _wrapped_view_func
+    response = view_func(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\contrib\admin\sites.py", line 231, in inner
+    return view(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\contrib\admin\options.py", line 1638, in add_view
+    return self.changeform_view(request, None, form_url, extra_context)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\utils\decorators.py", line 43, in _wrapper
+    return bound_method(*args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\utils\decorators.py", line 130, in _wrapped_view
+    response = view_func(request, *args, **kwargs)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\contrib\admin\options.py", line 1522, in changeform_view
+    return self._changeform_view(request, object_id, form_url, extra_context)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\contrib\admin\options.py", line 1569, in _changeform_view
+    self.log_addition(request, new_object, change_message)
+  File "D:\Anaconda3\envs\test\lib\site-packages\django\contrib\admin\options.py", line 807, in log_addition
+    object_repr=str(object),
+  File "D:\python\project\AutomationTest\ApiTest\models.py", line 281, in __str__
+    return '¹¦ÄÜÓÃÀý£º' + self.FunctionCase.casename
+AttributeError: 'FunctionCaseChild' object has no attribute 'FunctionCase'
+2020-05-29 23:57:22,987,5752,django.server,ERROR,basehttp.py:157,"POST /admin/ApiTest/functioncasechild/add/ HTTP/1.1" 500 120761

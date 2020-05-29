@@ -1,12 +1,12 @@
 from django.conf.urls import url
 from ApiTest.api import singleApiList, systemRole, Menu, Link, processApiList, \
-                        publicApi, ProcessApiTest, singleApiTest
+                        publicApi, ProcessApiTest, singleApiTest, functionCase
 
 urlpatterns = [
     # 单一接口测试
     url(r'singleapi/list/$', singleApiList.SingleApiList.as_view()),
-    url(r'singleapi/add_case/$', singleApiList.AddSingleApi.as_view()),
-    url(r'singleapi/del_case/(?P<pk>[0-9]+)/$', singleApiList.DelSingleApi.as_view()),
+    url(r'singleapi/add_case/$', singleApiList.SingleApiList.as_view()),
+    url(r'singleapi/del_case/(?P<pk>[0-9]+)/$', singleApiList.SingleApiList.as_view()),
     url(r'singleapi/update_case/(?P<pk>[0-9]+)/$', singleApiList.UpdateSingleApi.as_view()),
     url(r'singleapi/detail_case/(?P<pk>[0-9]+)/$', singleApiList.SingleApiDetail.as_view()),
     url(r'singleapi/search/$', singleApiList.SearchSingleApi.as_view()),
@@ -18,9 +18,9 @@ urlpatterns = [
 
     #单一接口参数详情
     url(r'singleapi/parameter_details/$', singleApiList.SingleApiChildList.as_view()),
-    url(r'singleapi/add_parameter/$', singleApiList.AddChildParameter.as_view()),
-    url(r'singleapi/update_parameter/(?P<pk>[0-9]+)/$', singleApiList.UpdateChildParameter.as_view()),
-    url(r'singleapi/del_parameter/(?P<pk>[0-9]+)/$', singleApiList.DelChildParameter.as_view()),
+    url(r'singleapi/add_parameter/$', singleApiList.SingleApiChildList.as_view()),
+    url(r'singleapi/update_parameter/(?P<pk>[0-9]+)/$', singleApiList.SingleApiChildList.as_view()),
+    url(r'singleapi/del_parameter/(?P<pk>[0-9]+)/$', singleApiList.SingleApiChildList.as_view()),
     url(r'singleapi/test/$', singleApiList.UpdateIdentity.as_view()),
 
     # 流程接口测试
@@ -65,4 +65,16 @@ urlpatterns = [
     url(r'testurl/add_test_url/$', Link.TesturlList.as_view()),
     url(r'testurl/update_test_url/(?P<pk>[0-9]+)/$', Link.TesturlList.as_view()),
     url(r'testurl/del_test_url/(?P<pk>[0-9]+)/$', Link.TesturlList.as_view()),
+
+    #功能测试
+    url(r'functioncase/list/$', functionCase.FunctionCaseList.as_view()),
+    url(r'functioncase/add_case/$', functionCase.FunctionCaseList.as_view()),
+    url(r'functioncase/update_case/(?P<pk>[0-9]+)/$', functionCase.FunctionCaseList.as_view()),
+    url(r'functioncase/del_case/(?P<pk>[0-9]+)/$', functionCase.FunctionCaseList.as_view()),
+
+    #功能测试子表
+    url(r'functioncase/childlist/$', functionCase.FunctionCaseChildList.as_view()),
+    url(r'functioncase/add_child/$', functionCase.FunctionCaseChildList.as_view()),
+    url(r'functioncase/update_child/(?P<pk>[0-9]+)/$', functionCase.FunctionCaseChildList.as_view()),
+    url(r'functioncase/del_child/(?P<pk>[0-9]+)/$', functionCase.FunctionCaseChildList.as_view()),
 ]

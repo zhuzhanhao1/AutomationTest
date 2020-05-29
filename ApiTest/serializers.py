@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import SingleApi, LeftMenu, ChildMenu, SystemRole, Link, Testurl, ProcessApi, LocustApi, SingleApiChild
+from .models import SingleApi, LeftMenu, ChildMenu, SystemRole, \
+    Link, Testurl, ProcessApi, LocustApi, SingleApiChild, FunctionCase, FunctionCaseChild
 
 ###########################SingleApi####################################
 
@@ -259,3 +260,22 @@ class UpdateParameterSer(serializers.ModelSerializer):
     class Meta:
         model = SingleApiChild
         fields = ["parameter_field","parameter_that","area","isMust","sample"]
+
+
+###########################functionCase####################################
+
+class functionCaseSer(serializers.ModelSerializer):
+    '''
+        功能测试主表
+    '''
+    class Meta:
+        model = FunctionCase
+        fields = "__all__"
+
+class functionCaseChildSer(serializers.ModelSerializer):
+    '''
+        功能测试主表
+    '''
+    class Meta:
+        model = FunctionCaseChild
+        fields = "__all__"

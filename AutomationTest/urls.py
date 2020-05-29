@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^systemlog/$', renderHtml.systemlog_views),
     url(r'^menu_management/$', renderHtml.menu_management_views),
     url(r'^echart_report/$', renderHtml.echart_report_views),
+    url(r'^functioncase/$', renderHtml.functioncase_views),
 ]

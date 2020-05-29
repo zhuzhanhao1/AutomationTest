@@ -52,6 +52,8 @@ class MenuTree(APIView):
             dic["children"] = []
             l[0]["children"].append(dic)
 
+
+
         queryset = LeftMenu.objects.filter(area="systemeSttings")
         area_list = list(set([x.title for x in queryset]))
         for i in range(len(area_list)):
@@ -111,6 +113,27 @@ class MenuListManage(APIView):
                 process_menu_list = json.dumps(dic)
                 #设置缓存时间一小时
                 conn.set("process",process_menu_list)
+
+        elif area == "automation":
+            automation_menu_list = conn.get("automation")
+            if automation_menu_list:
+                automation_menu_list = json.loads(automation_menu_list)
+                return Response(automation_menu_list)
+            else:
+                parent_menu = LeftMenu.objects.filter(area="automation")
+                leftmenu_single_serializer = LeftMenuSerializers(parent_menu, many=True)
+                # print(leftmenu_single_serializer.data)
+                dic["automation"] = leftmenu_single_serializer.data
+                title_list = [i.title for i in parent_menu]
+                # print(title_list)
+                for i in range(0,len(title_list)):
+                    ser = ChildMenuSerializers(ChildMenu.objects.filter(classification__title=title_list[i]), many=True).data
+                    dic["automation"][i]["children"] = ser
+                print("访问MySQL拿取automation数据放入缓存")
+                automation_menu_list = json.dumps(dic)
+                #设置缓存时间一小时
+                conn.set("automation",automation_menu_list)
+
 
         elif area == "systemeSttings":
             systemeSttings_menu_list = conn.get("systemeSttings")

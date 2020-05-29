@@ -2,7 +2,8 @@ from django.contrib import admin
 
 # Register your models here.
 
-from .models import SingleApi,LeftMenu,ChildMenu,SystemRole,Testurl,Link,ProcessApi  # 记得导包
+from .models import SingleApi,LeftMenu,ChildMenu,SystemRole,\
+    Testurl,Link,ProcessApi,FunctionCase,FunctionCaseChild  # 记得导包
 
 # 注册medel类到admin的方式-@admin.register(SingleApi)
 '''
@@ -15,7 +16,7 @@ from .models import SingleApi,LeftMenu,ChildMenu,SystemRole,Testurl,Link,Process
 class SingleApiAdmin(admin.ModelAdmin):
     list_display = ('caseid', 'casename', 'identity', 'url','method','header','params','body','belong','system','sortid','head')  # 在后台列表下显示的字段
     search_fields = ('casename',)
-    list_filter = ('casename',)
+    list_filter = ('belong',)
     ordering = ("sortid",)
 
 @admin.register(LeftMenu)
@@ -47,5 +48,17 @@ class TesturlAdmin(admin.ModelAdmin):
 class ProcrssApiAdmin(admin.ModelAdmin):
     list_display = ('caseid', 'casename', 'identity', 'url','method','header','params','body','belong','system','sortid','head')  # 在后台列表下显示的字段
     search_fields = ('casename',)
-    list_filter = ('casename',)
+    list_filter = ('belong',)
     ordering = ("sortid",)
+
+
+@admin.register(FunctionCase)
+class FunctionCaseAdmin(admin.ModelAdmin):
+    list_display = ("belong","function_model","function_point","casename","premise_condition","execution_result","note","executor")  # 在后台列表下显示的字段
+    search_fields = ('casename',)
+    list_filter = ('belong',)
+
+
+@admin.register(FunctionCaseChild)
+class FunctionCaseChildAdmin(admin.ModelAdmin):
+    list_display = ("parent_id","steps","expected_results")
