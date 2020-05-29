@@ -14,9 +14,12 @@
 
     <script src="../static/layui2.5.5/layui.js"></script>
     <style>
-        .layui-nav-itemed > .layui-nav-child{
-            max-height:300px!important;
-            overflow-y: scroll!important;
+        .layui-nav-itemed > .layui-nav-child {
+            max-height: 300px !important;
+            overflow-y: scroll !important;
+        }
+        .mydepned{
+            display: none;
         }
     </style>
 
@@ -28,126 +31,134 @@
         <div class="layui-col-md11">
             <form class="layui-form" lay-filter="add_update_case">
 
-                    <div class="layui-form-item" style="margin-top: 20px;">
-                        <label class="layui-form-label">系统角色</label>
-                        <div class="layui-input-block">
-                            <select name="identity" id="identity" lay-verify="required">
-                                <option value=""></option>
-                            </select>
-                        </div>
+                <div class="layui-form-item" style="margin-top: 20px;">
+                    <label class="layui-form-label">系统角色</label>
+                    <div class="layui-input-block">
+                        <select name="identity" id="identity" lay-verify="required">
+                            <option value=""></option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">所属模块</label>
-                        <div class="layui-input-block">
-                            <select name="belong" id="belong" lay-verify="required">
-                                <option value=""></option>
-                            </select>
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">所属模块</label>
+                    <div class="layui-input-block">
+                        <select name="belong" id="belong" lay-verify="required">
+                            <option value=""></option>
+                        </select>
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">用例名称</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="casename" required lay-verify="required"
-                                   placeholder="请输入用例名称"
-                                   autocomplete="off" class="layui-input">
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">用例名称</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="casename" required lay-verify="required"
+                               placeholder="请输入用例名称"
+                               autocomplete="off" class="layui-input">
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">请求地址</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="url" required lay-verify="required" placeholder="请输入请求地址"
-                                   autocomplete="off" class="layui-input">
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">请求地址</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="url" required lay-verify="required" placeholder="请输入请求地址"
+                               autocomplete="off" class="layui-input">
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">请求方式</label>
-                        <div class="layui-input-block">
-                            <input type="radio" name="method" value="get" title="GET" checked>
-                            <input type="radio" name="method" value="post" title="POST">
-                            <input type="radio" name="method" value="put" title="PUT">
-                            <input type="radio" name="method" value="delete" title="Delete">
-                            <input type="radio" name="method" value="file" title="File">
-                        </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">请求方式</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="method" value="get" title="GET" checked>
+                        <input type="radio" name="method" value="post" title="POST">
+                        <input type="radio" name="method" value="put" title="PUT">
+                        <input type="radio" name="method" value="delete" title="Delete">
+                        <input type="radio" name="method" value="file" title="File">
                     </div>
+                </div>
 
-                    <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">Query Params</label>
-                        <div class="layui-input-block">
-                            <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
-                        </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">Query Params</label>
+                    <div class="layui-input-block">
+                        <textarea name="params" placeholder="请输入内容" class="layui-textarea"></textarea>
                     </div>
+                </div>
 
-                    <div class="layui-form-item layui-form-text">
-                        <label class="layui-form-label">Form Data</label>
-                        <div class="layui-input-block">
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">Form Data</label>
+                    <div class="layui-input-block">
                                 <textarea name="body" id="body" placeholder="请输入内容"
                                           class="layui-textarea"></textarea>
-                        </div>
                     </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">存有依赖</label>
+                    <div class="layui-input-block">
+                        <input type="radio" lay-filter="depend" name="depend" value="exist" title="存在">
+                        <input type="radio" lay-filter="depend" checked name="depend" value="unexist" title="不存在">
+                    </div>
+                </div>
 
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">替换区域</label>
-                        <div class="layui-input-block">
-                            <input type="checkbox" name="params" value="params" title="params">
-                            <input type="checkbox" name="body" value="body" title="body">
-                        </div>
+                <div class="layui-form-item mydepend" style="display: none;">
+                    <label class="layui-form-label">替换区域</label>
+                    <div class="layui-input-block">
+                        <input type="checkbox"  name="params" value="params" title="params">
+                        <input type="checkbox"  name="body" value="body" title="body">
                     </div>
+                </div>
 
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">依赖的ID</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="dependid" placeholder="无依赖不必填" class="layui-input">
-                        </div>
+                <div class="layui-form-item mydepend" style="display: none;">
+                    <label class="layui-form-label">依赖的ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="dependid" placeholder="无依赖不必填" class="layui-input">
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">依赖的key</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="dependkey" placeholder="无依赖不必填" class="layui-input">
-                        </div>
+                <div class="layui-form-item mydepend" style="display: none;">
+                    <label class="layui-form-label">依赖的key</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="dependkey" placeholder="无依赖不必填" class="layui-input">
                     </div>
+                </div>
 
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">替换的key</label>
-                        <div class="layui-input-block">
-                            <input type="text" name="replacekey" placeholder="无依赖不必填" class="layui-input">
-                        </div>
+                <div class="layui-form-item mydepend" style="display: none;">
+                    <label class="layui-form-label">替换的key</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="replacekey" placeholder="无依赖不必填" class="layui-input">
                     </div>
-                    <div class="layui-form-item">
-                        <label class="layui-form-label">负责人</label>
-                        <div class="layui-input-block">
-                            <select name="head" lay-verify="required">
-                                <option value="老张">老张</option>
-                                <option value="老王">老王</option>
-                                <option value="老李">老李</option>
-                                <option value="老江">老江</option>
-                                <option value="老刘">老刘</option>
-                            </select>
-                        </div>
+                </div>
+                <div class="layui-form-item mydepend" style="display: none;">
+                    <label class="layui-form-label">负责人</label>
+                    <div class="layui-input-block">
+                        <select name="head" lay-verify="required">
+                            <option value="老张">老张</option>
+                            <option value="老王">老王</option>
+                            <option value="老李">老李</option>
+                            <option value="老江">老江</option>
+                            <option value="老刘">老刘</option>
+                        </select>
                     </div>
-                    <div class="layui-form-item">
-                        <div class="layui-input-block">
-                            <button class="layui-btn" lay-submit lay-filter="add_update_case"
-                                    style="float: right;">立即提交
-                            </button>
-                            <button type="reset" class="layui-btn layui-btn-primary"
-                                    style="float: right;margin-right: 10px;">
-                                重置
-                            </button>
-                        </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-input-block">
+                        <button class="layui-btn" lay-submit lay-filter="add_update_case"
+                                style="float: right;">立即提交
+                        </button>
+                        <button type="reset" class="layui-btn layui-btn-primary"
+                                style="float: right;margin-right: 10px;">
+                            重置
+                        </button>
                     </div>
-                </form>
+                </div>
+            </form>
         </div>
     </div>
 
     <!--添加编辑用户信息-->
-    <div class="layui-row" id="add_update_role" style="display: none;">
+    <div class="layui-row" id="add_update_role">
         <div class="layui-col-md11">
             <form class="layui-form" lay-filter="add_update_role">
 
@@ -155,7 +166,7 @@
                     <label class="layui-form-label">系统</label>
                     <div class="layui-input-block">
                         <input type="text" id="system" name="system" required lay-verify="required"
-                                autocomplete="off" class="layui-input" value="{{ system }}">
+                               autocomplete="off" class="layui-input" value="{{ system }}">
                     </div>
                 </div>
 
@@ -212,7 +223,7 @@
     </div>
 
     <!--负责人-->
-    <div class="layui-row" id="head" style="display: none;">
+    <div class="layui-row" id="head" >
         <div class="layui-col-md11">
             <form class="layui-form" lay-filter="head">
                 <div class="layui-form-item" style="margin-top: 25px;">
@@ -245,7 +256,7 @@
     </div>
 
     <!--导入测试用例-->
-    <div class="layui-row" id="import_case" style="display:none;">
+    <div class="layui-row" id="import_case" >
         <div class="layui-col-md11">
             <form class="layui-form" enctype="multipart/form-data" action="/publicapi/import_case/" method="post">
 
@@ -265,7 +276,7 @@
     </div>
 
     <!--设置定时任务-->
-    <div class="layui-row" id="timing_task" style="display:none;">
+    <div class="layui-row" id="timing_task" >
         <div class="layui-col-md11">
             <form class="layui-form" lay-filter="example">
 
@@ -314,7 +325,7 @@
     </div>
 
     <!--进度条-->
-    <div class="layui-row" id="progress_bar" style="display: none;">
+    <div class="layui-row" id="progress_bar">
         <div class="layui-col-md11">
             <blockquote class="layui-elem-quote">
                 <span>接口进度 (执行接口数/需要执行的接口总数)：</span>
@@ -327,7 +338,7 @@
     </div>
 
     <!--编辑替换位置-->
-    <div class="layui-row" id="replace_position" style="display: none;">
+    <div class="layui-row" id="replace_position" >
         <div class="layui-col-md11">
             <form class="layui-form" lay-filter="replace_position">
 
@@ -732,7 +743,7 @@
                             success: function (data) {
                                 console.log(data);//object
                                 if (len > 0) {
-                                    if(data.errors > 0){
+                                    if (data.errors > 0) {
                                         let failcases = data.failcases;
                                         let errors = data.errors;
                                         let pass = len - errors;
@@ -777,7 +788,7 @@
                                                     , limit: 10
                                                     , cols: [[
                                                         {type: 'checkbox'}
-                                                        , {field: 'casename', title: '接口名称', width: 300,align: "left"}
+                                                        , {field: 'casename', title: '接口名称', width: 300, align: "left"}
                                                         , {
                                                             field: 'duration', width: 100, title: '响应时长', align: "left",
                                                             templet: function (res) {
@@ -950,8 +961,8 @@
                                                 $(".layui-laypage-btn").click();
                                             }
                                         });
-                                    }else {
-                                        layer.msg("接口执行全部成功",{
+                                    } else {
+                                        layer.msg("接口执行全部成功", {
                                             icon: 6,
                                             offset: 't',
                                         })
@@ -1172,7 +1183,7 @@
                         });
                     });
                     break;
-                //定时任务
+                    //定时任务
                 {#case "timing_task":#}
                 {#    var data = checkStatus.data;#}
                 {#    var ids = "";#}
@@ -1247,7 +1258,7 @@
                 {#            });#}
                 {#        }#}
                 {#    });#}
-                break;
+                    break;
                 //导出报表
                 case 'export_report':
                     var data = checkStatus.data;
@@ -1269,56 +1280,56 @@
                         console.log(l);
                     }
                     $.ajax({
-                            cache: false,
-                            url: "/api/v1/publicapi/export_report/",
-                            type: 'POST',
-                            data: {
-                                "request": JSON.stringify(l)
-                            },
-                            //请求前的处理,加载loading
-                            beforeSend: function () {
-                                l_index = layer.msg('执行接口中，小伙伴请稍候~~', {
-                                    icon: 16,
-                                    time: false,
-                                    shade: 0.5
+                        cache: false,
+                        url: "/api/v1/publicapi/export_report/",
+                        type: 'POST',
+                        data: {
+                            "request": JSON.stringify(l)
+                        },
+                        //请求前的处理,加载loading
+                        beforeSend: function () {
+                            l_index = layer.msg('执行接口中，小伙伴请稍候~~', {
+                                icon: 16,
+                                time: false,
+                                shade: 0.5
+                            });
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code === 1000) {
+                                layer.msg(data.msg, {
+                                    icon: 6, offset: "t"
                                 });
-                            },
-                            success: function (data) {
-                                console.log(data);
-                                if (data.code === 1000) {
-                                    layer.msg(data.msg, {
-                                        icon: 6, offset: "t"
-                                    });
-                                    layer.open({
-                                        type: 2,
-                                        title: "pycharts图表",
-                                        shadeClose: true,
-                                        shade: false,
-                                        zIndex: layer.zIndex,
-                                        maxmin: true, //开启最大化最小化按钮
-                                        area: ['950px', '600px'],
-                                        content: '/echart_report/',
-                                        success: function () {
-                                            layer.setTop(layero);
-                                        }
-                                    });
-                                } else {
-                                    layer.msg(data.error, {
-                                        icon: 5, offset: "t"
-                                    })
-                                }
-
-                            },
-                            error: function () {
-                                layer.msg("回调失败", {
-                                    icon: 5,
-                                    offset: 't'
+                                layer.open({
+                                    type: 2,
+                                    title: "pycharts图表",
+                                    shadeClose: true,
+                                    shade: false,
+                                    zIndex: layer.zIndex,
+                                    maxmin: true, //开启最大化最小化按钮
+                                    area: ['950px', '600px'],
+                                    content: '/echart_report/',
+                                    success: function () {
+                                        layer.setTop(layero);
+                                    }
                                 });
-                            },
-                            complete: function () {
-                                layer.close(l_index);
+                            } else {
+                                layer.msg(data.error, {
+                                    icon: 5, offset: "t"
+                                })
                             }
-                        });
+
+                        },
+                        error: function () {
+                            layer.msg("回调失败", {
+                                icon: 5,
+                                offset: 't'
+                            });
+                        },
+                        complete: function () {
+                            layer.close(l_index);
+                        }
+                    });
             }
 
         });
@@ -1678,14 +1689,14 @@
                                 });
                                 console.log(par);
                                 let num = "";
-                                if (par.length == 2){
+                                if (par.length == 2) {
                                     num = 2
-                                }else if(par.length == 1 && par.indexOf("params") == 0){
+                                } else if (par.length == 1 && par.indexOf("params") == 0) {
                                     num = 0
-                                }else if(par.length == 1 && par.indexOf("body") == 0){
+                                } else if (par.length == 1 && par.indexOf("body") == 0) {
                                     num = 1
                                 }
-                                console.log("请求的replace_position为："+String(num));
+                                console.log("请求的replace_position为：" + String(num));
                                 $.ajax({
                                     url: "/api/v1/processapi/update_case/" + obj.data['caseid'] + '/',
                                     type: 'GET',
@@ -1724,7 +1735,7 @@
             }
             //编辑接口整体
             else if (obj.event === 'update_case') {
-                get_role_by_system("option","identity");
+                get_role_by_system("option", "identity");
                 get_belong_by_system("belong");
                 var a = layer.open({
                     type: 1,
@@ -1755,6 +1766,17 @@
                                 //"replaceposition": data.replace_position,
                             });
                             //监听编辑用户信息，
+                            form.on('radio(depend)', function (data) {
+                                console.log(data.elem); //得到radio原始DOM对象
+                                console.log(data.value); //被点击的radio的value值
+                                if (data.value == "exist") {
+                                    $(".mydepend").css("display", "block")
+                                    console.log("我应该展现依赖相关内容")
+                                } else {
+                                    $(".mydepend").css("display", "none")
+                                }
+                            });
+                            form.render('radio', 'depend'); //更新 lay-filter="depend" 所在容器内的全部 radio 状态
                             form.on('submit(add_update_case)', function (data) {
                                 console.log(data.field);
                                 let position_arr = ["params", "body"];
@@ -1767,14 +1789,14 @@
                                 });
                                 console.log(par);
                                 let num = "";
-                                if (par.length == 2){
+                                if (par.length == 2) {
                                     num = 2
-                                }else if(par.length == 1 && par.indexOf("params") == 0){
+                                } else if (par.length == 1 && par.indexOf("params") == 0) {
                                     num = 0
-                                }else if(par.length == 1 && par.indexOf("body") == 0){
+                                } else if (par.length == 1 && par.indexOf("body") == 0) {
                                     num = 1
                                 }
-                                console.log("请求的replace_position为："+String(num));
+                                console.log("请求的replace_position为：" + String(num));
                                 $.ajax({
                                     cache: false,
                                     url: "/api/v1/processapi/update_case/" + id + "/",
@@ -1896,7 +1918,7 @@
 <script>
     //新建用例
     function add_case() {
-        get_role_by_system("option","identity");
+        get_role_by_system("option", "identity");
         get_belong_by_system("belong");
         var Create_apicase = layer.open({
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
@@ -1911,7 +1933,20 @@
                 layui.use(['form', "jquery"], function () {
                     var form = layui.form,
                         $ = layui.$;
-                    form.val("add_update_case");
+                    form.val("add_update_case",{
+                        "depend":"unexist"
+                    });
+                    form.on('radio(depend)', function(data){
+                      console.log(data.elem); //得到radio原始DOM对象
+                      console.log(data.value); //被点击的radio的value值
+                        if (data.value == "exist"){
+                            $(".mydepend").css("display","block")
+                            console.log("我应该展现依赖相关内容")
+                        }else{
+                            $(".mydepend").css("display","none")
+                        }
+                    });
+                    form.render('radio', 'depend'); //更新 lay-filter="depend" 所在容器内的全部 radio 状态
                     form.on('submit(add_update_case)', function (data) {
                         console.log(data.field);
                         let position_arr = ["params", "body"];
@@ -1924,14 +1959,14 @@
                         });
                         console.log(par);
                         let num = "";
-                        if (par.length == 2){
+                        if (par.length == 2) {
                             num = 2
-                        }else if(par.length == 1 && par.indexOf("params") == 0){
+                        } else if (par.length == 1 && par.indexOf("params") == 0) {
                             num = 0
-                        }else if(par.length == 1 && par.indexOf("body") == 0){
+                        } else if (par.length == 1 && par.indexOf("body") == 0) {
                             num = 1
                         }
-                        console.log("请求的replace_position为："+String(num));
+                        console.log("请求的replace_position为：" + String(num));
                         $.ajax({
                             cache: false,
                             url: "/api/v1/processapi/add_case/",
@@ -1995,18 +2030,18 @@
             async: false,
             data: {
                 "system": '{{ system }}',
-                "area":"process"
+                "area": "process"
             },
             success: function (data) {
                 //res = data;
                 var str = '';
                 //data是数组时，index是当前元素的位置，value是值
-                $.each(data,function(index,value){
-                    str += "<option value='"+value+"'>"+value+"</option>";
+                $.each(data, function (index, value) {
+                    str += "<option value='" + value + "'>" + value + "</option>";
                 });
                 console.log(str);
-                $('#'+id).empty();
-                $('#'+id).append(str);
+                $('#' + id).empty();
+                $('#' + id).append(str);
 
             },
             error: function () {
@@ -2021,7 +2056,7 @@
     }
 
     //获取系统角色
-    function get_role_by_system(attrtype,id) {
+    function get_role_by_system(attrtype, id) {
         //attrtype：什么标签
         //id:父标签的id属性值
         $.ajax({
@@ -2037,19 +2072,19 @@
                 console.log(typeof (data));
                 var str = '';
                 //data是obj时，index是key，value是值
-                $.each(data,function(index,value){
+                $.each(data, function (index, value) {
                     console.log(index);
                     console.log(value);
-                    if(attrtype=="option"){
-                        console.log("我渲染的"+id);
-                        str += "<option value='"+value+"'>"+value+"</option>";
-                        $('#'+id).empty();
-                        $('#'+id).append(str);
-                    }else if(attrtype=="input"){
-                        console.log("我渲染的"+id);
-                        str += "<input type=\"radio\" name=\"identity\" value='"+value+"' title='"+value+"'>";
-                        $('#'+id).empty();
-                        $('#'+id).append(str);
+                    if (attrtype == "option") {
+                        console.log("我渲染的" + id);
+                        str += "<option value='" + value + "'>" + value + "</option>";
+                        $('#' + id).empty();
+                        $('#' + id).append(str);
+                    } else if (attrtype == "input") {
+                        console.log("我渲染的" + id);
+                        str += "<input type=\"radio\" name=\"identity\" value='" + value + "' title='" + value + "'>";
+                        $('#' + id).empty();
+                        $('#' + id).append(str);
                     }
 
                 });
@@ -2079,7 +2114,7 @@
                     var form = layui.form;
                     $ = layui.$;
                     form.val("add_update_role", {
-                        "role":"【】",
+                        "role": "【】",
                         "password": "Y+zilsR88g9SZI8WOeHJlA=="
                     });
                     //监听编辑用户信息，
@@ -2104,8 +2139,8 @@
                                 "role": data.field.role,
                                 "username": data.field.username,
                                 "password": data.field.password,
-                                "ip":data.field.url,
-                                "token":data.field.token
+                                "ip": data.field.url,
+                                "token": data.field.token
                             },
                             success: function (data) {
                                 if (data.code === 1000) {
@@ -2160,13 +2195,13 @@
                         , limit: 10
                         , toolbar: '#roletoolbarDemo'
                         , height: 'full-420'
-                        , page:true
+                        , page: true
                         , initSort: {
                             field: "system",
                             type: "desc"
                         },
-                        where:{
-                            "system":"{{ system }}"
+                        where: {
+                            "system": "{{ system }}"
                         },
                         id: "roletable"
                         , size: 'lg'
@@ -2198,10 +2233,10 @@
                                         var form = layui.form;
                                         $ = layui.$;
                                         form.val("add_update_role", {
-                                            "role":data.role,
-                                            "system":data.system,
-                                            "url":data.ip,
-                                            "token":data.token,
+                                            "role": data.role,
+                                            "system": data.system,
+                                            "url": data.ip,
+                                            "token": data.token,
                                             "username": data.username,
                                             "password": data.password
                                         });
@@ -2212,10 +2247,10 @@
                                                 url: "/api/v1/systemrole/update_role/" + id + "/",
                                                 type: 'PUT',
                                                 data: {
-                                                    "role":data.field.role,
-                                                    "system":data.field.system,
-                                                    "ip":data.field.url,
-                                                    "token":data.field.token,
+                                                    "role": data.field.role,
+                                                    "system": data.field.system,
+                                                    "ip": data.field.url,
+                                                    "token": data.field.token,
                                                     "username": data.field.username,
                                                     "password": data.field.password
                                                 },
@@ -2296,10 +2331,18 @@
                                 //获取token
                                 var res = checkStatus.data;
                                 console.log(res);
+                                let list_id = [];
+                                for(i=0;i<res.length;i++){
+                                    list_id.push(res[i].id)
+                                }
+                                console.log(list_id);
                                 $.ajax({
                                     cache: false,
-                                    url: "/api/v1/systemrole/get_token_by_id/" + res[0]["id"] + "/",
+                                    url: "/api/v1/systemrole/get_token_by_id/",
                                     type: 'PUT',
+                                    data:{
+                                      ids: JSON.stringify(list_id)
+                                    },
                                     success: function (data) {
                                         //layer.closeAll();
                                         if (data.code === 1000) {

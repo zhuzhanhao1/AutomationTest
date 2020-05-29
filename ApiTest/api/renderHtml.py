@@ -95,11 +95,13 @@ def index_views(request):
     '''
     首页html
     '''
-    user_id = UserProfile.objects.filter().order_by("-user_id")[:1].first().user_id
+    # user_id = UserProfile.objects.filter().order_by("-user_id")[:1].first().user_id
     # 获取当前登录名
-    name = User.objects.filter(id=user_id).first().first_name
+    name = User.objects.filter().values("first_name").order_by('-id').first()
+    print(name)
+    print(len(name))
     login_name = {
-        "name": name
+        "name": name["first_name"]
     }
     return render(request, 'index.html', login_name)
 

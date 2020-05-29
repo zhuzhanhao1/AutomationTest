@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from ApiTest.api import singleApiList, systemRole, Menu, Link, processApiList, \
-                        publicApi, ProcessApiTest, singleApiTest, pyechartExport
+                        publicApi, ProcessApiTest, singleApiTest
 
 urlpatterns = [
     # 单一接口测试
@@ -42,7 +42,7 @@ urlpatterns = [
     url(r'systemrole/add_role/$', systemRole.SystemRoleList.as_view()),
     url(r'systemrole/update_role/(?P<pk>[0-9]+)/$', systemRole.SystemRoleList.as_view()),
     url(r'systemrole/del_role/(?P<pk>[0-9]+)/$', systemRole.SystemRoleList.as_view()),
-    url(r'systemrole/get_token_by_id/(?P<pk>[0-9]+)/$', systemRole.SystemRoleToken.as_view()),
+    url(r'systemrole/get_token_by_id/$', systemRole.SystemRoleToken.as_view()),
     url(r'systemrole/get_role_by_system/$', systemRole.SystemRoleToken.as_view()),
 
     # 菜单

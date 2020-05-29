@@ -140,28 +140,31 @@ class SystemRoleToken(APIView):
         except:
             return None,None
 
-    def put(self, request, pk, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         '''
             更新被测系统角色的token
         '''
         ret = {"code": 1000}
         try:
-            token,obj = self.get_token(pk)
-            if not token:
-                ret["code"] = 1001
-                ret["error"] = "被测系统Token更新失败"
-                return Response(ret)
-            data = {"token":token}
-            serializer = TokenSerializers(obj,data=data)
-            # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
-            if serializer.is_valid():
-                serializer.save()
-                ret["msg"] = "被测系统Token更新成功"
-                return Response(ret, status=status.HTTP_201_CREATED)
-            else:
-                ret["code"] = 1001
-                ret['error'] = str(serializer.errors)
-                return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+            res = request.data
+            ids_list = json.loads(res["ids"])
+            for i in ids_list:
+                token, obj = self.get_token(i)
+                if not token:
+                    ret["code"] = 1001
+                    ret["error"] = "被测系统Token更新失败"
+                    return Response(ret)
+                data = {"token":token}
+                serializer = TokenSerializers(obj,data=data)
+                # 在获取反序列化的数据前，必须调用is_valid()方法进行验证，验证成功返回True，否则返回False
+                if serializer.is_valid():
+                    serializer.save()
+                    ret["msg"] = "被测系统Token更新成功"
+                else:
+                    ret["code"] = 1001
+                    ret['error'] = str(serializer.errors)
+                    return Response(ret, status=status.HTTP_400_BAD_REQUEST)
+            return Response(ret, status=status.HTTP_201_CREATED)
         except Exception as e:
             print(e)
             ret["code"] = 1001
