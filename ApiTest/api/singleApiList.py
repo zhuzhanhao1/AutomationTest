@@ -273,7 +273,7 @@ class SingleApiChildList(APIView):
         ret = {"code": 1000}
         try:
             snippet = self.get_object(pk)
-            serializer = UpdateParameterSer(snippet, data=request.data)
+            serializer = ParameterListSer(snippet, data=request.data)
             if serializer.is_valid():
                 serializer.save()
                 ret["msg"] = "编辑请求参数成功"

@@ -28,10 +28,10 @@
                     <label class="layui-form-label">所属模块</label>
                     <div class="layui-input-block">
                         <select name="belong" id="belong" lay-verify="required">
-{#                            django render#}
-{#                            {% for i in apinav %}#}
-{#                                <option value="{{ i }}">{{ i }}</option>#}
-{#                            {% endfor %}#}
+                            {#                            django render#}
+                            {#                            {% for i in apinav %}#}
+                            {#                                <option value="{{ i }}">{{ i }}</option>#}
+                            {#                            {% endfor %}#}
                             <option value=""></option>
                         </select>
                     </div>
@@ -209,7 +209,7 @@
         soulTable: 'soulTable'
     });
 
-    layui.use(['table', "soulTable",'util'], function (data) {
+    layui.use(['table', "soulTable", 'util'], function (data) {
         var table = layui.table;
         var util = layui.util;
         soulTable = layui.soulTable;
@@ -300,7 +300,7 @@
             , cols: [[ //表头, fixed: 'left'
                 {type: 'checkbox'}
                 , {title: '操作', toolbar: '#barDemo', width: 80, align: "left"}
-                , {field: 'function_point', title: '用例点',  align: "left"}//, templet: "#identityTpl"
+                , {field: 'function_point', title: '用例点', align: "left"}//, templet: "#identityTpl"
                 , {
                     field: 'casename',
                     title: '用例名称',
@@ -320,7 +320,7 @@
                             , skin: 'line'
                             , size: "lg"
                             {#, toolbar: '#toolbarchiildDemo'#}
-                            ,toolbar:
+                            , toolbar:
                                 '<div>' +
                                 ' <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add_parameter">添加参数</a>' +
                                 '<a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="reload">重载表格</a>' +
@@ -329,10 +329,15 @@
                             //, height: 'full-10'
                             , cols: [[
                                 {type: 'checkbox'}
-                                , {title: '操作', width: 120, templet: function(row) {
-                                   return '<a class="layui-btn layui-btn-xs" lay-event="childEdit">编辑</a>' +
-                                    '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="childDel">删除</a>'
-                                }}
+                                , {
+                                    title: '操作', width: 120, templet: function (row) {
+                                        return '<a class="layui-icon layui-icon-tips"\n' +
+                                            'style="color:#797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"\n' +
+                                            'lay-event="childEdit"></a>' +
+                                            '<a class="fa fa-trash-o" lay-event="childDel"\n' +
+                                            'style="color: #797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"></a>'
+                                    }
+                                }
                                 , {
                                     field: 'step_id',
                                     title: '序号',
@@ -368,8 +373,10 @@
                                 var childId = this.id; // 通过 this 对象获取当前子表的id
 
                                 if (obj.event === 'childEdit') {
-                                    console.log(obj.data.id);//子表数据行的id
-                                    console.log(this.id);//子表id
+                                    //console.log(obj.data.id);//子表数据行的id
+                                    //console.log(this.id);//子表id
+                                    //console.log(pobj.data.id);
+                                    var parent_id = pobj.data.id;
                                     var a = layer.open({
                                         type: 1,
                                         title: "编辑请求参数",
@@ -383,7 +390,7 @@
                                                 $ = layui.$;
                                                 var caseid = obj.data.id;
                                                 form.val("add_update_parameter", {
-                                                    "step_id":obj.data.step_id,
+                                                    "step_id": obj.data.step_id,
                                                     "steps": obj.data.steps,
                                                     "expected_results": obj.data.expected_results,
                                                 });
@@ -392,10 +399,11 @@
                                                     console.log(data.field);
                                                     $.ajax({
                                                         cache: false,
-                                                        url: "/api/v1/functionCase/update_child/" + caseid + "/",
+                                                        url: "/api/v1/functioncase/update_child/" + caseid + "/",
                                                         type: 'PUT',
                                                         data: {
-                                                            "step_id":data.field.step_id,
+                                                            "parent_id": parent_id,
+                                                            "step_id": data.field.step_id,
                                                             "steps": data.field.steps,
                                                             "expected_results": data.field.expected_results,
                                                         },
@@ -437,7 +445,7 @@
                                         console.log(id);
                                         $.ajax({
                                             cache: false,
-                                            url: "/api/v1/functionCase/del_child/" + id + "/",
+                                            url: "/api/v1/functioncase/del_child/" + id + "/",
                                             type: 'DELETE',
                                             success: function (data) {
                                                 if (data.code === 1000) {
@@ -481,7 +489,8 @@
                                     //关闭子表
                                     pobj.close()
                                 } else if (obj.event === "add_parameter") {
-                                    var parent_id = pobj.data.caseid;
+                                    var parent_id = pobj.data.id;
+                                    console.log(parent_id);
                                     var Create_apicase = layer.open({
                                         //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
                                         type: 1,
@@ -498,9 +507,10 @@
                                                 form.on('submit(add_update_parameter)', function (data) {
                                                     $.ajax({
                                                         cache: false,
-                                                        url: "/api/v1/functionCase/add_child/",
+                                                        url: "/api/v1/functioncase/add_child/",
                                                         type: 'POST',
                                                         data: {
+                                                            "parent_id": parent_id,
                                                             "step_id": data.field.step_id,
                                                             "steps": data.field.steps,
                                                             "expected_results": data.field.expected_results,
@@ -559,9 +569,9 @@
 
                     ]
                 }
-                , {field: 'premise_condition', title: '前提条件',  align: "left"}
+                , {field: 'premise_condition', title: '前提条件', align: "left"}
                 , {field: 'execution_result', title: '执行结果', align: "left"}
-                , {field: 'note', title: '备注',  align: "left"}
+                , {field: 'note', title: '备注', align: "left"}
                 , {field: 'executor', title: '执行人', width: 80, align: "left", event: "head"}//merge: true行合并
 
             ]]
@@ -843,7 +853,7 @@
                 //获取系统模块参数
                 get_belong_by_system();
                 //获取系统角色
-                get_role_by_system("option","identity");
+                get_role_by_system("option", "identity");
                 var a = layer.open({
                     type: 1,
                     title: "编辑用例",
@@ -927,8 +937,6 @@
 <script>
     //新建用例
     function add_case() {
-        get_role_by_system("option","identity");
-        get_belong_by_system();
         var Create_apicase = layer.open({
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
             type: 1,
@@ -996,7 +1004,6 @@
 </script>
 
 
-
 <!--主表头按钮 layui-btn-disabled-->
 <script type="text/html" id="toolbarDemo">
     <div class="layui-btn-container">
@@ -1028,7 +1035,6 @@
     <a class="fa fa-trash-o" lay-event="del_parameter"
        style="color: #797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"></a>
 </script>
-
 
 
 </body>

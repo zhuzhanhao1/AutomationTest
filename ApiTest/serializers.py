@@ -243,7 +243,7 @@ class ParameterListSer(serializers.ModelSerializer):
     isMust = serializers.CharField(source="get_isMust_display")
     class Meta:
         model = SingleApiChild
-        fields = ["id","parent_id","parameter_field","parameter_that","area","isMust","sample"]
+        fields = "__all__"
 
 class AddParameterSer(serializers.ModelSerializer):
     '''
@@ -252,15 +252,6 @@ class AddParameterSer(serializers.ModelSerializer):
     class Meta:
         model = SingleApiChild
         fields = ["parent_id","parameter_field","parameter_that","area","isMust","sample"]
-
-class UpdateParameterSer(serializers.ModelSerializer):
-    '''
-        单一接口参数子表
-    '''
-    class Meta:
-        model = SingleApiChild
-        fields = ["parameter_field","parameter_that","area","isMust","sample"]
-
 
 ###########################functionCase####################################
 

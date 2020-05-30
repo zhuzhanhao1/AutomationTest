@@ -1,3 +1,5 @@
+/*1AA094-5FB878*/
+
 /*公共样式*/
 .header .layui-nav-child {
     z-index: 99999;
@@ -170,7 +172,7 @@ iframe {
 .admin-header-lock-input {
     width: 170px;
     color: #fff;
-    background-color: #009688;
+    background-color: #5FB878;
     float: left;
     margin: 0 10px 0 40px;
     border: none;
@@ -225,7 +227,7 @@ iframe {
     text-align: center;
     padding: 5px 5px;
     color: #fff;
-    background-color: #1AA094;
+    background-color: #ECEFFC;
 }
 
 .hideMenu:hover {
@@ -254,9 +256,9 @@ iframe {
 }
 
 .topLevelMenus .layui-nav-item.layui-this {
-    /*background-color: #1AA094;*/
-    border-left: 1px solid #1AA094;
-    border-right: 1px solid #1AA094;
+    /*background-color: #5FB878;*/
+    /*border-left: 1px solid #5FB878;*/
+    /*border-right: 1px solid #5FB878;*/
 
 }
 
@@ -265,9 +267,9 @@ iframe {
 }
 
 .top_menu .layui-nav-bar, .mobileTopLevelMenus .layui-nav-bar {
-    /*background-color: #1AA094;*/
-    border-left: 1px solid #1AA094;
-    border-right: 1px solid #1AA094;
+    /*background-color: #5FB878;*/
+    border-left: 1px solid #5FB878;
+    border-right: 1px solid #5FB878;
 
 }
 
@@ -319,7 +321,7 @@ iframe {
     border-radius: 50%;
     -webkit-border-radius: 50%;
     -moz-border-radius: 50%;
-    /*border: 3px solid #1AA094;*/
+    /*border: 3px solid #5FB878;*/
     box-sizing: border-box;
 }
 
@@ -342,9 +344,9 @@ iframe {
 }
 
 .layui-nav-itemed:before {
-    width: 5px;
+    width: 3px;
     height: 100%;
-    background-color: #009688;
+    background-color: #5FB878;
     position: absolute;
     content: '';
     left: 0;
@@ -358,8 +360,8 @@ iframe {
 /*layui-body*/
 .layui-body {
     overflow: hidden;
-    border-top: 5px solid #1AA094;
-    border-left: 2px solid #1AA094;
+    border-top: 1px solid #5FB878;
+    border-left: 1px solid #5FB878;
     background: #fff;
 }
 
@@ -375,8 +377,9 @@ iframe {
 }
 
 .layui-tab-title .layui-this {
-    background-color: #1AA094;
+    background-color: #5FB878;
     color: #fff;
+    /*border-bottom: 3px solid #5FB878;*/
 }
 
 .layui-tab-title .layui-this:after {
@@ -508,7 +511,7 @@ iframe {
 .footer {
     text-align: center;
     line-height: 44px;
-    border-left: 2px solid #1AA094;
+    border-left: 2px solid #5FB878;
     z-index: 999;
 }
 
@@ -675,7 +678,7 @@ iframe {
 }
 
 .layui-layout-admin .layui-header {
-    border-bottom: 5px solid #1AA094;
+    border-bottom: 1px solid #5FB878;
 }
 
 .layui-nav .layui-nav-more {

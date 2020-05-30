@@ -28,9 +28,9 @@
                     <label class="layui-form-label">系统角色</label>
                     <div class="layui-input-block">
                         <select name="identity" id="identity" lay-verify="required">
-{#                            {% for item,value in role.items %}#}
-{#                                <option value="{{ item }}">{{ value }}</option>#}
-{#                            {% endfor %}#}
+                            {#                            {% for item,value in role.items %}#}
+                            {#                                <option value="{{ item }}">{{ value }}</option>#}
+                            {#                            {% endfor %}#}
                             <option value=""></option>
                         </select>
                     </div>
@@ -40,10 +40,10 @@
                     <label class="layui-form-label">所属模块</label>
                     <div class="layui-input-block">
                         <select name="belong" id="belong" lay-verify="required">
-{#                            django render#}
-{#                            {% for i in apinav %}#}
-{#                                <option value="{{ i }}">{{ i }}</option>#}
-{#                            {% endfor %}#}
+                            {#                            django render#}
+                            {#                            {% for i in apinav %}#}
+                            {#                                <option value="{{ i }}">{{ i }}</option>#}
+                            {#                            {% endfor %}#}
                             <option value=""></option>
                         </select>
                     </div>
@@ -124,7 +124,7 @@
                     <label class="layui-form-label">系统</label>
                     <div class="layui-input-block">
                         <input type="text" id="system" name="system" required lay-verify="required"
-                                autocomplete="off" class="layui-input" value="{{ system }}">
+                               autocomplete="off" class="layui-input" value="{{ system }}">
                     </div>
                 </div>
 
@@ -318,7 +318,8 @@
         <div class="layui-col-md11">
 
             <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 20px;">
-                <a href="http://localhost:8089/" target="_blank" style="font-size: 20px;color: #1E9FFF;padding-left: 20px;">
+                <a href="http://localhost:8089/" target="_blank"
+                   style="font-size: 20px;color: #1E9FFF;padding-left: 20px;">
                     点击前往-->Start new Locust swarm
                 </a>
             </blockquote>
@@ -440,7 +441,7 @@
         soulTable: 'soulTable'
     });
 
-    layui.use(['table', "soulTable",'util'], function (data) {
+    layui.use(['table', "soulTable", 'util'], function (data) {
         var table = layui.table;
         var util = layui.util;
         soulTable = layui.soulTable;
@@ -553,7 +554,7 @@
                             , skin: 'line'
                             , size: "lg"
                             {#, toolbar: '#toolbarchiildDemo'#}
-                            ,toolbar:
+                            , toolbar:
                                 '<div>' +
                                 ' <a class="layui-btn layui-btn-normal layui-btn-sm" lay-event="add_parameter">添加参数</a>' +
                                 '<a class="layui-btn layui-btn-sm layui-btn-normal" lay-event="reload">重载表格</a>' +
@@ -562,15 +563,14 @@
                             //, height: 'full-10'
                             , cols: [[
                                 {type: 'checkbox'}
-                                , {title: '操作', width: 120, templet: function(row) {
-                                   return '<a class="layui-btn layui-btn-xs" lay-event="childEdit">编辑</a>' +
-                                    '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="childDel">删除</a>'
-                                }}
                                 , {
-                                    field: 'id',
-                                    title: '序号',
-                                    width: 100,
-                                    align: "left"
+                                    title: '操作', width: 120, templet: function (row) {
+                                        return '<a class="layui-icon layui-icon-tips"\n' +
+                                            'style="color:#797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"\n' +
+                                            'lay-event="childEdit"></a>' +
+                                            '<a class="fa fa-trash-o" lay-event="childDel"\n' +
+                                            'style="color: #797979;font-size: 20px;padding:0 2px;vertical-align:middle;font-weight: lighter;"></a>'
+                                    }
                                 }
                                 , {
                                     field: 'area',
@@ -614,7 +614,7 @@
                                 // 单击行事件
                                 // obj 子表当前行对象
                                 // pobj 父表当前行对象
-                                obj.tr.css({'background': '#5FB878'}).siblings().removeAttr('style')
+                                obj.tr.css({'background': '#ECEFFC'}).siblings().removeAttr('style')
                                 console.log(obj.tr) //得到当前行元素对象
                                 console.log(obj.data) //得到当前行数据
                                 console.log(pobj) //得到当前行数据
@@ -630,6 +630,7 @@
                                 if (obj.event === 'childEdit') {
                                     console.log(obj.data.id);//子表数据行的id
                                     console.log(this.id);//子表id
+                                    let parent_id = pobj.data.caseid;
                                     var a = layer.open({
                                         type: 1,
                                         title: "编辑请求参数",
@@ -643,6 +644,7 @@
                                                 $ = layui.$;
                                                 var caseid = obj.data.id;
                                                 form.val("add_update_parameter", {
+
                                                     "parameter_field": obj.data.parameter_field,
                                                     "parameter_that": obj.data.parameter_that,
                                                     "area": obj.data.area,
@@ -657,6 +659,7 @@
                                                         url: "/api/v1/singleapi/update_parameter/" + caseid + "/",
                                                         type: 'PUT',
                                                         data: {
+                                                            "parent_id": parent_id,
                                                             "parameter_field": data.field.parameter_field,
                                                             "parameter_that": data.field.parameter_that,
                                                             "area": data.field.area,
@@ -765,12 +768,13 @@
                                                         url: "/api/v1/singleapi/add_parameter/",
                                                         type: 'POST',
                                                         data: {
+                                                            "parent_id": parent_id,
                                                             "parameter_field": data.field.parameter_field,
                                                             "parameter_that": data.field.parameter_that,
                                                             "area": data.field.area,
                                                             "isMust": data.field.isMust,
                                                             "sample": data.field.sample,
-                                                            "parent_id": parent_id
+
                                                         },
                                                         beforeSend: function () {
                                                             l_index = layer.load(0, {shade: [0.5, '#DBDBDB']});
@@ -878,7 +882,7 @@
             }
             , id: 'testReload'
             , rowEvent: function (obj) {
-                obj.tr.css({'background': '#5FB878', 'color': 'white'}).siblings().removeAttr('style')
+                obj.tr.css({'background': '#ECEFFC'}).siblings().removeAttr('style')
             }
             , done: function (res) {   //返回数据执行回调函数
                 layer.close(index);    //返回数据关闭loading
@@ -1459,56 +1463,56 @@
                         console.log(l);
                     }
                     $.ajax({
-                            cache: false,
-                            url: "/api/v1/publicapi/export_report/",
-                            type: 'POST',
-                            data: {
-                                "request": JSON.stringify(l)
-                            },
-                            //请求前的处理,加载loading
-                            beforeSend: function () {
-                                l_index = layer.msg('执行接口中，小伙伴请稍候~~', {
-                                    icon: 16,
-                                    time: false,
-                                    shade: 0.5
+                        cache: false,
+                        url: "/api/v1/publicapi/export_report/",
+                        type: 'POST',
+                        data: {
+                            "request": JSON.stringify(l)
+                        },
+                        //请求前的处理,加载loading
+                        beforeSend: function () {
+                            l_index = layer.msg('执行接口中，小伙伴请稍候~~', {
+                                icon: 16,
+                                time: false,
+                                shade: 0.5
+                            });
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            if (data.code === 1000) {
+                                layer.msg(data.msg, {
+                                    icon: 6, offset: "t"
                                 });
-                            },
-                            success: function (data) {
-                                console.log(data);
-                                if (data.code === 1000) {
-                                    layer.msg(data.msg, {
-                                        icon: 6, offset: "t"
-                                    });
-                                    layer.open({
-                                        type: 2,
-                                        title: "pycharts图表",
-                                        shadeClose: true,
-                                        shade: false,
-                                        zIndex: layer.zIndex,
-                                        maxmin: true, //开启最大化最小化按钮
-                                        area: ['950px', '600px'],
-                                        content: '/echart_report/',
-                                        success: function () {
-                                            layer.setTop(layero);
-                                        }
-                                    });
-                                } else {
-                                    layer.msg(data.error, {
-                                        icon: 5, offset: "t"
-                                    })
-                                }
-
-                            },
-                            error: function () {
-                                layer.msg("回调失败", {
-                                    icon: 5,
-                                    offset: 't'
+                                layer.open({
+                                    type: 2,
+                                    title: "pycharts图表",
+                                    shadeClose: true,
+                                    shade: false,
+                                    zIndex: layer.zIndex,
+                                    maxmin: true, //开启最大化最小化按钮
+                                    area: ['950px', '600px'],
+                                    content: '/echart_report/',
+                                    success: function () {
+                                        layer.setTop(layero);
+                                    }
                                 });
-                            },
-                            complete: function () {
-                                layer.close(l_index);
+                            } else {
+                                layer.msg(data.error, {
+                                    icon: 5, offset: "t"
+                                })
                             }
-                        });
+
+                        },
+                        error: function () {
+                            layer.msg("回调失败", {
+                                icon: 5,
+                                offset: 't'
+                            });
+                        },
+                        complete: function () {
+                            layer.close(l_index);
+                        }
+                    });
             }
 
         });
@@ -1683,7 +1687,7 @@
                 //获取系统模块参数
                 get_belong_by_system();
                 //获取系统角色
-                get_role_by_system("option","identity");
+                get_role_by_system("option", "identity");
                 var a = layer.open({
                     type: 1,
                     title: "编辑用例",
@@ -1833,14 +1837,14 @@
             async: false,
             data: {
                 "system": '{{ system }}',
-                "area":"single"
+                "area": "single"
             },
             success: function (data) {
                 //res = data;
                 var str = '';
                 //data是数组时，index是当前元素的位置，value是值
-                $.each(data,function(index,value){
-                    str += "<option value='"+value+"'>"+value+"</option>";
+                $.each(data, function (index, value) {
+                    str += "<option value='" + value + "'>" + value + "</option>";
                 });
                 console.log(str);
                 $('#belong').empty();
@@ -1859,7 +1863,7 @@
     }
 
     //获取系统角色
-    function get_role_by_system(attrtype,id) {
+    function get_role_by_system(attrtype, id) {
         //attrtype：什么标签
         //id:父标签的id属性值
         $.ajax({
@@ -1875,19 +1879,19 @@
                 console.log(typeof (data));
                 var str = '';
                 //data是obj时，index是key，value是值
-                $.each(data,function(index,value){
+                $.each(data, function (index, value) {
                     console.log(index);
                     console.log(value);
-                    if(attrtype=="option"){
-                        console.log("我渲染的"+id);
-                        str += "<option value='"+value+"'>"+value+"</option>";
-                        $('#'+id).empty();
-                        $('#'+id).append(str);
-                    }else if(attrtype=="input"){
-                        console.log("我渲染的"+id);
-                        str += "<input type=\"radio\" name=\"identity\" value='"+value+"' title='"+value+"'>";
-                        $('#'+id).empty();
-                        $('#'+id).append(str);
+                    if (attrtype == "option") {
+                        console.log("我渲染的" + id);
+                        str += "<option value='" + value + "'>" + value + "</option>";
+                        $('#' + id).empty();
+                        $('#' + id).append(str);
+                    } else if (attrtype == "input") {
+                        console.log("我渲染的" + id);
+                        str += "<input type=\"radio\" name=\"identity\" value='" + value + "' title='" + value + "'>";
+                        $('#' + id).empty();
+                        $('#' + id).append(str);
                     }
 
                 });
@@ -1905,7 +1909,7 @@
 
     //新建用例
     function add_case() {
-        get_role_by_system("option","identity");
+        get_role_by_system("option", "identity");
         get_belong_by_system();
         var Create_apicase = layer.open({
             //layer提供了5种层类型。可传入的值有：0（信息框，默认）1（页面层）2（iframe层）3（加载层）4（tips层）
@@ -1985,7 +1989,7 @@
                     var form = layui.form;
                     $ = layui.$;
                     form.val("add_update_role", {
-                        "role":"【】",
+                        "role": "【】",
                         "password": "Y+zilsR88g9SZI8WOeHJlA=="
                     });
                     //监听编辑用户信息，
@@ -2010,8 +2014,8 @@
                                 "role": data.field.role,
                                 "username": data.field.username,
                                 "password": data.field.password,
-                                "ip":data.field.url,
-                                "token":data.field.token
+                                "ip": data.field.url,
+                                "token": data.field.token
                             },
                             success: function (data) {
                                 if (data.code === 1000) {
@@ -2066,13 +2070,13 @@
                         , limit: 10
                         , toolbar: '#roletoolbarDemo'
                         , height: 'full-420'
-                        , page:true
+                        , page: true
                         , initSort: {
                             field: "system",
                             type: "desc"
                         },
-                        where:{
-                            "system":"{{ system }}"
+                        where: {
+                            "system": "{{ system }}"
                         },
                         id: "roletable"
                         , size: 'lg'
@@ -2104,10 +2108,10 @@
                                         var form = layui.form;
                                         $ = layui.$;
                                         form.val("add_update_role", {
-                                            "role":data.role,
-                                            "system":data.system,
-                                            "url":data.ip,
-                                            "token":data.token,
+                                            "role": data.role,
+                                            "system": data.system,
+                                            "url": data.ip,
+                                            "token": data.token,
                                             "username": data.username,
                                             "password": data.password
                                         });
@@ -2118,10 +2122,10 @@
                                                 url: "/api/v1/systemrole/update_role/" + id + "/",
                                                 type: 'PUT',
                                                 data: {
-                                                    "role":data.field.role,
-                                                    "system":data.field.system,
-                                                    "ip":data.field.url,
-                                                    "token":data.field.token,
+                                                    "role": data.field.role,
+                                                    "system": data.field.system,
+                                                    "ip": data.field.url,
+                                                    "token": data.field.token,
                                                     "username": data.field.username,
                                                     "password": data.field.password
                                                 },
@@ -2203,7 +2207,7 @@
                                 var res = checkStatus.data;
                                 console.log(res);
                                 let list_id = [];
-                                for(i=0;i<res.length;i++){
+                                for (i = 0; i < res.length; i++) {
                                     list_id.push(res[i].id)
                                 }
                                 console.log(list_id);
@@ -2211,8 +2215,8 @@
                                     cache: false,
                                     url: "/api/v1/systemrole/get_token_by_id/",
                                     type: 'PUT',
-                                    data:{
-                                      ids: JSON.stringify(list_id)
+                                    data: {
+                                        ids: JSON.stringify(list_id)
                                     },
                                     success: function (data) {
                                         //layer.closeAll();

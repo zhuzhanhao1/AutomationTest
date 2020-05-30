@@ -77,7 +77,7 @@ layui.use(['form', 'jquery', "layer"], function () {
             title: false,
             type: 1,
             content: '<div class="admin-header-lock" id="lock-box">' +
-                '<div class="admin-header-lock-img"><img src="./../static/images/userface4.jpg" class="userAvatar"/></div>' +
+                '<div class="admin-header-lock-img"><img src="./../static/images/login.png" class="userAvatar"/></div>' +
                 '<div class="admin-header-lock-name" id="lockUserName">朱占豪</div>' +
                 '<div class="input_btn">' +
                 '<input type="password" class="admin-header-lock-input layui-input" autocomplete="off" placeholder="请输入密码解锁.." name="lockPwd" id="lockPwd" />' +

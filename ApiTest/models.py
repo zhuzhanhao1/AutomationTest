@@ -273,7 +273,7 @@ class FunctionCaseChild(models.Model):
         功能测试子表
     '''
     # on_delete=models.CASCADE删除关联数据,与之关联也删除
-    parent_id = models.ForeignKey(FunctionCase, verbose_name='父id', on_delete=models.CASCADE)
+    parent_id = models.ForeignKey(to='FunctionCase', verbose_name='父id', on_delete=models.CASCADE)
     step_id = models.CharField(max_length=10, verbose_name="步骤序号")
     steps = models.CharField(max_length=999, verbose_name="操作步骤")
     expected_results = models.CharField(max_length=999, verbose_name="预期结果")
