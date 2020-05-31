@@ -16,8 +16,22 @@ class FunctionCaseList(APIView):
     def get(self, request, *args ,**kwargs):
         casename = request.GET.get("casename", "")          #搜索名字
         belong = request.GET.get("belong", "")              #所属模块
-        system = request.GET.get("system", "")              #所属系统
-        caselist = FunctionCase.objects.filter()
+        system = request.GET.get("system", "")
+        if casename:
+            if belong:
+                apilists = FunctionCase.objects.filter(Q(casename__contains=casename) & Q(belong__contains=belong) & Q(system=system))
+                if apilists.count() == 0:
+                    caselist = FunctionCase.objects.filter(Q(execution_result__contains="failed")  & Q(system=system))
+            else:
+                apilists = FunctionCase.objects.filter(Q(casename__contains=casename) & Q(system=system))
+                if  apilists.count() == 0:
+                    caselist = FunctionCase.objects.filter(Q(result__contains="success")  & Q(system=system))
+
+        elif system:
+            if belong:
+                caselist = FunctionCase.objects.filter(Q(belong__contains=belong) & Q(system=system))
+            else:
+                caselist = FunctionCase.objects.filter(system=system)
         serializer = functionCaseSer(caselist, many=True)
         pageindex = request.GET.get('page', 1)      # 页数
         pagesize = request.GET.get("limit", 30)     # 每页显示数量
@@ -31,14 +45,62 @@ class FunctionCaseList(APIView):
 
 
     def post(self, request, *args, **kwargs):
-        pass
+        '''
+            创建功能用例-操作步骤、预计结果
+        '''
+        ret = {"code": 1000}
+        try:
+            data = request.data
+            serializer = functionCaseSer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "添加成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except:
+            ret["code"] = 1001
+            ret["error"] = "添加失败"
+        return Response(ret)
 
+    def get_object(self, pk):
+        try:
+            return FunctionCase.objects.get(id=pk)
+        except FunctionCase.DoesNotExist:
+            raise Http404
 
     def put(self, request, pk, *args, **kwargs):
-        pass
+        '''
+            编辑功能用例-操作步骤、预计结果
+        '''
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            serializer = functionCaseSer(snippet, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                ret["msg"] = "编辑成功"
+                return Response(ret)
+            ret["code"] = 1001
+            ret["error"] = str(serializer.errors)
+        except:
+            ret["code"] = 1001
+            ret["error"] = "编辑失败"
+        return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, *args, **kwargs):
-        pass
+        """
+            删除功能用例-操作步骤、预计结果
+        """
+        ret = {"code": 1000}
+        try:
+            snippet = self.get_object(pk)
+            snippet.delete()
+            ret["msg"] = "删除成功"
+        except Exception as e:
+            ret["code"] = 1001
+            ret["error"] = "删除失败"
+        return Response(ret)
 
 
 class FunctionCaseChildList(APIView):
@@ -87,13 +149,13 @@ class FunctionCaseChildList(APIView):
             serializer = functionCaseChildSer(snippet, data=request.data)
             if serializer.is_valid():
                 serializer.save()
-                ret["msg"] = "编辑请求参数成功"
+                ret["msg"] = "编辑成功"
                 return Response(ret)
             ret["code"] = 1001
             ret["error"] = str(serializer.errors)
         except:
             ret["code"] = 1001
-            ret["error"] = "编辑请求参数失败"
+            ret["error"] = "编辑失败"
         return Response(ret, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk, *args, **kwargs):
@@ -104,8 +166,8 @@ class FunctionCaseChildList(APIView):
         try:
             snippet = self.get_object(pk)
             snippet.delete()
-            ret["msg"] = "删除请求参数成功"
+            ret["msg"] = "删除成功"
         except Exception as e:
             ret["code"] = 1001
-            ret["error"] = "删除请求参数失败"
+            ret["error"] = "删除失败"
         return Response(ret)

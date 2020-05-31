@@ -125,6 +125,7 @@ class SystemRole(models.Model):
         verbose_name_plural = '系统角色管理'
 
 
+
 class Link(models.Model):
     """
     友情链接
@@ -259,6 +260,7 @@ class FunctionCase(models.Model):
     execution_result = models.CharField(max_length=250,verbose_name="执行结果",null=True,blank=True)
     note = models.CharField(max_length=250,verbose_name="备注",null=True,blank=True)
     executor = models.CharField(max_length=50,verbose_name="执行人",null=True,blank=True)
+    system = models.CharField(max_length=50, verbose_name="所属系统")
 
     def __str__(self):
         return self.casename
@@ -284,3 +286,19 @@ class FunctionCaseChild(models.Model):
     class Meta:
         verbose_name = '用例管理子表'
         verbose_name_plural = '功能用例管理子表'
+
+
+class Head(models.Model):
+    '''
+        负责人
+    '''
+    user = models.CharField(max_length=50, verbose_name="用户名")
+    phone = models.CharField(max_length=11, verbose_name="手机号")
+
+
+    def __str__(self):
+        return self.user
+
+    class Meta:
+        verbose_name = '责任者'
+        verbose_name_plural = '责任者'

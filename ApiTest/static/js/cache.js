@@ -27,7 +27,7 @@ layui.use(['form', 'jquery', "layer"], function () {
         layer.open({
             type: 1,
             title: "系统公告",
-            area: '300px',
+            area: '400px',
             shade: 0.8,
             id: 'LAY_layuipro',
             btn: ['关闭'],
@@ -38,11 +38,12 @@ layui.use(['form', 'jquery', "layer"], function () {
                 '<p><span style="margin-left:15px;margin-top:20px;">流程接口自动化测试</span></p>' +
                 '<p><span style="margin-left:15px;">接口定时测试</span></p>' +
                 '<p><span style="margin-left:15px;">接口重复测试</span></p>' +
-                '<p><span style="margin-left:15px;">启用多线程接口测试</span></p>' +
+                '<p><span style="margin-left:15px;">多线程接口压测</span></p>' +
                 '<p><span style="margin-left:15px;">钉钉发送测试结果</span></p>' +
                 '<p><span style="margin-left:15px;">导出测试记录</span></p>' +
                 '<p><span style="margin-left:15px;">接口性能测试</span></p>' +
-                '<p><span style="margin-left:15px;">UI自动化测试</span></p>' +
+                '<p><span style="margin-left:15px;">功能测试</span></p>' +
+                '<p><span style="margin-left:15px;">生成报表</span></p>' +
                 '</div>',
             success: function (layero) {
                 var btn = layero.find('.layui-layer-btn');

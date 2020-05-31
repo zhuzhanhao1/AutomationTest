@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import SingleApi, LeftMenu, ChildMenu, SystemRole, \
-    Link, Testurl, ProcessApi, LocustApi, SingleApiChild, FunctionCase, FunctionCaseChild
+    Link, Testurl, ProcessApi, LocustApi, SingleApiChild, FunctionCase,\
+    FunctionCaseChild,Head
 
 ###########################SingleApi####################################
 
@@ -269,4 +270,14 @@ class functionCaseChildSer(serializers.ModelSerializer):
     '''
     class Meta:
         model = FunctionCaseChild
+        fields = "__all__"
+
+##############################Head####################################
+
+class Headser(serializers.ModelSerializer):
+    '''
+        功能测试主表
+    '''
+    class Meta:
+        model = Head
         fields = "__all__"

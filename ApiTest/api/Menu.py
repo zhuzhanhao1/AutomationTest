@@ -17,7 +17,7 @@ import json
 
 class MenuTree(APIView):
     '''
-    树形菜单
+        树形菜单
     '''
     def get(self, request, *args, **kwargs):
         queryset = LeftMenu.objects.filter()
@@ -41,7 +41,7 @@ class MenuTree(APIView):
             dic["title"] = area_list[i]
             dic["id"] = i+1
             dic["children"] = []
-            l[1]["children"].append(dic)
+            l[2]["children"].append(dic)
 
         queryset = LeftMenu.objects.filter(area="process")
         area_list = list(set([x.title for x in queryset]))
@@ -50,9 +50,16 @@ class MenuTree(APIView):
             dic["title"] = area_list[i]
             dic["id"] = i+1
             dic["children"] = []
+            l[1]["children"].append(dic)
+
+        queryset = LeftMenu.objects.filter(area="automation")
+        area_list = list(set([x.title for x in queryset]))
+        for i in range(len(area_list)):
+            dic = {}
+            dic["title"] = area_list[i]
+            dic["id"] = i+1
+            dic["children"] = []
             l[0]["children"].append(dic)
-
-
 
         queryset = LeftMenu.objects.filter(area="systemeSttings")
         area_list = list(set([x.title for x in queryset]))
@@ -62,7 +69,8 @@ class MenuTree(APIView):
             dic["id"] = i+1
             dic["children"] = []
             dic["href"]='http://127.0.0.1:8000/admin/'
-            l[2]["children"].append(dic)
+            l[3]["children"].append(dic)
+
         return Response(l)
 
 

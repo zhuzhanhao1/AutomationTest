@@ -3,7 +3,7 @@ from django.contrib import admin
 # Register your models here.
 
 from .models import SingleApi,LeftMenu,ChildMenu,SystemRole,\
-    Testurl,Link,ProcessApi,FunctionCase,FunctionCaseChild  # 记得导包
+    Testurl,Link,ProcessApi,FunctionCase,FunctionCaseChild,Head  # 记得导包
 
 # 注册medel类到admin的方式-@admin.register(SingleApi)
 '''
@@ -62,3 +62,8 @@ class FunctionCaseAdmin(admin.ModelAdmin):
 @admin.register(FunctionCaseChild)
 class FunctionCaseChildAdmin(admin.ModelAdmin):
     list_display = ("parent_id","steps","expected_results")
+
+
+@admin.register(Head)
+class HeadAdmin(admin.ModelAdmin):
+    list_display = ("user","phone")

@@ -21,26 +21,10 @@ def send_process_link(id, text):
                        message_url='http://zhuzhanhao.cn:8000/get_processcase_details/?id={}'.format(id))
 
 
-def get_phone_number_by_name(name):
-    if name == "老张":
-        return "15270833545"
-    elif name == "老刘":
-        return "15279438039"
-    elif name == "老李":
-        return "13157155198"
-    elif name == "老江":
-        return "15073326435"
-    elif name == "老王":
-        return ""
-    elif name == "老王":
-        return ""
-    else:
-        return ""
-
-def send_ding(content,head=None):
+def send_ding(content,head):
     l = []
-    phone_number = l.append(get_phone_number_by_name(head))
-    print(phone_number)
+    phone_number = l.append(head)
+    print("你发送的用户是："+str(phone_number))
     params = {
         "msgtype": "text",
         "text": {
@@ -54,10 +38,8 @@ def send_ding(content,head=None):
     headers = {
         "Content-Type":"application/json"
     }
-
     f = requests.post(url, data=json.dumps(params), headers=headers)
     if f.status_code==200:
-        print(123)
         return True
     else:
         return False

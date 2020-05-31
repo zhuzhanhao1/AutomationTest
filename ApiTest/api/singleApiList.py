@@ -3,7 +3,7 @@ from django.db.models import Q
 from ApiTest.models import SingleApi,SingleApiChild
 from ApiTest.serializers import SingleApiSerializers,SingleApiParamsSerializers,\
                                 SingleApiBodySerializers,SingleApiHeadSerializers,\
-                                ParameterListSer,AddParameterSer,UpdateParameterSer,SingleApiIdentitySerializers
+                                ParameterListSer,AddParameterSer,SingleApiIdentitySerializers
 from django.core.paginator import Paginator
 from django.http import Http404
 from rest_framework.views import APIView
@@ -34,6 +34,8 @@ class SingleApiList(APIView):
         casename = request.GET.get("casename", "")          #搜索名字
         belong = request.GET.get("belong", "")              #所属模块
         system = request.GET.get("system", "")              #所属系统
+
+
 
         if casename:
             if belong:

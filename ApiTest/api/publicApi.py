@@ -1,7 +1,8 @@
 from django.db import transaction
 from django.db.models import Q
 from ApiTest.common.dingDingNotice import send_singleapi_link, send_ding
-from ApiTest.models import SingleApi, ProcessApi
+from ApiTest.models import SingleApi, ProcessApi,Head
+from ApiTest.serializers import Headser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import json, xlrd
@@ -66,6 +67,10 @@ class PublicApiDingDingNotice(APIView):
     def update_date(self):
         pass
 
+    def get_phone_by_user(self,head):
+        obj = Head.objects.get(user=head)
+        return obj.phone
+
     def get(self, request, *args, **kwargs):
         '''
         发送钉钉消息
@@ -77,11 +82,13 @@ class PublicApiDingDingNotice(APIView):
             for id in ids:
                 if isporcess == "no":
                     data = SingleApi.objects.get(caseid=id)
+                    phone = self.get_phone_by_user(data.head)
                     send_singleapi_link("singleid", id, data.casename + "-详情-->")
                 elif isporcess == "yes":
                     data = ProcessApi.objects.get(caseid=id)
+                    phone = self.get_phone_by_user(data.head)
                     send_singleapi_link("processid", id, data.casename + "-详情-->")
-                send_ding(data.head + "-看消息", data.head)
+                send_ding(phone + "-看消息", phone)
             ret["msg"] = 1000
         except Exception as e:
             ret["code"] = 1001
@@ -166,3 +173,18 @@ class EchartExport(APIView):
             ret["code"] = 1001
             ret["error"] = "生成报表异常"
         return Response(ret)
+
+
+class HeadList(APIView):
+    '''
+        责任者
+    '''
+    def get(self, request, *args, **kwargs):
+        query_set = Head.objects.filter()
+        ser = Headser(query_set,many=True).data
+        # dic = {}
+        # for i in ser:
+        #     dic[i["user"]] = i["phone"]
+        # print(dic)
+        head_list = [i["user"] for i in ser]
+        return Response(head_list)

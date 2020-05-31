@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'publicapi/dingding/$', publicApi.PublicApiDingDingNotice.as_view()),
     url(r'publicapi/import_case/$', publicApi.PublicApiImport.as_view()),
     url(r'publicapi/export_report/$', publicApi.EchartExport.as_view()),
+    url(r'publicapi/get_head/$', publicApi.HeadList.as_view()),
 
     # 测试系统角色
     url(r'systemrole/list/$', systemRole.SystemRoleList.as_view()),
