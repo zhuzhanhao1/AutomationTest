@@ -68,14 +68,14 @@
                 <div class="layui-form-item">
                     <label class="layui-form-label">执行结果</label>
                     <div class="layui-input-block">
-                        <textarea name="execution_result" placeholder="" class="layui-textarea" required lay-verify="required"></textarea>
+                        <textarea name="execution_result" placeholder="" class="layui-textarea"></textarea>
                     </div>
                 </div>
 
                 <div class="layui-form-item">
                     <label class="layui-form-label">备注</label>
                     <div class="layui-input-block">
-                        <textarea name="note" placeholder="" class="layui-textarea" required lay-verify="required"></textarea>
+                        <textarea name="note" placeholder="" class="layui-textarea"></textarea>
                     </div>
                 </div>
 
@@ -303,7 +303,7 @@
                 , {
                     field: 'casename',
                     title: '用例名称',
-                    width: 220,
+                    width: 250,
                     align: "left",
                     excel: {color: '0040ff', bgColor: 'f3fef3'},
                     templet: "#casenameTpl",
@@ -315,7 +315,7 @@
                                 console.log(row);
                                 return {id: row.id}
                             }
-                            , title: "请求参数详情"
+                            , title: "操作步骤-预期结果"
                             , skin: 'line'
                             , size: "lg"
                             {#, toolbar: '#toolbarchiildDemo'#}
@@ -358,7 +358,7 @@
                                 // 单击行事件
                                 // obj 子表当前行对象
                                 // pobj 父表当前行对象
-                                obj.tr.css({'background': '#ECEFFC'}).siblings().removeAttr('style')
+                                obj.tr.css({'background': '#ECEFFC'}).siblings().removeAttr('style');
                                 console.log(obj.tr); //得到当前行元素对象
                                 console.log(obj.data); //得到当前行数据
                                 console.log(pobj); //得到当前行数据
@@ -753,22 +753,9 @@
                     skin: "layui-layer-rim",//hui
                     closeBtn: 0,
                     zIndex: layer.zIndex,
-                    area: ['800px', '600px'], //自定义文本域宽高
-                    btn: ["详情", "关闭"],
-                    yes: function () {
-                        var index = layer.open({
-                            type: 2,
-                            title: data.casename + "详细信息",
-                            //shadeClose: true,
-                            shade: false,
-                            zIndex: layer.zIndex,
-                            maxmin: true, //开启最大化最小化按钮
-                            area: ['600px', '1200px'],
-                            content: "/detail/?singleid=" + data.caseid,
-                        });
-                        layer.full(index);
-                    },
-                    btn2: function (index) {
+                    area: ['600px', '400px'], //自定义文本域宽高
+                    btn: [ "关闭"],
+                    yes: function (index) {
                         layer.close(index);
                     }
                 });
@@ -824,6 +811,7 @@
                             var form = layui.form;
                             $ = layui.$;
                             var caseid = data.id;
+                            console.log(data);
                             form.val("add_update_case", {
                                 "belong": data.belong,
                                 "function_model": data.function_model,
@@ -988,6 +976,10 @@
                 },
             });
     }
+
+
+
+
 
 </script>
 

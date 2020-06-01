@@ -212,6 +212,14 @@ class FunctionCaseImport(APIView):
                         if serializer.is_valid():
                             serializer.save()
                             ret["msg"] = "导入成功"
+                            # id = FunctionCase.objects.filter(Q(function_point=rowVlaues[2])&Q(casename=rowVlaues[3])).first().id
+                            # steps_list = rowVlaues[6].split("\n")
+                            # child_dic = {
+                            #     "parent_id" :id,
+                            #     "step_id":1,
+                            #     "steps":rowVlaues[6],
+                            #     "expected_results":rowVlaues[6]
+                            # }
             except:
                 ret["code"] = 1001
                 ret["error"] = "解析excel文件或者数据插入错误"
