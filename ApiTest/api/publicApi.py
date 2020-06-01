@@ -97,7 +97,7 @@ class PublicApiDingDingNotice(APIView):
 
 class PublicApiImport(APIView):
     '''
-        导入数据
+        导入单一接口数据
     '''
     def post(self, request, *args, **kwargs):
         '''
@@ -173,7 +173,6 @@ class EchartExport(APIView):
             ret["code"] = 1001
             ret["error"] = "生成报表异常"
         return Response(ret)
-
 
 class HeadList(APIView):
     '''

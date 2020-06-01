@@ -7,6 +7,10 @@ from django.http import Http404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+import xlrd
+from ApiTest.common.readExcel import ReadExcel
+
+from django.db import transaction
 
 
 class FunctionCaseList(APIView):
@@ -171,3 +175,48 @@ class FunctionCaseChildList(APIView):
             ret["code"] = 1001
             ret["error"] = "删除失败"
         return Response(ret)
+
+
+class FunctionCaseImport(APIView):
+    '''
+        导入测试用例数据
+    '''
+
+    def post(self, request, *args, **kwargs):
+        '''
+        :param request:
+        :return: 导入数据
+        '''
+        ret = {"code": 1000}
+        f = request.FILES.get('file')  # sheet名
+        print(f)
+        excel_type = f.name.split('.')[1]
+        if excel_type in ['xlsx', 'xls']:
+            # 开始解析上传的excel表格
+            params_list = ReadExcel().read_excel(f)
+            print(params_list)
+            try:
+                with transaction.atomic():  # 控制数据库事务交易
+                    for rowVlaues in params_list:
+                        dic = {
+                            "belong":rowVlaues[0],
+                            "function_model": rowVlaues[1],
+                            "function_point": rowVlaues[2],
+                            "casename": rowVlaues[3],
+                            "premise_condition": rowVlaues[5],
+                            "note":rowVlaues[9],
+                            "system": "erms",
+                        }
+                        print(dic)
+                        serializer = functionCaseSer(data=dic)
+                        if serializer.is_valid():
+                            serializer.save()
+                            ret["msg"] = "导入成功"
+            except:
+                ret["code"] = 1001
+                ret["error"] = "解析excel文件或者数据插入错误"
+            return Response(ret)
+        else:
+            ret["code"] = 1001
+            ret["error"] = "所选文件必须是xlsx、xls格式"
+            return Response(ret)

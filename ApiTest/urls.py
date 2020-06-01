@@ -72,6 +72,7 @@ urlpatterns = [
     url(r'functioncase/add_case/$', functionCase.FunctionCaseList.as_view()),
     url(r'functioncase/update_case/(?P<pk>[0-9]+)/$', functionCase.FunctionCaseList.as_view()),
     url(r'functioncase/del_case/(?P<pk>[0-9]+)/$', functionCase.FunctionCaseList.as_view()),
+    url(r'functioncase/import_case/$', functionCase.FunctionCaseImport.as_view()),
 
     #功能测试子表
     url(r'functioncase/childlist/$', functionCase.FunctionCaseChildList.as_view()),

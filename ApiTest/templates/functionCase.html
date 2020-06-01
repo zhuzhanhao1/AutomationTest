@@ -105,7 +105,7 @@
     <!--导入测试用例-->
     <div class="layui-row" id="importCase" style="display:none;">
         <div class="layui-col-md11">
-            <form class="layui-form" enctype="multipart/form-data" action="/publicapi/import_case/" method="post">
+            <form class="layui-form" enctype="multipart/form-data" action="/api/v1/functioncase/import_case/" method="post">
 
                 <div class="layui-form-item" style="margin-top: 20px;">
                     <div class="layui-input-block">
@@ -570,8 +570,8 @@
                 }
                 , {field: 'premise_condition', title: '前提条件', align: "left"}
                 , {field: 'execution_result', title: '执行结果', align: "left"}
-                , {field: 'note', title: '备注', align: "left"}
-                , {field: 'executor', title: '执行人', width: 80, align: "left", event: "head"}//merge: true行合并
+                , {field: 'note', title: '备注', align: "left", event: "note"}
+                , {field: 'executor', title: '执行人', width: 80, align: "left"}//merge: true行合并
 
             ]]
             , filter: {
@@ -742,13 +742,13 @@
         table.on('tool(test)', function (obj) {
             var data = obj.data;
             //响应结果详情
-            if (obj.event === 'detail') {
-                console.log(data.result);
+            if (obj.event === 'note') {
+                console.log(data.note);
                 layer.prompt({
                     formType: 2,//多行文本
-                    value: data.result,
+                    value: data.note,
                     shade: false,
-                    title: data.casename + "响应结果",
+                    title: data.casename + "-备注",
                     maxmin: true,
                     skin: "layui-layer-rim",//hui
                     closeBtn: 0,
