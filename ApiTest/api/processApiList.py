@@ -122,17 +122,12 @@ class UpdateProcessApi(APIView):
         '''
         ret = {"code":1000}
         try:
-            head = request.GET.get("head","")
             depend_key = request.GET.get("depend_key","")
             depend_id = request.GET.get("depend_id","")
             replace_key = request.GET.get("replace_key","")
             replace_position = request.GET.get("replace_position","")
             snippet = self.get_object(pk)
-            if head:
-                data = {"head":head}
-                serializer = ProcessApiHeadSerializers(snippet, data=data)
-                ret["msg"] = "编辑责任者成功"
-            elif depend_id:
+            if depend_id:
                 data = {"depend_id":depend_id}
                 serializer = ProcessApiDependIdSerializers(snippet, data=data)
                 ret["msg"] = "编辑依赖id成功"

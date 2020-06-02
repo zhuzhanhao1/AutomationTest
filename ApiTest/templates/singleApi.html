@@ -1815,6 +1815,7 @@
         });
     }
 
+    //获取责任者
     function get_head(id) {
         $.ajax({
             url: "/api/v1/publicapi/get_head/",
@@ -1841,6 +1842,7 @@
         //console.log(res);
         //return res
     }
+
     //新建用例
     function add_case() {
         get_role_by_system("option", "identity");
