@@ -1,11 +1,12 @@
 from django.db import transaction
 from django.db.models import Q
-from ApiTest.common.dingDingNotice import send_singleapi_link, send_ding
+from ApiTest.common.dingDingNotice import DingNotice
 from ApiTest.models import SingleApi, ProcessApi,Head
 from ApiTest.serializers import Headser
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import json, xlrd
+
 from pyecharts.globals import CurrentConfig
 #设置src="../static/js/echarts.min.js"加载在本地路径
 CurrentConfig.ONLINE_HOST  = "../static/js/"
@@ -82,13 +83,15 @@ class PublicApiDingDingNotice(APIView):
             for id in ids:
                 if isporcess == "no":
                     data = SingleApi.objects.get(caseid=id)
+                    print(data)
                     phone = self.get_phone_by_user(data.head)
-                    send_singleapi_link("singleid", id, data.casename + "-详情-->")
+                    print(phone)
+                    DingNotice().send_link_bot("singleid", id, data.casename + "-详情-->")
                 elif isporcess == "yes":
                     data = ProcessApi.objects.get(caseid=id)
                     phone = self.get_phone_by_user(data.head)
-                    send_singleapi_link("processid", id, data.casename + "-详情-->")
-                send_ding(phone + "-看消息", phone)
+                    DingNotice().send_link_bot("processid", id, data.casename + "-详情-->")
+                DingNotice().send_text_bot(data.head + "-你负责的接口出错啦！", phone)
             ret["msg"] = 1000
         except Exception as e:
             ret["code"] = 1001

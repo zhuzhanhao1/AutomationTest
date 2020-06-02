@@ -1,49 +1,95 @@
 import requests,json
 from dingtalkchatbot.chatbot import DingtalkChatbot
-#测试部URL
-# url = "https://oapi.dingtalk.com/robot/send?access_token=99c9913b6f5370541f17d56b3e1e32ca4d534b25f17df9fcedf44aa5173968a6"
-#小分队URL
-url = "https://oapi.dingtalk.com/robot/send?access_token=21829afa1afbefb42c38dfe171a4f6398448eec4da63bb914310067d22b256fc"
+import time
+import hmac
+import hashlib
+import base64
+import urllib.parse
 
-# 初始化机器人小丁
-def send_image():
-    xiaoding = DingtalkChatbot(url)
-    xiaoding.send_text(msg='-李建构吃屎去吧！')
-    # xiaoding.send_image(pic_url='https://ss1.baidu.com/6ONXsjip0QIZ8tyhnq/it/u=1147110391,1099568746&fm=173&app=25&f=JPEG?w=640&h=640&s=4BA43A625AFA7BAF7D302CC60000A0A1')
+class DingNotice:
 
-def send_singleapi_link(isprocess,id,text):
-    xiaoding = DingtalkChatbot(url)
-    xiaoding.send_link(title='接口详情', text='{}请点击我......'.format(text), message_url='http://localhost:8000/detail/?{}={}'.format(isprocess,id))
+    def __init__(self):
+        # Webhook地址
+        self.url = "https://oapi.dingtalk.com/robot/send?access_token=153b78f377161db415e453c8e5442a5657694569bb7440e49c3ff14f8aaef583"
+        # 加签密钥
+        self.secret = "SEC17cc4536b6007bae4e6701a3aec556911042b503af484a20a7cb789fef4a10eb"
 
-def send_process_link(id, text):
-    xiaoding = DingtalkChatbot(url)
-    xiaoding.send_link(title='接口详情', text='{}请点击我......'.format(text),
-                       message_url='http://zhuzhanhao.cn:8000/get_processcase_details/?id={}'.format(id))
+    def get_sign_timestamp(self):
+        #获取时间戳和签证
+        timestamp = str(round(time.time() * 1000))
+        secret_enc = self.secret.encode('utf-8')
+        string_to_sign = '{}\n{}'.format(timestamp, self.secret)
+        string_to_sign_enc = string_to_sign.encode('utf-8')
+        hmac_code = hmac.new(secret_enc, string_to_sign_enc, digestmod=hashlib.sha256).digest()
+        sign = urllib.parse.quote_plus(base64.b64encode(hmac_code))
+        # print(timestamp)
+        # print(sign)
+        return timestamp,sign
 
-
-def send_ding(content,head):
-    l = []
-    phone_number = l.append(head)
-    print("你发送的用户是："+str(phone_number))
-    params = {
-        "msgtype": "text",
-        "text": {
-            "content": content
-        },
-        "at": {
-            "atMobiles": l,
-            "isAtAll": False
+    def send_ding(self,content,head=None):
+        #发送文本格式消息
+        timestamp,sign = self.get_sign_timestamp()
+        url = self.url + "&timestamp=" + timestamp + "&sign=" + sign
+        print(url)
+        if head:
+            l = []
+            l.append(head)
+            print("你发送的用户是：" + str(l))
+            params = {
+                "msgtype": "text",
+                "text": {
+                    "content": content
+                },
+                "at": {
+                    "atMobiles": l,
+                    "isAtAll": False
+                }
+            }
+        else:
+            params = {
+                "msgtype": "text",
+                "text": {
+                    "content": content
+                },
+                "at": {
+                    "atMobiles": [],
+                    "isAtAll": False
+                }
+            }
+        headers = {
+            "Content-Type":"application/json"
         }
-    }
-    headers = {
-        "Content-Type":"application/json"
-    }
-    f = requests.post(url, data=json.dumps(params), headers=headers)
-    if f.status_code==200:
-        return True
-    else:
-        return False
+        print(params)
+        f = requests.post(url, data=json.dumps(params), headers=headers)
+        if f.status_code==200:
+            print("发送成功")
+            return True
+        else:
+            return False
+
+    def send_text_bot(self,content,phone=None):
+        #Text消息之@指定用户@所有人
+        xiaoding = DingtalkChatbot(self.url,secret=self.secret, pc_slide=True)
+        if phone:
+            at_mobiles = []
+            at_mobiles.append(phone)
+            xiaoding.send_text(msg='{}'.format(content),at_mobiles=at_mobiles)
+        else:
+            xiaoding.send_text(msg='{}'.format(content),is_at_all=True)
+
+    def send_image_bot(self,imagepath):
+        #发送图片
+        xiaoding = DingtalkChatbot(self.url, secret=self.secret, pc_slide=True)
+        xiaoding.send_image(pic_url='{}'.format(imagepath))
+
+    def send_link_bot(self,key, id, text):
+        xiaoding = DingtalkChatbot(self.url,secret=self.secret)
+        xiaoding.send_link(title='接口详情', text='{}请点击我......'.format(text),
+                           message_url='http://zhuzhanhao.cn:8000/detail/?{}={}'.format(key, id))
 
 
-if __name__ == "__main__":
-    send_ding("1","老李")
+
+
+# if __name__ == "__main__":
+    # DingNotice().send_ding("","")
+    # DingNotice().send_text_bot()

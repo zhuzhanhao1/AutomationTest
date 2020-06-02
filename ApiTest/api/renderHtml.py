@@ -257,6 +257,9 @@ def echart_report_views(request):
     return render(request, 'pyechartReport.html')
 
 def functioncase_views(request):
+    '''
+        功能测试页面
+    '''
     belong = request.GET.get("belong", "")
     system = request.GET.get("system", "")
     return render(request, "functionCase.html", {"belong": belong, "system": system})
