@@ -87,10 +87,6 @@ class QuickMothod():
         headers = json.loads(headers)
         params = params if any(params) == True else None
         headers = headers if any(headers) == True else None
-        print(data['path'])
-        print(type(data['path']))
-        print(params)
-        print(type(params))
         files = {"file": open(data['path'], "rb")}
         r = requests.post(url, params=params, files=files, headers=headers)
         try:
