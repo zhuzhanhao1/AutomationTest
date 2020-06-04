@@ -23,12 +23,12 @@ class FunctionCaseList(APIView):
         system = request.GET.get("system", "")
         if casename:
             if belong:
-                apilists = FunctionCase.objects.filter(Q(casename__contains=casename) & Q(belong__contains=belong) & Q(system=system))
-                if apilists.count() == 0:
+                caselist = FunctionCase.objects.filter(Q(casename__contains=casename) & Q(belong__contains=belong) & Q(system=system))
+                if caselist.count() == 0:
                     caselist = FunctionCase.objects.filter(Q(execution_result__contains="failed")  & Q(system=system))
             else:
-                apilists = FunctionCase.objects.filter(Q(casename__contains=casename) & Q(system=system))
-                if  apilists.count() == 0:
+                caselist = FunctionCase.objects.filter(Q(casename__contains=casename) & Q(system=system))
+                if  caselist.count() == 0:
                     caselist = FunctionCase.objects.filter(Q(result__contains="success")  & Q(system=system))
 
         elif system:

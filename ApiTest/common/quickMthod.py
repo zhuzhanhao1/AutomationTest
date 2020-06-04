@@ -14,6 +14,7 @@ class QuickMothod():
         params = params if any(params) == True else None
         headers = headers if any(headers) == True else None
         r = requests.get(url, params=params, headers=headers)
+        print(r.headers)
         try:
             json_response = r.json()
             return json_response

@@ -360,7 +360,7 @@
                                 }
                                 $.ajax({
                                         cache: false,
-                                        url: "/api/v1/singleapi/export_report/",
+                                        url: "/api/v1/publicapi/export_report/",
                                         type: 'POST',
                                         data: {
                                             "request": JSON.stringify(l)
@@ -389,7 +389,7 @@
                                                     area: ['950px', '600px'],
                                                     content: '/echart_report/',
                                                     success: function () {
-                                                        layer.setTop(layero);
+                                                        //layer.setTop(layero);
                                                     }
                                                 });
                                             } else {
