@@ -1,6 +1,6 @@
 DingtalkChatbot==1.5.0
 Django==3.0.3
-djangorestframework==3.11.0
+djangorestframework==3.11.2
 jsonpath==0.82
 locust==0.0
 PyMySQL==0.9.3
