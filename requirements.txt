@@ -1,5 +1,5 @@
 DingtalkChatbot==1.5.0
-Django==3.0.3
+Django==3.0.12
 djangorestframework==3.11.0
 jsonpath==0.82
 locust==0.0
